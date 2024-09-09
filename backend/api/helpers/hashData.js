@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.hashPassword = async (data, salt = 10) => {
    try {
@@ -17,4 +18,10 @@ exports.comparePassword = async (data, password) => {
    } catch (error) {
       throw error;
    }
+};
+
+exports.generateJwtToken = ({ userId, email, role }) => {
+   return jwt.sign({ userId, email, role }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+   });
 };
