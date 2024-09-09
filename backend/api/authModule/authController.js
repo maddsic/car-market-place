@@ -1,7 +1,8 @@
 const { findUser, createUser, sendResponse } = require("../helpers/response");
-const { hashPassword, comparePassword } = require("../helpers/hashData");
+const { hashPassword, comparePassword, generateJwtToken } = require("../helpers/hashData");
 const { registerSchema, loginSchema } = require("./authService");
 
+// Register route
 exports.register = async (req, res, next) => {
    const { error } = registerSchema.validate(req.body);
 
@@ -69,13 +70,20 @@ exports.login = async (req, res, next) => {
 
       // Compare password
       const validPassword = await comparePassword(password, user.data.password);
-      console.log("IS PASSWORD VALID");
-      console.log(validPassword);
 
-      return !validPassword
-         ? sendResponse(res, 401, false, "Auth Fail")
-         : // TODO - create a jwt token and assin user role, & ID
-           sendResponse(res, 200, true, "User logged in successfully!");
+      if (!validPassword) {
+         return sendResponse(res, 401, false, "Auth Fail");
+      }
+
+      // TODO - create a jwt token and assin user role, & ID
+      const token = await generateJwtToken({
+         userId: user.data.userId,
+         email: user.data.email,
+         role: user.data.role,
+      });
+      console.log(token);
+
+      sendResponse(res, 200, true, "User logged in successfully!", token);
    } catch (error) {
       console.log("ERROR FROM AUTHCONTROLLER - LOGIN");
       console.log(error.message);
