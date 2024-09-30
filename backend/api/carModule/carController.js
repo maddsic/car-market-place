@@ -1,7 +1,10 @@
 const { Car } = require("../models");
 const { carSchema } = require("./carService");
 const { sendResponse } = require("../helpers/response");
+
 const CarBodyType = require("../models/").CarBodyType;
+const CarMake = require("../models/").CarMake;
+const CarModel = require("../models/").CarModel;
 
 exports.createCar = async (req, res, next) => {
    const { error } = carSchema.validate(req.body);
@@ -48,6 +51,7 @@ exports.createCar = async (req, res, next) => {
 exports.getCars = async (req, res, next) => {
    try {
       const cars = await Car.findAll({ include: { model: CarBodyType, as: "bodyType" } });
+      // console.log("get cars");
 
       return cars.length > 0 ? sendResponse(res, 200, true, "Car(s) Found", cars) : sendResponse(res, 404, false, "Car(s) not found");
    } catch (error) {
@@ -64,9 +68,9 @@ exports.getCarById = async (req, res, next) => {
          where: { carId },
          include: { model: CarBodyType, as: "bodyType" },
       });
-      console.log(car);
+      // console.log("Get car by Id");
 
-      return car ? sendResponse(res, 200, true, "Car(s) Found", car) : sendResponse(res, 404, false, "Car(s) not found");
+      return car ? sendResponse(res, 200, true, "Car Found", car) : sendResponse(res, 404, false, "Car not found");
    } catch (error) {
       console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
       next(error);
@@ -105,6 +109,31 @@ exports.deleteCar = async (req, res, next) => {
       return affectedRows > 0 ? sendResponse(res, 200, true, "Car deleted successfully", {}) : sendResponse(res, 200, false, "Car delete fail", {});
    } catch (error) {
       console.log("ERROR FROM USER CONTROLLER: " + error.message);
+      next(error);
+   }
+};
+
+exports.getCarMakes = async (req, res, next) => {
+   try {
+      const carMakes = await CarMake.findAll({ include: { model: CarModel } });
+      // console.log(carMakes);
+
+      return carMakes.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carMakes) : sendResponse(res, 404, false, "No result found.", {});
+   } catch (error) {
+      console.log("ERROR FROM GET CAR MAKES CONTROLLER: " + error.message);
+      next(error);
+   }
+};
+
+exports.getCarModel = async (req, res, next) => {
+   const { make_id } = req.body;
+   try {
+      const carModels = await CarModel.findAll({ where: { make_id } });
+      console.log(carModels);
+
+      return carModels.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carModels) : sendResponse(res, 404, false, "No result found.", {});
+   } catch (error) {
+      console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
       next(error);
    }
 };
