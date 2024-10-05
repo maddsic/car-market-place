@@ -11,7 +11,7 @@ const Button = ({
     <span>
       <button
         className={twMerge(
-          `rounded-sm bg-btn px-6 py-2 font-bold uppercase shadow-2xl shadow-black ${classNames}`,
+          `rounded-sm bg-btn px-6 py-2 font-bold uppercase shadow-2xl ${classNames}`,
         )}
       >
         {title}

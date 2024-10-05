@@ -1,10 +1,18 @@
 import car from "/banner-img.jpg";
+// import icons
 import { FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 
+// import cars
 import chevy from "/chevy.jpg";
 import bmw from "/bmw.jpg";
 import acura from "/acura.jpg";
+import lambo from "/latest_cars/lambo.jpg";
+
+// Components
+import Button from "./button";
+import Divider from "./divider";
+import Heading from "./heading";
 
 const cars = [
   {
@@ -12,7 +20,7 @@ const cars = [
     make: "new chevrolet",
     img: chevy,
     model: "trailblazer",
-    price: 12500,
+    price: "12,500",
     transmission: "automatic",
     fuelType: "Gas",
     millage: 0,
@@ -21,7 +29,7 @@ const cars = [
     id: 2,
     make: "certified used bmw",
     model: "m5",
-    price: 25000,
+    price: "25,000",
     transmission: "manual",
     fuelType: "petrol",
     millage: 185000,
@@ -31,26 +39,40 @@ const cars = [
     id: 3,
     make: "certified used acura",
     model: "ilx",
-    price: 13500,
+    price: "13,500",
     transmission: "automatic",
     fuelType: "Gas",
     millage: 125000,
     img: acura,
   },
+  // {
+  //   id: 4,
+  //   make: "certified used acura",
+  //   model: "ilx",
+  //   price: "13,500",
+  //   transmission: "automatic",
+  //   fuelType: "Gas",
+  //   millage: 125000,
+  //   img: lambo,
+  // },
 ];
 
 const PremiumCars = () => {
   return (
     <div className="max__container">
       {/* SECTION TITLE */}
-      <h2 className="section_heading">
-        Latest Premium <span className="text-yellow">Cars</span>
-      </h2>
-      <div className="md:grid-col-2 mt-10 grid gap-4 lg:grid-cols-3">
+
+      <Heading
+        title="Latest Premium"
+        colouredText="Cars"
+        classNames="text-center text-[24px]"
+      />
+
+      <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
         {cars.map((car) => (
           <div className="relative overflow-clip">
             {/* IMAGE */}
-            <img src={car.img} alt={car.model} className="h-[70%] w-full" />
+            <img src={car.img} alt={car.model} className="max-h-[70%] w-full" />
 
             {/* TITLE */}
             <div className="mt-3 flex justify-between">
@@ -60,13 +82,13 @@ const PremiumCars = () => {
               </label>
 
               {/* PRICE */}
-              <span className="clip-path relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
+              <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
                 ${car.price}
               </span>
             </div>
 
             {/* DESCRIPTION */}
-            <div className="mt-4 grid items-center gap-4 text-xs md:flex">
+            <div className="mt-4 flex items-center gap-4 text-xs md:flex">
               <span className="flex items-center gap-1 text-muted-foreground">
                 <FaRoad />
                 <span>{car.millage}</span>
@@ -82,7 +104,7 @@ const PremiumCars = () => {
               </span>
             </div>
 
-            <span className="rotate-diagonal absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white z-999">
+            <span className="rotate-diagonal z-999 font-montserrat absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white">
               special
             </span>
 
@@ -90,6 +112,16 @@ const PremiumCars = () => {
           </div>
         ))}
       </div>
+
+      {/* BUTTON */}
+      <div className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10">
+        <Button
+          title="show all premium cars"
+          classNames="uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"
+        />
+      </div>
+
+      <Divider classNames="md:mb-10 mt-8" />
     </div>
   );
 };
