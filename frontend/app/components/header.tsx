@@ -1,39 +1,43 @@
-import React from "react";
-
-// import bannerImg from "/banner-img.jpg";
 import bannerImg1 from "/banner-img-1.jpg";
 
 import Button from "./button";
 import SearchInventory from "./search";
 
-// import "./styles.css";
+const Header = ({ carMakes }: { carMakes: any }) => {
+  return (
+    <>
+      <header className="relative h-[calc(100vh-400px)] max-w-full md:h-[calc(100vh-250px)]">
+        <div className="group relative h-full max-w-full overflow-hidden bg-gray-800 md:h-full">
+          <img
+            src={bannerImg1}
+            alt=""
+            className="relative h-full w-full transform overflow-y-hidden object-cover opacity-60 transition-all duration-1000 ease-in-out group-hover:scale-125"
+          />
+          <div className="z-999 group absolute left-10 top-[30%] w-[100%] flex-col gap-6 overflow-hidden bg-black/20 text-white transition-all duration-1000 hover:bg-black/40 md:left-1/4 md:top-[15%] md:flex lg:w-auto lg:p-10">
+            <h1 className="text-5xl font-bold tracking-wider text-white md:text-5xl">
+              Mercedez-Benz <br /> AMG GT 2017
+            </h1>
+            <h2 className="text-2xl font-semibold md:text-5xl">
+              <span className="text-yellow transition-all duration-1000 group-hover:text-white">
+                $320
+              </span>{" "}
+              /
+              <span className="transition-all duration-1000 group-hover:text-yellow">
+                {" "}
+                MO
+              </span>
+            </h2>
 
-const Header = () => {
-   return (
-      <>
-         <header className="w-full md:h-[calc(100vh-250px)] relative">
-            <div className="w-full h-full md:h-full bg-gray-800 relative group overflow-hidden">
-               <img
-                  src={bannerImg1}
-                  alt=""
-                  className="w-full h-full object-cover opacity-60 relative group-hover:scale-125 transition-all duration-1000 ease-in-out transform overflow-y-hidden"
-               />
-               <div className="group hidden  absolute h-auto top-[10%] left-10 md:top-[15%] md:left-1/4 z-999 text-white md:flex flex-col gap-6 p-10 bg-black/20 hover:bg-black/40 transition-all duration-1000">
-                  <h1 className="text-2xl md:text-5xl text-white font-bold tracking-wider">
-                     Mercedez-Benz <br /> AMG GT 2017
-                  </h1>
-                  <h2 className="text-2xl md:text-5xl font-semibold ">
-                     <span className="text-yellow group-hover:text-white transition-all duration-1000">$320</span> /
-                     <span className="group-hover:text-yellow transition-all duration-1000"> MO</span>
-                  </h2>
-
-                  <Button title="Learn More" classNames="group-hover:bg-yellow transition-all duration-1000" />
-               </div>
-            </div>
-         </header>
-         <SearchInventory />
-      </>
-   );
+            <Button
+              title="Learn More"
+              classNames="group-hover:bg-yellow transition-all duration-1000"
+            />
+          </div>
+        </div>
+      </header>
+      <SearchInventory carMakes={carMakes} />
+    </>
+  );
 };
 
 export default Header;

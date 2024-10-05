@@ -2,61 +2,123 @@ import { Form } from "@remix-run/react";
 import { IoCarSportOutline } from "react-icons/io5";
 import Button from "./button";
 import { TbZoomReset } from "react-icons/tb";
+import { Fragment, useState } from "react";
 
-const SearchInventory = () => {
-   return (
-      <main className="bg-primary text-white w-full md:w-[90%] lg:w-1/2 mx-auto px-5 py-10 md:flex flex-col justify-between gap-8 absolute bottom-[28%] md:bottom-[10%] lg:bottom-[10%] md:left-[44px] lg:left-1/4 shadow-lg rounded">
-         <div className="flex items-center gap-3 mb-5">
-            <IoCarSportOutline size={24} className="text-yellow" />
-            <h2 className="text-xl font-sans">Search Inventory</h2>
-         </div>
+interface CarModel {
+  id: string;
+  name: string;
+}
 
-         <Form className="grid md:grid-cols-4 lg:grid-cols-4 gap-2">
-            <div className="">
-               <select
-                  name="make"
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  defaultValue="Make"
-               >
-                  <option value="">Make</option>
-               </select>
-            </div>
+interface CarMake {
+  id: string;
+  name: string;
+  CarModels: CarModel[];
+}
 
-            <div className="">
-               <select
-                  name="model"
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  defaultValue="Model"
-               >
-                  <option value="">Model</option>
-               </select>
-            </div>
+const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
+  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
+  const [models, setModels] = useState<CarModel[]>([]);
+  const [formData, setFormData] = useState({
+    make: "",
+    model: "",
+    price: "",
+  });
 
-            <div className="">
-               <select
-                  name="price"
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  defaultValue="Price"
-               >
-                  <option value="">Price</option>
-               </select>
-            </div>
-            <span className="flex items-center justify-center gap-1 lg:flex">
-               <Button title="Search" classNames="bg-yellow hover:bg-yellow/70 transition-all duration-1000" />
-               <span className="relative group ">
-                  <Button title={<TbZoomReset size={24} />} classNames="bg-red-500 hover:bg-red-500/70 transition-all duration-1000 relative" />
-                  <span
-                     className="group-hover:opacity-100 transition-opacity bg-gray-800 px-1 text-sm text-gray-100 rounded-md absolute left-1/2 
-                           -translate-x-1/2 -translate-y-full opacity-0 m-4 mx-auto"
-                  >
-                     reset
-                  </span>
-               </span>
+  const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const makeId = e.target.value;
+
+    const foundMake = carMakes.find((make) => make.id === makeId);
+
+    if (foundMake) {
+      setSelectedMake(foundMake);
+      setModels(foundMake.CarModels || []);
+    }
+  };
+
+  return (
+    <Fragment>
+      {/* {console.log(formData)} */}
+      <main className="absolute bottom-[28%] mx-auto box-border hidden max-w-full flex-col justify-between gap-8 rounded bg-primary px-5 py-10 text-white shadow md:bottom-[6%] md:left-[44px] md:flex md:max-w-[90%] lg:bottom-[6%] lg:right-10 lg:max-w-[75%] xl:max-w-[50%] 2xl:max-w-[50%]">
+        <div className="mb-5 flex items-center gap-3">
+          <IoCarSportOutline size={24} className="text-yellow" />
+          <h2 className="font-sans text-xl">Search Inventory</h2>
+        </div>
+
+        <Form className="grid gap-2 md:grid-cols-4 lg:grid-cols-4">
+          <div className="">
+            <select
+              name="make"
+              className="block w-full rounded border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              value={formData.make}
+              onChange={handleMakeChange}
+            >
+              <option value="">Make</option>
+              <option value="all">All</option>
+              {carMakes.map((make: CarMake) => (
+                <option key={make.id} value={make.id}>
+                  {make.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="">
+            <select
+              name="model"
+              className="block w-full rounded border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              value={formData.model}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  model: e.target.value,
+                })
+              }
+            >
+              <option value="">Models</option>
+              <option value="all">All</option>
+
+              {models &&
+                models.length > 0 &&
+                models.map((model: CarModel) => (
+                  <option key={model.id} value="">
+                    {model.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div className="">
+            <select
+              name="price"
+              className="block w-full rounded border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              defaultValue="Price"
+            >
+              <option value="">Price</option>
+            </select>
+          </div>
+          {/* BUTTONS */}
+          <span className="box-border flex items-center justify-center gap-1 lg:flex">
+            <Button
+              title="Search"
+              classNames="bg-yellow hover:bg-yellow/70 transition-all duration-1000"
+            />
+            <span className="group relative">
+              <Button
+                title={<TbZoomReset size={24} />}
+                classNames="bg-red-500 hover:bg-red-500/70 transition-all duration-1000 relative"
+              />
+              <span className="absolute left-1/2 m-4 mx-auto -translate-x-1/2 -translate-y-full rounded-md bg-gray-800 px-1 text-sm text-gray-100 opacity-0 transition-opacity group-hover:opacity-100">
+                reset
+              </span>
             </span>
-         </Form>
-         {/* SELECTS */}
+          </span>
+        </Form>
+        {/* SELECTS */}
       </main>
-   );
+    </Fragment>
+  );
 };
 
 export default SearchInventory;

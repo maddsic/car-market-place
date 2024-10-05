@@ -26,33 +26,35 @@ const NavLinks = [
 
 const Navbar = () => {
   return (
-    <main className="relative h-[80px] w-full bg-primary">
-      <nav className="max__container h-full text-white">
-        <div className="flex h-full items-center justify-between">
-          <h1 className="cursor-pointer text-2xl font-bold tracking-wider">
-            <span className="text-yellow">G</span>amAutos
-          </h1>
+    <main className="relative h-[100px] w-full">
+      <nav className="fixed left-0 top-0 z-20 h-[100px] w-full border-b-2 border-gray-500 bg-primary">
+        <div className="max__container z-999 relative h-full text-white">
+          <div className="flex h-full items-center justify-between">
+            <h1 className="cursor-pointer text-2xl font-bold tracking-wider">
+              <span className="text-yellow">G</span>amAutos
+            </h1>
 
-          <ul className="hidden items-center justify-between gap-5 text-sm font-semibold uppercase lg:flex">
-            {NavLinks.map((link) => (
-              <li key={link.id} className="tracking-wider">
-                <NavLink to={link.href}>{link.title}</NavLink>
-              </li>
-            ))}
-          </ul>
+            <ul className="hidden items-center justify-between gap-5 text-sm font-semibold uppercase lg:flex">
+              {NavLinks.map((link) => (
+                <li key={link.id} className="tracking-wider">
+                  <NavLink to={link.href}>{link.title}</NavLink>
+                </li>
+              ))}
+            </ul>
 
-          <div className="flex items-center justify-center gap-5 md:gap-10">
-            <span className="rounded-full bg-yellow p-2 md:hidden">
-              <FaCarSide size={24} className="cursor-pointer" />
-            </span>
-            <span className="rounded-full bg-gray-500 p-2">
-              <FaUserCircle size={24} className="cursor-pointer" />
-            </span>
+            <div className="flex items-center justify-center gap-5 md:gap-10">
+              <span className="rounded-full bg-yellow p-2 md:hidden">
+                <FaCarSide size={24} className="cursor-pointer" />
+              </span>
+              <span className="rounded-full bg-gray-500 p-2">
+                <FaUserCircle size={24} className="cursor-pointer" />
+              </span>
 
-            <button className="hidden items-center gap-2 bg-yellow px-4 py-2 text-sm font-semibold hover:bg-yellow/80 md:flex">
-              <FaCarSide />
-              Add Your Item
-            </button>
+              <button className="hidden items-center gap-2 bg-yellow px-4 py-2 text-sm font-semibold hover:bg-yellow/80 md:flex">
+                <FaCarSide />
+                Add Your Item
+              </button>
+            </div>
           </div>
         </div>
       </nav>

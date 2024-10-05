@@ -129,7 +129,6 @@ exports.getCarModel = async (req, res, next) => {
    const { make_id } = req.body;
    try {
       const carModels = await CarModel.findAll({ where: { make_id } });
-      console.log(carModels);
 
       return carModels.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carModels) : sendResponse(res, 404, false, "No result found.", {});
    } catch (error) {
