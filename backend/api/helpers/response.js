@@ -43,7 +43,7 @@ exports.createUser = async form => {
 };
 
 // Custom response
-exports.sendResponse = async (res, statusCode, success, message, data = null) => {
+exports.sendResponse = async (res, statusCode, success, message, data = []) => {
    return res.status(statusCode).json({
       success,
       message,
