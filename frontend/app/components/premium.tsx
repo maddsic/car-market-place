@@ -45,16 +45,6 @@ const cars = [
     millage: 125000,
     img: acura,
   },
-  // {
-  //   id: 4,
-  //   make: "certified used acura",
-  //   model: "ilx",
-  //   price: "13,500",
-  //   transmission: "automatic",
-  //   fuelType: "Gas",
-  //   millage: 125000,
-  //   img: lambo,
-  // },
 ];
 
 const PremiumCars = () => {
@@ -65,7 +55,7 @@ const PremiumCars = () => {
       <Heading
         title="Latest Premium"
         colouredText="Cars"
-        classNames="text-center text-[24px]"
+        classNames="text-center"
       />
 
       <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
