@@ -27,7 +27,7 @@ const NavLinks = [
 const Navbar = () => {
   return (
     <main className="relative h-[100px] w-full">
-      <nav className="fixed left-0 top-0 z-20 h-[100px] w-full border-b-2 border-gray-500 bg-primary">
+      <nav className="fixed left-0 top-0 z-20 h-[100px] w-full bg-primary">
         <div className="max__container z-999 relative h-full text-white">
           <div className="flex h-full items-center justify-between">
             <h1 className="cursor-pointer text-2xl font-bold tracking-wider">
