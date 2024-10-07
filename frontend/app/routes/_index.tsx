@@ -1,4 +1,4 @@
-import { json, type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunction, type MetaFunction } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
 import BrowseBymake from "~/components/browse";
 import Category from "~/components/category";
@@ -16,7 +16,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async () => {
-  const response = await fetch("http://localhost:8080/api/v1/cars/carmakes");
+  // const response = await fetch("http://localhost:8080/api/v1/cars/carmakes");
+  const response = await fetch(
+    "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
+  );
   const carMakes = await response.json();
 
   if (!carMakes.success) {
