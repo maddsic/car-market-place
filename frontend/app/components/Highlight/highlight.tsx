@@ -1,13 +1,13 @@
 import { Link } from "@remix-run/react";
 
 // COMPONENT
-import Button from "./button";
 
 // ICONS
 import { IoCarSportOutline } from "react-icons/io5";
 
 import { FcSearch } from "react-icons/fc";
 import { AiFillDollarCircle } from "react-icons/ai";
+import Button from "../Button/button";
 
 const Highlight = () => {
   return (
@@ -15,7 +15,7 @@ const Highlight = () => {
       <div className="max__container relative h-full">
         <div className="z-10 grid h-full grid-cols-1 gap-5 p-3 lg:grid-cols-2 lg:gap-10">
           {/* LOOKING FOR A CAR */}
-          <div className="relative flex max-w-full flex-col justify-between gap-5 overflow-hidden bg-card p-5 md:p-10 lg:p-6">
+          <div className="max-w-content relative flex flex-col justify-between gap-5 overflow-hidden bg-card p-5 md:p-10 lg:p-6">
             <div className="relative">
               <IoCarSportOutline size={80} className="text-extrabold" />
               <FcSearch
@@ -30,7 +30,7 @@ const Highlight = () => {
               Our cars are delivered fully-registered with all requirements
               completed. We will deliver your car wherever you are.
             </p>
-            <Link to="/">
+            <Link to="/inventory">
               <Button
                 title="Inventory"
                 classNames="text-white font-montserrat hover:bg-yellow"

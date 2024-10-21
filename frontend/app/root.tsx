@@ -10,6 +10,8 @@ import {
 import { type LinksFunction } from "@vercel/remix";
 import tailwindStyles from "./tailwind.css?url";
 import globalStyles from "./styles/global.css?url";
+import Footer from "./components/Footer/page";
+import Navbar from "./components/Navbar/navbar";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,7 +23,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <main>
+          <Navbar />
+          {children}
+          <Footer />
+        </main>
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -1,25 +1,25 @@
-const jwt = require("jsonwebtoken");
+const jwt = require("jwt");
 const { sendResponse } = require("../helpers/response");
 
-exports.checkAuth = async (req, res, next) => {
+exports.VerifyOwner = async (req, res, next) => {
    try {
       const authHeader = req.headers.authorization;
-      const token = authHeader && authHeader.split(" ")[1];
-      // console.log("token");
-      // console.log(token);
+      const token = authHeader.split(" ")[1];
 
       if (token === null) return sendResponse(res, 401, false, "No token found");
 
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
          if (err) return sendResponse(res, 403, false, "Authentication failed - invaliad or expired token");
-         // console.log("USER DATA FROM DECODED TOKEN");
-         // console.log(user);
-
+         //  console.log("USER DATA FROM DECODED TOKEN");
+         //  console.log(user);
          req.userData = user;
+
+         if (req.userData.id !== req.params.id) return sendResponse(res, 403, false, "Authentication failed - invaliad or expired token");
+
          next();
       });
    } catch (error) {
-      console.log("CHECK AUTH", error.message);
+      console.log("VERIFY OWNER", error.message);
       return sendResponse(res, 500, false, "Server error");
    }
 };

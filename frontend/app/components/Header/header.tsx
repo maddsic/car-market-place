@@ -1,11 +1,10 @@
-import Button from "./button";
-import SearchInventory from "./search";
+import Button from "../Button/button";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Slider } from "~/data/slider";
+import SearchInventory from "../Search/search";
 
 const Header = ({ carMakes }: { carMakes: any }) => {
-  const [imagesSlide, setImagesSlide] = useState([Slider]);
   const [currentState, setCurrentState] = useState(0);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const Header = ({ carMakes }: { carMakes: any }) => {
   };
   return (
     <>
-      <header className="group relative h-screen max-w-full overflow-hidden overflow-x-hidden md:h-[calc(100vh-250px)]">
+      <header className="group relative h-[calc(100vh-80px)] max-w-full overflow-hidden overflow-x-hidden md:h-[calc(100vh-250px)]">
         <motion.div
           style={bgImageStyle}
           className="transform transition-all duration-1000 ease-in-out group-hover:scale-125"
@@ -40,12 +39,12 @@ const Header = ({ carMakes }: { carMakes: any }) => {
           initial={{ x: -1500 }}
           animate={{ x: 0 }}
           transition={{ duration: 0.5, type: "spring" }}
-          className="z-999 group absolute left-5 top-[30%] flex w-[100%] flex-col gap-6 overflow-hidden bg-black/30 p-5 text-white transition-all duration-1000 hover:bg-black/40 md:left-1/4 md:top-[15%] md:flex lg:w-auto lg:p-10"
+          className="z-999 w-content group absolute left-5 top-[18%] flex flex-col gap-3 overflow-hidden bg-black/30 p-5 text-white transition-all duration-1000 hover:bg-black/40 md:left-1/4 md:top-[15%] md:flex lg:w-auto lg:p-10"
         >
-          <h1 className="text-5xl font-bold uppercase tracking-wider text-white group-hover:text-yellow md:text-6xl">
+          <h1 className="text-5xl font-bold uppercase text-white group-hover:text-yellow md:text-6xl">
             {Slider[currentState].title}
           </h1>
-          <h2 className="text-3xl font-bold uppercase tracking-wider text-white md:text-4xl">
+          <h2 className="text-3xl font-bold uppercase text-white md:text-4xl">
             {Slider[currentState].subTitle}
           </h2>
           <h3 className="text-3xl font-semibold uppercase md:text-5xl">

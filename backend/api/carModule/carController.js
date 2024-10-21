@@ -51,7 +51,7 @@ exports.createCar = async (req, res, next) => {
 exports.getCars = async (req, res, next) => {
    try {
       const cars = await Car.findAll({ include: { model: CarBodyType, as: "bodyType" } });
-      // console.log("get cars");
+      console.log("get cars");
 
       return cars.length > 0 ? sendResponse(res, 200, true, "Car(s) Found", cars) : sendResponse(res, 404, false, "Car(s) not found");
    } catch (error) {
@@ -131,6 +131,17 @@ exports.getCarModel = async (req, res, next) => {
       const carModels = await CarModel.findAll({ where: { make_id } });
 
       return carModels.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carModels) : sendResponse(res, 404, false, "No result found.", {});
+   } catch (error) {
+      console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
+      next(error);
+   }
+};
+
+exports.getCarBodyTypes = async (req, res, next) => {
+   try {
+      const bodyType = await CarBodyType.findAll();
+
+      return bodyType.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", bodyType) : sendResponse(res, 404, false, "No result found.", {});
    } catch (error) {
       console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
       next(error);

@@ -1,12 +1,12 @@
-import { json, type LoaderFunction, type MetaFunction } from "@vercel/remix";
+import { type LoaderFunction, type MetaFunction } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
-import BrowseBymake from "~/components/browse";
-import Category from "~/components/category";
-import Header from "~/components/header";
-import Highlight from "~/components/highlight";
-import LatestCars from "~/components/latestCars";
-import Navbar from "~/components/navbar";
-import PremiumCars from "~/components/premium";
+import Navbar from "~/components/Navbar/navbar";
+import Header from "~/components/Header/header";
+import BrowseBymake from "~/components/Browse/browse";
+import PremiumCars from "~/components/PremiumCars/premium";
+import Highlight from "~/components/Highlight/highlight";
+import Category from "~/components/Category/category";
+import LatestCars from "~/components/LatestCars/latestCars";
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,7 +36,6 @@ export default function Index() {
   return (
     <>
       <header className="max-h-[70%]">
-        <Navbar />
         <Header carMakes={carMakes} />
       </header>
       <main className="relative mt-10 md:mt-24">
@@ -52,7 +51,7 @@ export default function Index() {
         <section className="relative mt-10 sm:mb-10">
           <Category />
         </section>
-        <section className="relative sm:mb-28 sm:mt-8">
+        <section className="relative sm:mb-14 sm:mt-8">
           <LatestCars />
         </section>
       </main>

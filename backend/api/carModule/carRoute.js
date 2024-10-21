@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { createCar, getCars, getCarById, updateCar, deleteCar, getCarMakes, getCarModel } = require("./carController");
+const { createCar, getCars, getCarById, updateCar, deleteCar, getCarMakes, getCarModel, getCarBodyTypes } = require("./carController");
 
 const imageUploader = require("../helpers/upload");
 const { checkAuth } = require("../middlewares/verifyToken");
 
 router.post("/carmodels", getCarModel);
 router.get("/carmakes", getCarMakes);
+router.get("/bodyType", getCarBodyTypes);
 router.post("/", checkAuth, imageUploader.single("imageUrl"), createCar);
 router.get("/", checkAuth, getCars);
 router.get("/:carId", checkAuth, getCarById);
