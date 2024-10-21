@@ -1,11 +1,10 @@
 import { FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 
-import Divider from "./divider";
-import Price from "./price";
-import Heading from "./heading";
 import { BsTelephone } from "react-icons/bs";
 import { cars } from "~/data/latestcars";
+import Heading from "../Header/heading";
+import Price from "../Price/price";
 
 const LatestCars = () => {
   return (
@@ -38,7 +37,7 @@ const LatestCars = () => {
                 </div>
 
                 {/* DESCRIPTION */}
-                <div className="mt-4 grid grid-cols-3 gap-4 text-xs">
+                <div className="mt-4 grid grid-cols-3 gap-4 text-xs capitalize">
                   <span className="flex gap-2 border-r-2">
                     <FaRoad />
                     <div className="flex flex-col">

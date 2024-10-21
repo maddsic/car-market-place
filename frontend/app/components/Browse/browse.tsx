@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-import Divider from "./divider";
-import Heading from "./heading";
 import { cars } from "~/data/carmakes";
+import Heading from "../Header/heading";
+import Divider from "../Divider/divider";
 
 const BrowseBymake = () => {
   const [startIndex, setStartIndex] = useState<number>(0);

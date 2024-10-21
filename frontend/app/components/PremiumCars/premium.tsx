@@ -1,4 +1,3 @@
-import car from "/banner-img.jpg";
 // import icons
 import { FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
@@ -7,12 +6,11 @@ import { SiTransmission } from "react-icons/si";
 import chevy from "/chevy.jpg";
 import bmw from "/bmw.jpg";
 import acura from "/acura.jpg";
-import lambo from "/latest_cars/lambo.jpg";
 
 // Components
-import Button from "./button";
-import Divider from "./divider";
-import Heading from "./heading";
+import Heading from "../Header/heading";
+import Button from "../Button/button";
+import Divider from "../Divider/divider";
 
 const cars = [
   {

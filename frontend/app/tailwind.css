@@ -6,10 +6,6 @@
   @apply mx-auto max-w-7xl px-4;
 }
 
-/* .transform {
-   transform: skewX(3deg);
-} */
-
 .rotate-diagonal {
   transform: rotate(-45deg); /* Rotate the element diagonally */
   transform-origin: bottom; /* Set the pivot point for rotation */
@@ -64,24 +60,6 @@
 .font-montserrat {
   font-family: Montserrat, Arial;
 }
-
-/* .hightlight_section {
-  background-image: url("https://motors.stylemixthemes.com/elementor-dealer-two/wp-content/uploads/sites/24/2022/09/icon-box-bg-1679x944-1.jpg");
-  background-position: 50% 50%;
-  background-size: cover;
-  bottom: 0px;
-  box-sizing: border-box;
-  left: -397.5px;
-  padding: 70px 150px;
-  position: relative;
-  right: 397.5px;
-  top: 0px;
-  transition:
-    background 0.3s,
-    border 0.3s,
-    border-radius 0.3s,
-    box-shadow 0.3s;
-} */
 
 @layer base {
   :root {
@@ -183,14 +161,5 @@
     --chart-4: 280 65% 60%;
 
     --chart-5: 340 75% 55%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

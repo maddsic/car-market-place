@@ -1,7 +1,6 @@
-import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Heading from "../Header/heading";
 import CategoryImage from "./categoryImage";
-import Heading from "./heading";
 
 const Category = () => {
   return (
