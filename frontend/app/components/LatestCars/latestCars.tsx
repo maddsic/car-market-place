@@ -5,6 +5,7 @@ import { BsTelephone } from "react-icons/bs";
 import { cars } from "~/data/latestcars";
 import Heading from "../Header/heading";
 import Price from "../Price/price";
+import Button from "../Button/button";
 
 const LatestCars = () => {
   return (
@@ -28,7 +29,7 @@ const LatestCars = () => {
               />
               <div className="ccol-span-1 flex flex-col justify-between gap-2 md:col-span-7">
                 <div className="flex justify-between">
-                  <label className="latest_car_labels flex flex-col gap-1 text-[28px] lg:gap-0">
+                  <label className="latest_car_labels flex flex-col gap-1 lg:gap-0">
                     <p className="">{car.make}</p>
                     <p className="font-semibold text-primary">{car.model}</p>
                   </label>
@@ -110,6 +111,14 @@ const LatestCars = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* BUTTON */}
+        <div className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10">
+          <Button
+            title="show all latest cars"
+            classNames="uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"
+          />
         </div>
       </div>
     </div>

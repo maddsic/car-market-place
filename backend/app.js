@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const errorHandler = require("./globalError");
 require("dotenv").config();
 
 const { authenticateDBConnection } = require("./db");
@@ -20,8 +21,16 @@ authenticateDBConnection();
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/cars", carRouter);
-// app.use((req, res, next) => {
-//    res.send("it works");
-// });
+
+// GLOBAL ERROR HANDLER
+app.use((err, req, res, next) => {
+   console.log(err.stack);
+
+   return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message || "Internal server error",
+   });
+});
 
 module.exports = app;

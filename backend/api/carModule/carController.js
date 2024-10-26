@@ -1,6 +1,7 @@
 const { Car } = require("../models");
+const path = require("path");
 const { carSchema } = require("./carService");
-const { sendResponse } = require("../helpers/response");
+const { sendResponse, hasLength, hasError, convertImageToBase64 } = require("../helpers/response");
 
 const CarBodyType = require("../models/").CarBodyType;
 const CarMake = require("../models/").CarMake;
@@ -51,9 +52,24 @@ exports.createCar = async (req, res, next) => {
 exports.getCars = async (req, res, next) => {
    try {
       const cars = await Car.findAll({ include: { model: CarBodyType, as: "bodyType" } });
-      console.log("get cars");
 
-      return cars.length > 0 ? sendResponse(res, 200, true, "Car(s) Found", cars) : sendResponse(res, 404, false, "Car(s) not found");
+      if (hasLength(cars)) {
+         const carImages = await Promise.all(
+            // Map through all cars and convert to base64
+            cars.map(async car => {
+               const imgPath = path.join(__dirname, "../../image_uploads", car.imageUrl);
+               // console.log(`Processing image for car ID ${car.id}: ${imgPath}`);
+
+               const base64Image = await convertImageToBase64(imgPath);
+
+               return {
+                  ...car.toJSON(),
+                  imageUrl: base64Image ? `data:image/jpeg;base64,${base64Image}` : null,
+               };
+            })
+         );
+         return sendResponse(res, 200, true, "Car(s) Found", carImages);
+      }
    } catch (error) {
       console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
       next(error);
@@ -70,7 +86,7 @@ exports.getCarById = async (req, res, next) => {
       });
       // console.log("Get car by Id");
 
-      return car ? sendResponse(res, 200, true, "Car Found", car) : sendResponse(res, 404, false, "Car not found");
+      return hasLength(car) ? sendResponse(res, 200, true, "Car Found", car) : sendResponse(res, 404, false, "Car not found");
    } catch (error) {
       console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
       next(error);
@@ -86,7 +102,7 @@ exports.updateCar = async (req, res, next) => {
          where: { carId },
       });
 
-      if (numberOfAffectedRows > 0) {
+      if (hasLength(numberOfAffectedRows)) {
          const updatedCar = await Car.findOne({ where: { carId } });
 
          return sendResponse(res, 200, true, "Car updated successfully", updatedCar);
@@ -106,7 +122,7 @@ exports.deleteCar = async (req, res, next) => {
       console.log("AFFECTED ROWS");
       console.log(affectedRows);
 
-      return affectedRows > 0 ? sendResponse(res, 200, true, "Car deleted successfully", {}) : sendResponse(res, 200, false, "Car delete fail", {});
+      return hasLength(affectedRows) ? sendResponse(res, 200, true, "Car deleted successfully", {}) : sendResponse(res, 200, false, "Car delete fail", {});
    } catch (error) {
       console.log("ERROR FROM USER CONTROLLER: " + error.message);
       next(error);
@@ -116,9 +132,8 @@ exports.deleteCar = async (req, res, next) => {
 exports.getCarMakes = async (req, res, next) => {
    try {
       const carMakes = await CarMake.findAll({ include: { model: CarModel } });
-      // console.log(carMakes);
 
-      return carMakes.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carMakes) : sendResponse(res, 404, false, "No result found.", {});
+      return hasLength(carMakes) ? sendResponse(res, 200, true, "Result(s) found...", carMakes) : sendResponse(res, 404, false, "No result found.", {});
    } catch (error) {
       console.log("ERROR FROM GET CAR MAKES CONTROLLER: " + error.message);
       next(error);
@@ -130,7 +145,7 @@ exports.getCarModel = async (req, res, next) => {
    try {
       const carModels = await CarModel.findAll({ where: { make_id } });
 
-      return carModels.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", carModels) : sendResponse(res, 404, false, "No result found.", {});
+      return hasLength(carModels) ? sendResponse(res, 200, true, "Result(s) found...", carModels) : sendResponse(res, 404, false, "No result found.", {});
    } catch (error) {
       console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
       next(error);
@@ -141,9 +156,9 @@ exports.getCarBodyTypes = async (req, res, next) => {
    try {
       const bodyType = await CarBodyType.findAll();
 
-      return bodyType.length > 0 ? sendResponse(res, 200, true, "Result(s) found...", bodyType) : sendResponse(res, 404, false, "No result found.", {});
+      return hasLength(bodyType) ? sendResponse(res, 200, true, "Result(s) found...", bodyType) : sendResponse(res, 404, false, "No result found.", {});
    } catch (error) {
-      console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
+      console.log("ERROR FROM GET CAR BODY TYPES CONTROLLER: " + error.message);
       next(error);
    }
 };

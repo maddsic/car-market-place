@@ -1,3 +1,6 @@
+const fs = require("fs").promises;
+const path = require("path");
+
 const { User } = require("../models");
 
 // verifies that the user has records
@@ -16,6 +19,21 @@ exports.hasRecords = async user => {
            },
            status: 404,
         };
+};
+
+exports.hasLength = data => {
+   return (data && data.length > 0) || (data && Object.keys(data).length > 0);
+};
+
+exports.hasError = error => {
+   return {
+      error: true,
+      status: 500,
+      success: false,
+      result: {
+         message: error,
+      },
+   };
 };
 
 // Find User records by email
@@ -49,4 +67,14 @@ exports.sendResponse = async (res, statusCode, success, message, data = []) => {
       message,
       data,
    });
+};
+
+exports.convertImageToBase64 = async imagePath => {
+   try {
+      const imgBuffer = await fs.readFile(imagePath);
+      return `data:image/jpeg;base64,${imgBuffer.toString("base64")}`;
+   } catch (error) {
+      console.log(`ERROR READING IMAGE: ${error.message}`);
+      return null;
+   }
 };

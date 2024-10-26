@@ -4,6 +4,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { cars } from "~/data/carmakes";
 import Heading from "../Header/heading";
 import Divider from "../Divider/divider";
+import NextButton from "../PaginationRight/next";
+import PrevButton from "../PaginationLeft/prev";
 
 const BrowseBymake = () => {
   const [startIndex, setStartIndex] = useState<number>(0);
@@ -29,12 +31,14 @@ const BrowseBymake = () => {
     return () => window.removeEventListener("resize", handleWindowSizeChanged);
   }, []);
 
+  // Next button
   const handleNext = () => {
     if (startIndex + 1 < cars.length - carsPerPage + 1) {
       setStartIndex(startIndex + 1);
     }
   };
 
+  // Prev button
   const handlePrev = () => {
     if (startIndex > 0) {
       setStartIndex(startIndex - 1);
@@ -45,25 +49,16 @@ const BrowseBymake = () => {
     <main className="max__container p-6 md:block">
       <div className="flex items-center justify-between">
         <Heading title="Browse By" colouredText="make" />
+        {/* PAGINATION */}
         <div className="flex gap-4">
-          <span
-            className={`cursor-pointer rounded-lg bg-gray-200 px-5 py-3 duration-1000 hover:bg-yellow ${
-              startIndex === 0 ? "cursor-not-allowed opacity-50" : ""
-            }`}
-            onClick={handlePrev}
-          >
-            <FaArrowLeft className="text-gray-400" />
-          </span>
-          <span
-            className={`cursor-pointer rounded-lg bg-gray-200 px-5 py-3 duration-1000 hover:bg-yellow ${
-              startIndex + carsPerPage >= cars.length
-                ? "cursor-not-allowed opacity-50"
-                : ""
-            }`}
-            onClick={handleNext}
-          >
-            <FaArrowRight className="text-gray-400" />
-          </span>
+          <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
+
+          <NextButton
+            handleNext={handleNext}
+            startIndex={startIndex}
+            carsPerPage={carsPerPage}
+            carsLength={cars.length}
+          />
         </div>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-4 lg:mt-10 lg:grid-cols-8">
