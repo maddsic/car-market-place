@@ -4,6 +4,71 @@
   box-sizing: border-box;
 }
 
+.error {
+  max-width: fit-content;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--color-secondary-100);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.rotate-diagonal {
+  transform: rotate(-45deg); /* Rotate the element diagonally */
+  transform-origin: bottom; /* Set the pivot point for rotation */
+}
+
+.clip-path {
+  clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.section_heading {
+  box-sizing: border-box;
+  color: #232628;
+  font-family: Montserrat, Arial;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 30px;
+  margin: 5px 0px;
+}
+
+.section_heading_mobile {
+  box-sizing: border-box;
+  color: #232628;
+  font-family: Montserrat, Arial;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 30px;
+  margin: 5px 0px;
+}
+
+.labels {
+  box-sizing: border-box;
+  color: #ff9501;
+  cursor: pointer;
+  font-family: Montserrat, Arial;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.latest_car_labels {
+  box-sizing: border-box;
+  color: #ff9501;
+  cursor: pointer;
+  font-family: Montserrat, Arial;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.font-montserrat {
+  font-family: Montserrat, Arial;
+}
+
 .footer_text {
   font-family: "Lato", sans-serif;
   font-weight: 400;

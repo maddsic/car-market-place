@@ -16,12 +16,17 @@ const NavLinks = [
   {
     id: 3,
     title: "listings",
-    href: "/",
+    href: "/listings",
   },
   {
     id: 4,
     title: "dealers",
-    href: "/",
+    href: "/dealers",
+  },
+  {
+    id: 5,
+    title: "auction",
+    href: "/auctions",
   },
 ];
 
@@ -47,8 +52,8 @@ const Navbar = () => {
                 <FaUserCircle size={24} className="cursor-pointer" />
               </span>
 
-              <button className="hidden items-center gap-2 rounded bg-yellow px-4 py-2 text-sm font-semibold hover:bg-yellow/80 md:flex">
-                <FaCarSide />
+              <button className="hidden items-center gap-2 rounded bg-yellow px-4 py-3 text-sm font-semibold hover:bg-yellow/80 md:flex">
+                <FaCarSide size={20} color="black" />
                 Add Your Item
               </button>
             </div>

@@ -6,9 +6,16 @@ const { createCar, getCars, getCarById, updateCar, deleteCar, getCarMakes, getCa
 const imageUploader = require("../helpers/upload");
 const { checkAuth } = require("../middlewares/verifyToken");
 
+// ---------------- CAR MODELS ------------------------------------
 router.post("/carmodels", getCarModel);
+
+// ---------------- CAR MAKES -------------------------------------
 router.get("/carmakes", getCarMakes);
+
+// -------------- BODY TYPES ----------------------------------
 router.get("/bodyType", getCarBodyTypes);
+
+// ----------------- CAR CRUD ROUTES ------------------------------
 router.post("/", checkAuth, imageUploader.single("imageUrl"), createCar);
 router.get("/", checkAuth, getCars);
 router.get("/:carId", checkAuth, getCarById);

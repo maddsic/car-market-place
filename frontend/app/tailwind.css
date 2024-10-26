@@ -6,47 +6,11 @@
   @apply mx-auto max-w-7xl px-4;
 }
 
-.rotate-diagonal {
-  transform: rotate(-45deg); /* Rotate the element diagonally */
-  transform-origin: bottom; /* Set the pivot point for rotation */
+a.active {
+  @apply font-bold text-yellow;
 }
 
-.clip-path {
-  clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
-}
-
-.section_heading {
-  box-sizing: border-box;
-  color: #232628;
-  font-family: Montserrat, Arial;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 30px;
-  margin: 5px 0px;
-}
-
-.section_heading_mobile {
-  box-sizing: border-box;
-  color: #232628;
-  font-family: Montserrat, Arial;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 30px;
-  margin: 5px 0px;
-}
-
-.labels {
-  box-sizing: border-box;
-  color: #ff9501;
-  cursor: pointer;
-  font-family: Montserrat, Arial;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 16px;
-  text-transform: uppercase;
-}
-
-.latest_car_labels {
+/* .latest_car_labels {
   box-sizing: border-box;
   color: #ff9501;
   cursor: pointer;
@@ -55,11 +19,7 @@
   font-weight: 700;
   line-height: 16px;
   text-transform: uppercase;
-}
-
-.font-montserrat {
-  font-family: Montserrat, Arial;
-}
+} */
 
 @layer base {
   :root {

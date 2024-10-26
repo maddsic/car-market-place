@@ -9,6 +9,9 @@ import Heading from "~/components/Header/heading";
 import { FaArrowLeft, FaArrowRight, FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 import { cars } from "~/data/latestcars";
+import Next from "~/components/PaginationRight/next";
+import NextButton from "~/components/PaginationRight/next";
+import PrevButton from "~/components/PaginationLeft/prev";
 
 interface CarModel {
   id: string;
@@ -36,9 +39,6 @@ export const loader: LoaderFunction = async () => {
 };
 
 const InventoryPage = () => {
-  const carMakes = useLoaderData<typeof loader>() || null;
-  //   console.log(carMakes);
-
   const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
 
@@ -51,6 +51,22 @@ const InventoryPage = () => {
     transmission: "",
     listing_status: "",
   });
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [carsPerPage, setCarsPerPage] = useState<number>(0);
+  const carMakes = useLoaderData<typeof loader>() || null;
+  //   console.log(carMakes);
+
+  const handleNext = () => {
+    if (startIndex + 1 < cars.length - carsPerPage + 1) {
+      setStartIndex(startIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 1);
+    }
+  };
 
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -222,28 +238,31 @@ const InventoryPage = () => {
 
           <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
             {cars.map((car) => (
-              <div className="relative cursor-pointer overflow-clip">
-                {/* IMAGE */}
+              <div
+                className="relative cursor-pointer overflow-clip"
+                key={car.id}
+              >
+                {/* CAR IMAGE */}
                 <img
                   src={car.img}
                   alt={car.model}
                   className="max-h-[70%] w-full"
                 />
 
-                {/* TITLE */}
+                {/*CAR TITLE */}
                 <div className="mt-3 flex justify-between">
                   <label className="labels flex flex-col">
                     <p className="">{car.make}</p>
                     <p className="font-semibold text-primary">{car.model}</p>
                   </label>
 
-                  {/* PRICE */}
+                  {/* CAR PRICE */}
                   <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
                     ${car.price}
                   </span>
                 </div>
 
-                {/* DESCRIPTION */}
+                {/* CAR DESCRIPTION */}
                 <div className="mt-4 flex items-center gap-4 text-xs md:flex">
                   <span className="flex items-center gap-1 text-muted-foreground">
                     <FaRoad />
@@ -271,12 +290,8 @@ const InventoryPage = () => {
 
           {/* TODO: PAGINATION */}
           <div className="mt-10 flex items-center justify-between">
-            {/* ARROW LEFT */}
-            <span
-              className={`cursor-pointer rounded-lg bg-gray-200 px-5 py-3 duration-1000 hover:bg-yellow`}
-            >
-              <FaArrowLeft className="text-gray-400" />
-            </span>
+            {/* PREV BUTTON */}
+            <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
 
             {/* PAGINATION PAGE NUMBERS */}
             <div className="flex items-center gap-2">
@@ -287,10 +302,13 @@ const InventoryPage = () => {
               <span className="rounded bg-yellow px-4 py-1 text-white">3</span>
             </div>
 
-            {/* ARROW RIGHT */}
-            <span className="cursor-pointer rounded-lg bg-yellow px-5 py-3 duration-1000">
-              <FaArrowRight className="text-gray-400" />
-            </span>
+            {/* NEXT BUTTON */}
+            <NextButton
+              handleNext={handleNext}
+              startIndex={startIndex}
+              carsPerPage={carsPerPage}
+              carsLength={cars.length}
+            />
           </div>
         </div>
       </div>

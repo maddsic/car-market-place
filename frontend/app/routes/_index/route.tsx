@@ -1,5 +1,9 @@
 import { type LoaderFunction, type MetaFunction } from "@vercel/remix";
-import { useLoaderData } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react";
 import Navbar from "~/components/Navbar/navbar";
 import Header from "~/components/Header/header";
 import BrowseBymake from "~/components/Browse/browse";
@@ -56,5 +60,33 @@ export default function Index() {
         </section>
       </main>
     </>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <main className="">
+        <div className="error">
+          <h1>Oooops!</h1>
+          <p>Status: {error.status}</p>
+          <p className="info-message">{error.data.message}</p>
+        </div>
+      </main>
+    );
+  }
+
+  let errorMessage = "message kunta/flex to start backend server";
+
+  return (
+    <main className="flex h-[calc(100vh-80px)] items-center justify-center">
+      <div className="error">
+        <h1>Uh oh ...</h1>
+        <p>ngrok server down.</p>
+        <pre>{errorMessage}</pre>
+      </div>
+    </main>
   );
 }
