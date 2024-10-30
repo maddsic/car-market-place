@@ -22,6 +22,6 @@ exports.comparePassword = async (data, password) => {
 
 exports.generateJwtToken = ({ userId, email, role }) => {
    return jwt.sign({ userId, email, role }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "7d",
    });
 };

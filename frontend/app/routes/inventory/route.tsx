@@ -24,18 +24,46 @@ interface CarMake {
   CarModels: CarModel[];
 }
 
-export const loader: LoaderFunction = async () => {
-  // const response = await fetch("http://localhost:8080/api/v1/cars/carmakes");
-  const response = await fetch(
-    "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
-  );
-  const carMakes = await response.json();
+// Getting car makes
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const section = url.searchParams.get("section");
+  const value = url.searchParams.get("value");
+  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
+  console.log("token: " + token);
 
-  if (!carMakes.success) {
-    throw new Response("Failed to fetch car makes", { status: 500 });
+  let carMakes;
+
+  try {
+    // Load cars based on section and value
+    const carResponse = await fetch(
+      `https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars?section=${section}&value=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    const carData = await carResponse.json();
+    // console.log("carData", carData);
+
+    // Load car makes separately
+    const makesResponse = await fetch(
+      "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
+    );
+    carMakes = await makesResponse.json();
+
+    // Ensure both fetches are successful and contain expected data
+    if (!carMakes?.success || !carData?.success) {
+      throw new Response("Failed to fetch records", { status: 500 });
+    }
+
+    return { carMakes: carMakes.data, cars: carData.data };
+  } catch (error) {
+    console.error("Error in loader:", error);
+    return new Response("Failed to load data", { status: 500 });
   }
-
-  return carMakes.data;
 };
 
 const InventoryPage = () => {
@@ -52,19 +80,19 @@ const InventoryPage = () => {
     listing_status: "",
   });
   const [startIndex, setStartIndex] = useState<number>(0);
-  const [carsPerPage, setCarsPerPage] = useState<number>(0);
-  const carMakes = useLoaderData<typeof loader>() || null;
-  //   console.log(carMakes);
+  const [carsPerPage, setCarsPerPage] = useState<number>(6);
+  const { carMakes, cars } = useLoaderData<typeof loader>() || null;
+  // console.log("cars", cars);
 
   const handleNext = () => {
     if (startIndex + 1 < cars.length - carsPerPage + 1) {
-      setStartIndex(startIndex + 1);
+      setStartIndex(startIndex + 6);
     }
   };
 
   const handlePrev = () => {
     if (startIndex > 0) {
-      setStartIndex(startIndex - 1);
+      setStartIndex(startIndex - 6);
     }
   };
 
@@ -231,61 +259,65 @@ const InventoryPage = () => {
           <Divider classNames="h-[1px] mt-6" />
 
           <h2 className="mb-6 mt-6 text-xl font-semibold text-yellow">
-            23 matches
+            {cars.length} Found
           </h2>
 
           <Divider classNames="h-[1px]" />
 
           <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
-            {cars.map((car) => (
-              <div
-                className="relative cursor-pointer overflow-clip"
-                key={car.id}
-              >
-                {/* CAR IMAGE */}
-                <img
-                  src={car.img}
-                  alt={car.model}
-                  className="max-h-[70%] w-full"
-                />
+            {cars ? (
+              cars.slice(startIndex, startIndex + carsPerPage).map((car) => (
+                <div
+                  className="relative cursor-pointer overflow-clip"
+                  key={car.id}
+                >
+                  {/* CAR IMAGE */}
+                  <img
+                    src={car.imageUrl}
+                    alt={car.model + "-" + car.make}
+                    className="max-h-[70%] w-full"
+                  />
 
-                {/*CAR TITLE */}
-                <div className="mt-3 flex justify-between">
-                  <label className="labels flex flex-col">
-                    <p className="">{car.make}</p>
-                    <p className="font-semibold text-primary">{car.model}</p>
-                  </label>
+                  {/*CAR TITLE */}
+                  <div className="mt-3 flex justify-between">
+                    <label className="labels flex flex-col">
+                      <p className="">{car.make}</p>
+                      <p className="font-semibold text-primary">{car.model}</p>
+                    </label>
 
-                  {/* CAR PRICE */}
-                  <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
-                    ${car.price}
+                    {/* CAR PRICE */}
+                    <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
+                      ${car.price}
+                    </span>
+                  </div>
+
+                  {/* CAR DESCRIPTION */}
+                  <div className="mt-4 flex items-center gap-4 text-xs md:flex">
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <FaRoad />
+                      <span>{car.mileage}</span>
+                      <span>mi</span>
+                    </span>
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <FaGasPump />
+                      <span>{car.fuelType}</span>
+                    </span>
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <SiTransmission />
+                      <span>{car.engineType}</span>
+                    </span>
+                  </div>
+
+                  <span className="rotate-diagonal z-999 font-montserrat absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white">
+                    special
                   </span>
+
+                  <hr className="mt-3 border-gray-300" />
                 </div>
-
-                {/* CAR DESCRIPTION */}
-                <div className="mt-4 flex items-center gap-4 text-xs md:flex">
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <FaRoad />
-                    <span>{car.millage}</span>
-                    <span>mi</span>
-                  </span>
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <FaGasPump />
-                    <span>{car.fuelType}</span>
-                  </span>
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <SiTransmission />
-                    <span>{car.transmission}</span>
-                  </span>
-                </div>
-
-                <span className="rotate-diagonal z-999 font-montserrat absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white">
-                  special
-                </span>
-
-                <hr className="mt-3 border-gray-300" />
-              </div>
-            ))}
+              ))
+            ) : (
+              <h1>No Record Found</h1>
+            )}
           </div>
 
           {/* TODO: PAGINATION */}
