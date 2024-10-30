@@ -72,7 +72,7 @@ exports.sendResponse = async (res, statusCode, success, message, data = []) => {
 exports.convertImageToBase64 = async imagePath => {
    try {
       const imgBuffer = await fs.readFile(imagePath);
-      return `data:image/jpeg;base64,${imgBuffer.toString("base64")}`;
+      return imgBuffer.toString("base64");
    } catch (error) {
       console.log(`ERROR READING IMAGE: ${error.message}`);
       return null;

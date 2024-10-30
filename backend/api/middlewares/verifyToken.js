@@ -11,7 +11,7 @@ exports.checkAuth = async (req, res, next) => {
       if (token === null) return sendResponse(res, 401, false, "No token found");
 
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-         if (err) return sendResponse(res, 403, false, "Authentication failed - invaliad or expired token");
+         if (err) return sendResponse(res, 403, false, "Authentication failed - invalid or expired token");
          // console.log("USER DATA FROM DECODED TOKEN");
          // console.log(user);
 

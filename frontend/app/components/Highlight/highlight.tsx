@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 // COMPONENT
 
@@ -10,6 +10,12 @@ import { AiFillDollarCircle } from "react-icons/ai";
 import Button from "../Button/button";
 
 const Highlight = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (section: string, value: string) => {
+    navigate(`/inventory?section=${section}&value=${value}`);
+  };
+
   return (
     <div className="relative w-full bg-gray-900 bg-[url(/latest_cars/x7.jpg)] bg-center object-cover p-3 md:p-7 lg:max-h-[calc(100vh-500px)] lg:p-10">
       <div className="max__container relative h-full">
@@ -30,12 +36,13 @@ const Highlight = () => {
               Our cars are delivered fully-registered with all requirements
               completed. We will deliver your car wherever you are.
             </p>
-            <Link to="/inventory">
+
+            <div onClick={() => handleNavigate("inventory", "all")}>
               <Button
                 title="Inventory"
                 classNames="text-white font-montserrat hover:bg-yellow"
               />
-            </Link>
+            </div>
           </div>
           {/* SELL YOUR CAR */}
           <div className="relative flex max-w-full flex-col justify-between gap-5 overflow-hidden bg-card bg-yellow p-5 md:p-10 lg:p-6">

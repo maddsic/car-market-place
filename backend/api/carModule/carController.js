@@ -16,7 +16,7 @@ exports.createCar = async (req, res, next) => {
 
    const { userId, make, model, year, price, mileage, color, fuelType, description, engineType, carType } = req.body;
 
-   const imageUrl = req.file.filename;
+   const imageUrl = req.file ? req.file.filename : null;
 
    const carBodyType = await CarBodyType.findOne({ where: { typeName: carType } });
 
@@ -50,8 +50,33 @@ exports.createCar = async (req, res, next) => {
 };
 
 exports.getCars = async (req, res, next) => {
+   const { section, value } = req.query;
+
    try {
-      const cars = await Car.findAll({ include: { model: CarBodyType, as: "bodyType" } });
+      let cars;
+      switch (section) {
+         case "inventory":
+            // Fetch all cars
+            cars = await Car.findAll();
+            break;
+         case "make":
+            // Fetch cars by make ID
+            cars = await Car.findAll({ where: { make: value } });
+            console.log("make id" + cars);
+            break;
+         case "premium":
+            // Fetch premium cars based on some premium condition
+            // cars = await Car.findAll({ where: { isPremium: true } });
+            cars = await Car.findAll();
+            break;
+         case "latest":
+            // Fetch the latest cars
+            cars = await Car.findAll({ order: [["createdAt", "DESC"]], limit: 10 });
+            break;
+         default:
+            cars = await Car.findAll();
+            break;
+      }
 
       if (hasLength(cars)) {
          const carImages = await Promise.all(
@@ -70,6 +95,7 @@ exports.getCars = async (req, res, next) => {
          );
          return sendResponse(res, 200, true, "Car(s) Found", carImages);
       }
+      return sendResponse(res, 404, false, "No Record Found");
    } catch (error) {
       console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
       next(error);
@@ -129,11 +155,49 @@ exports.deleteCar = async (req, res, next) => {
    }
 };
 
+exports.createCarMakes = async (req, res, next) => {
+   const { name } = req.body;
+   // console.log("MAKES");
+   // console.log(name);
+
+   const imageUrl = req.file ? req.file.filename : null;
+
+   const data = {
+      name,
+      imageUrl: imageUrl,
+   };
+
+   try {
+      const new_make = await CarMake.create(data);
+      console.log(new_make);
+
+      return new_make ? sendResponse(res, 201, true, "Car make created successfully", new_make) : sendResponse(res, 404, false, "Cannot create car makes");
+   } catch (error) {
+      console.log("ERROR FROM CREATE CAR MAKES: " + error.message);
+      next(error);
+   }
+};
+
 exports.getCarMakes = async (req, res, next) => {
    try {
       const carMakes = await CarMake.findAll({ include: { model: CarModel } });
+      // console.log("first car makes: " + carMakes);
 
-      return hasLength(carMakes) ? sendResponse(res, 200, true, "Result(s) found...", carMakes) : sendResponse(res, 404, false, "No result found.", {});
+      if (hasLength(carMakes)) {
+         const carMakeImages = await Promise.all(
+            carMakes.map(async make => {
+               const imgPath = path.join(__dirname, "../../image_uploads", make.imageUrl);
+
+               const base64Image = await convertImageToBase64(imgPath);
+
+               return {
+                  ...make.toJSON(),
+                  imageUrl: base64Image ? `data:image/png;base64,${base64Image}` : null,
+               };
+            })
+         );
+         return sendResponse(res, 200, true, "Record Found", carMakeImages);
+      }
    } catch (error) {
       console.log("ERROR FROM GET CAR MAKES CONTROLLER: " + error.message);
       next(error);
@@ -162,3 +226,8 @@ exports.getCarBodyTypes = async (req, res, next) => {
       next(error);
    }
 };
+
+// TODO:
+/**
+ * 1. Create a new api - get cars by make, category, premium, lastest
+ */

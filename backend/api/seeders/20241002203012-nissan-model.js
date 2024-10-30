@@ -8,70 +8,70 @@ module.exports = {
          {
             id: uuidv4(),
             name: "Altima",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5", // Replace with the actual UUID of Nissan
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb", // Replace with the actual UUID of Nissan
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Maxima",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Sentra",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Rogue",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Murano",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Pathfinder",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "370Z",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "GT-R",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Frontier",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
          {
             id: uuidv4(),
             name: "Titan",
-            make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5",
+            make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb",
             createdAt: new Date(),
             updatedAt: new Date(),
          },
@@ -79,6 +79,6 @@ module.exports = {
    },
 
    async down(queryInterface, Sequelize) {
-      await queryInterface.bulkDelete("CarModel", { make_id: "fefbf4e0-4fe0-47fc-9d41-0473b3c066d5" }, {});
+      await queryInterface.bulkDelete("CarModel", { make_id: "16047ddd-84c7-43c6-8fcf-59553ba95ccb" }, {});
    },
 };

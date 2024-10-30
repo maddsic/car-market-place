@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       {
          id: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true, allowNull: false },
          name: { type: DataTypes.STRING, allowNull: false },
+         imageUrl: { type: DataTypes.STRING, allowNull: true },
       },
       {
          freezeTableName: true,

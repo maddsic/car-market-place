@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const carMakes = useLoaderData<typeof loader>() || null;
-  // console.log(carMakes);
 
   return (
     <>
@@ -44,7 +43,7 @@ export default function Index() {
       </header>
       <main className="relative mt-10 md:mt-24">
         <section className="">
-          <BrowseBymake />
+          <BrowseBymake carMakes={carMakes} />
         </section>
         <section className="relative sm:mb-10 sm:mt-8">
           <PremiumCars />

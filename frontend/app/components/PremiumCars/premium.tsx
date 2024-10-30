@@ -11,6 +11,7 @@ import acura from "/acura.jpg";
 import Heading from "../Header/heading";
 import Button from "../Button/button";
 import Divider from "../Divider/divider";
+import { useNavigate } from "@remix-run/react";
 
 const cars = [
   {
@@ -46,6 +47,11 @@ const cars = [
 ];
 
 const PremiumCars = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (section: string, value: string) => {
+    navigate(`/inventory?section=${section}&value=${value}`);
+  };
   return (
     <div className="max__container">
       {/* SECTION TITLE */}
@@ -58,7 +64,7 @@ const PremiumCars = () => {
 
       <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
         {cars.map((car) => (
-          <div className="relative overflow-clip">
+          <div className="relative overflow-clip" key={car.id}>
             {/* IMAGE */}
             <img src={car.img} alt={car.model} className="max-h-[70%] w-full" />
 
@@ -102,7 +108,10 @@ const PremiumCars = () => {
       </div>
 
       {/* BUTTON */}
-      <div className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10">
+      <div
+        className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10"
+        onClick={() => handleNavigate("premium", "all")}
+      >
         <Button
           title="show all premium cars"
           classNames="uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"

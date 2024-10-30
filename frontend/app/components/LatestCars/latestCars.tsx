@@ -6,8 +6,14 @@ import { cars } from "~/data/latestcars";
 import Heading from "../Header/heading";
 import Price from "../Price/price";
 import Button from "../Button/button";
+import { useNavigate } from "@remix-run/react";
 
 const LatestCars = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (section: string, value: string) => {
+    navigate(`/inventory?section=${section}&value=${value}`);
+  };
   return (
     <div className="max__container">
       <div className="mt-10">
@@ -114,7 +120,10 @@ const LatestCars = () => {
         </div>
 
         {/* BUTTON */}
-        <div className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10">
+        <div
+          className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10"
+          onClick={() => handleNavigate("latest", "all")}
+        >
           <Button
             title="show all latest cars"
             classNames="uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"
