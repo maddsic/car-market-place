@@ -70,18 +70,23 @@ const BrowseBymake = ({ carMakes }: { carMakes: any }) => {
         </div>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-4 lg:mt-10 lg:grid-cols-8">
-        {carMakes
-          .slice(startIndex, startIndex + carsPerPage)
-          .map((make: any) => (
-            <div
-              key={make.id}
-              className="flex transform cursor-pointer flex-col items-center justify-center p-4 transition duration-1000 ease-linear animate-out hover:border"
-              onClick={() => handleNavigate("make", make.name)}
-            >
-              <img src={make?.imageUrl} alt={make.name} className="mb-4 w-20" />
-              <p className="text-lg font-medium text-gray-600">{make.name}</p>
-            </div>
-          ))}
+        {carMakes &&
+          carMakes
+            .slice(startIndex, startIndex + carsPerPage)
+            .map((make: any) => (
+              <div
+                key={make.id}
+                className="flex transform cursor-pointer flex-col items-center justify-center p-4 transition duration-1000 ease-linear animate-out hover:border"
+                onClick={() => handleNavigate("make", make.name)}
+              >
+                <img
+                  src={make?.imageUrl}
+                  alt={make.name}
+                  className="mb-4 w-20"
+                />
+                <p className="text-lg font-medium text-gray-600">{make.name}</p>
+              </div>
+            ))}
       </div>
       <Divider />
     </main>

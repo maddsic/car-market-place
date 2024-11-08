@@ -1,18 +1,22 @@
 import { LoaderFunction } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { IoCarSportOutline } from "react-icons/io5";
 
+// Components
 import Button from "~/components/Button/button";
 import Divider from "~/components/Divider/divider";
 import Heading from "~/components/Header/heading";
-import { FaArrowLeft, FaArrowRight, FaGasPump, FaRoad } from "react-icons/fa";
-import { SiTransmission } from "react-icons/si";
-import { cars } from "~/data/latestcars";
-import Next from "~/components/PaginationRight/next";
 import NextButton from "~/components/PaginationRight/next";
 import PrevButton from "~/components/PaginationLeft/prev";
 
+// Icons
+import { IoCarSportOutline } from "react-icons/io5";
+import { FaGasPump, FaRoad } from "react-icons/fa";
+import { SiTransmission } from "react-icons/si";
+import Special from "~/components/Special/special";
+import { apiFetch } from "~/utils/apiFetch";
+
+// Interfaces
 interface CarModel {
   id: string;
   name: string;
@@ -24,35 +28,34 @@ interface CarMake {
   CarModels: CarModel[];
 }
 
+interface Car {
+  id: string;
+  make: string;
+  model: string;
+  imageUrl: string;
+  price: number;
+  mileage: number;
+  fuelType: string;
+  engineType: string;
+}
+
 // Getting car makes
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const section = url.searchParams.get("section");
   const value = url.searchParams.get("value");
   const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
-  console.log("token: " + token);
-
-  let carMakes;
+  // console.log("token: " + token);
 
   try {
-    // Load cars based on section and value
-    const carResponse = await fetch(
+    const carData = await apiFetch(
       `https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars?section=${section}&value=${value}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      },
+      token,
     );
-    const carData = await carResponse.json();
-    // console.log("carData", carData);
 
-    // Load car makes separately
-    const makesResponse = await fetch(
+    let carMakes = await apiFetch(
       "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
     );
-    carMakes = await makesResponse.json();
 
     // Ensure both fetches are successful and contain expected data
     if (!carMakes?.success || !carData?.success) {
@@ -67,9 +70,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 const InventoryPage = () => {
-  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
+  const [carsPerPage, setCarsPerPage] = useState<number>(6);
+  const { carMakes = [], cars = [] } = useLoaderData<typeof loader>() || {};
   const [models, setModels] = useState<CarModel[]>([]);
-
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
   const [formData, setFormData] = useState({
     condition: "",
     body: "",
@@ -79,10 +84,6 @@ const InventoryPage = () => {
     transmission: "",
     listing_status: "",
   });
-  const [startIndex, setStartIndex] = useState<number>(0);
-  const [carsPerPage, setCarsPerPage] = useState<number>(6);
-  const { carMakes, cars } = useLoaderData<typeof loader>() || null;
-  // console.log("cars", cars);
 
   const handleNext = () => {
     if (startIndex + 1 < cars.length - carsPerPage + 1) {
@@ -246,6 +247,7 @@ const InventoryPage = () => {
               <option value="sold">sold</option>
             </select>
 
+            {/* button */}
             <Button
               title="reset all"
               classNames="bg-yellow w-full py-4 px-2 text-white font-bold tracking-wide"
@@ -264,84 +266,89 @@ const InventoryPage = () => {
 
           <Divider classNames="h-[1px]" />
 
+          {/* Cars */}
           <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
-            {cars ? (
-              cars.slice(startIndex, startIndex + carsPerPage).map((car) => (
-                <div
-                  className="relative cursor-pointer overflow-clip"
-                  key={car.id}
-                >
-                  {/* CAR IMAGE */}
-                  <img
-                    src={car.imageUrl}
-                    alt={car.model + "-" + car.make}
-                    className="max-h-[70%] w-full"
-                  />
+            {cars && cars.length > 0 ? (
+              cars
+                .slice(startIndex, startIndex + carsPerPage)
+                .map((car: Car) => (
+                  <div
+                    className="relative cursor-pointer overflow-clip"
+                    key={car.id}
+                  >
+                    {/* CAR IMAGE */}
+                    <img
+                      src={car.imageUrl}
+                      alt={car.model + "-" + car.make}
+                      className="max-h-[70%] w-full"
+                    />
+                    {/*CAR TITLE */}
+                    <div className="mt-3 flex justify-between">
+                      <label className="labels flex flex-col">
+                        <p className="">{car.make}</p>
+                        <p className="font-semibold text-primary">
+                          {car.model}
+                        </p>
+                      </label>
 
-                  {/*CAR TITLE */}
-                  <div className="mt-3 flex justify-between">
-                    <label className="labels flex flex-col">
-                      <p className="">{car.make}</p>
-                      <p className="font-semibold text-primary">{car.model}</p>
-                    </label>
-
-                    {/* CAR PRICE */}
-                    <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
-                      ${car.price}
-                    </span>
+                      {/* CAR PRICE */}
+                      <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
+                        ${car.price}
+                      </span>
+                    </div>
+                    {/* CAR DESCRIPTION */}
+                    <div className="mt-4 flex items-center gap-4 text-xs md:flex">
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <FaRoad />
+                        <span>{car.mileage}</span>
+                        <span>mi</span>
+                      </span>
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <FaGasPump />
+                        <span>{car.fuelType}</span>
+                      </span>
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <SiTransmission />
+                        <span>{car.engineType}</span>
+                      </span>
+                    </div>
+                    <Special />
+                    <hr className="mt-3 border-gray-300" />
                   </div>
-
-                  {/* CAR DESCRIPTION */}
-                  <div className="mt-4 flex items-center gap-4 text-xs md:flex">
-                    <span className="flex items-center gap-1 text-muted-foreground">
-                      <FaRoad />
-                      <span>{car.mileage}</span>
-                      <span>mi</span>
-                    </span>
-                    <span className="flex items-center gap-1 text-muted-foreground">
-                      <FaGasPump />
-                      <span>{car.fuelType}</span>
-                    </span>
-                    <span className="flex items-center gap-1 text-muted-foreground">
-                      <SiTransmission />
-                      <span>{car.engineType}</span>
-                    </span>
-                  </div>
-
-                  <span className="rotate-diagonal z-999 font-montserrat absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white">
-                    special
-                  </span>
-
-                  <hr className="mt-3 border-gray-300" />
-                </div>
-              ))
+                ))
             ) : (
-              <h1>No Record Found</h1>
+              <h1 className="capitalize">No Record Found </h1>
             )}
           </div>
 
           {/* TODO: PAGINATION */}
-          <div className="mt-10 flex items-center justify-between">
-            {/* PREV BUTTON */}
-            <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
+          {cars && cars.length > 0 && (
+            <div className="mt-10 flex items-center justify-between">
+              {/* PREV BUTTON */}
+              <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
 
-            {/* PAGINATION PAGE NUMBERS */}
-            <div className="flex items-center gap-2">
-              <span className="rounded bg-gray-200 px-4 py-1 text-white">
-                1
-              </span>
-              <span className="rounded bg-yellow px-4 py-1 text-white">2</span>
-              <span className="rounded bg-yellow px-4 py-1 text-white">3</span>
+              {/* PAGINATION PAGE NUMBERS */}
+              <div className="flex items-center gap-2">
+                <span className="rounded bg-gray-200 px-4 py-1 text-white">
+                  1
+                </span>
+                <span className="rounded bg-yellow px-4 py-1 text-white">
+                  2
+                </span>
+                <span className="rounded bg-yellow px-4 py-1 text-white">
+                  3
+                </span>
+              </div>
+
+              {/* NEXT BUTTON */}
+              <NextButton
+                handleNext={handleNext}
+                startIndex={startIndex}
+                carsPerPage={carsPerPage}
+                carsLength={cars.length}
+              />
             </div>
-
-            {/* NEXT BUTTON */}
-            <NextButton
-              handleNext={handleNext}
-              startIndex={startIndex}
-              carsPerPage={carsPerPage}
-              carsLength={cars.length}
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>
