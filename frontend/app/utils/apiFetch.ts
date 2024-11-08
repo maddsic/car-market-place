@@ -1,8 +1,11 @@
-import { json } from "@remix-run/node";
-
-export async function apiFetch(url: string) {
+export async function apiFetch(url: string, token?: string) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error(

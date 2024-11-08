@@ -1,8 +1,15 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Heading from "../Header/heading";
 import CategoryImage from "./categoryImage";
+import { category } from "~/data/category";
+import { useNavigate } from "@remix-run/react";
 
 const Category = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (section: string, value: string) => {
+    navigate(`/inventory?section=${section}&value=${value}`);
+  };
   return (
     <div className="max__container">
       <div className="flex items-center justify-between">
@@ -18,25 +25,15 @@ const Category = () => {
       </div>
 
       <div className="mt-10 gap-10 md:grid md:grid-cols-12 md:gap-6">
-        <CategoryImage
-          imgUrl="/sedan.jpeg"
-          classNames="mb-5 md:mb-0"
-          title="Sedan"
-          count={13}
-        />
-        <CategoryImage
-          imgUrl="/coupe.jpeg"
-          classNames="col-span-7 mb-5 md:mb-0"
-          title="coupe"
-          count={23}
-        />
-        <CategoryImage
-          imgUrl="/convert.jpeg"
-          classNames="col-span-7 mb-5 md:mb-0"
-          title="convertable"
-          count={33}
-        />
-        <CategoryImage imgUrl="/pickups.jpeg" title="pick-ups" count={43} />
+        {category.map((category) => (
+          <CategoryImage
+            imgUrl={category.imgUrl}
+            classNames={`${category.colSpan} ${category.classNames}`}
+            title={category.name}
+            count={13}
+            onClick={() => handleNavigate("category", category.name)}
+          />
+        ))}
       </div>
     </div>
   );

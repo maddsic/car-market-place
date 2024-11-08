@@ -6,17 +6,20 @@ const CategoryImage = ({
   classNames,
   title,
   count,
+  onClick,
 }: {
   imgUrl: string | any;
   classNames?: string;
   title: string;
-  count: number;
+  count?: number;
+  onClick?: () => void;
 }) => {
   return (
     <div
       className={twMerge(
         `relative col-span-5 h-auto overflow-hidden ${classNames} cursor-pointer`,
       )}
+      onClick={onClick}
     >
       <img src={imgUrl} className="h-full w-full" alt="BMW 1" />
       <div className="z-999 font-montserrat absolute bottom-1 left-2 text-white lg:bottom-2 lg:left-5">

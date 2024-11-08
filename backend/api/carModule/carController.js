@@ -62,7 +62,6 @@ exports.getCars = async (req, res, next) => {
          case "make":
             // Fetch cars by make ID
             cars = await Car.findAll({ where: { make: value } });
-            console.log("make id" + cars);
             break;
          case "premium":
             // Fetch premium cars based on some premium condition
@@ -73,6 +72,8 @@ exports.getCars = async (req, res, next) => {
             // Fetch the latest cars
             cars = await Car.findAll({ order: [["createdAt", "DESC"]], limit: 10 });
             break;
+         case "category":
+            cars = await Car.findAll({ where: {} });
          default:
             cars = await Car.findAll();
             break;
