@@ -8,10 +8,11 @@ import bmw from "/bmw.jpg";
 import acura from "/acura.jpg";
 
 // Components
-import Heading from "../Header/heading";
+import Heading from "../Heading/heading";
 import Button from "../Button/button";
 import Divider from "../Divider/divider";
 import { useNavigate } from "@remix-run/react";
+import Special from "../Special/special";
 
 const cars = [
   {
@@ -64,7 +65,11 @@ const PremiumCars = () => {
 
       <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
         {cars.map((car) => (
-          <div className="relative overflow-clip" key={car.id}>
+          <div
+            className="relative cursor-pointer overflow-clip"
+            key={car.id}
+            onClick={() => navigate("/listings")}
+          >
             {/* IMAGE */}
             <img src={car.img} alt={car.model} className="max-h-[70%] w-full" />
 
@@ -98,9 +103,7 @@ const PremiumCars = () => {
               </span>
             </div>
 
-            <span className="rotate-diagonal z-999 font-montserrat absolute -left-5 top-4 bg-yellow px-12 py-2 text-xs font-semibold uppercase text-white">
-              special
-            </span>
+            <Special />
 
             <hr className="mt-3 border-gray-300" />
           </div>

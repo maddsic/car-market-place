@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Heading from "../Header/heading";
+import Heading from "../Heading/heading";
 import Divider from "../Divider/divider";
 import NextButton from "../PaginationRight/next";
 import PrevButton from "../PaginationLeft/prev";
