@@ -5,7 +5,7 @@ import { useState } from "react";
 // Components
 import Button from "~/components/Button/button";
 import Divider from "~/components/Divider/divider";
-import Heading from "~/components/Header/heading";
+import Heading from "~/components/Heading/heading";
 import NextButton from "~/components/PaginationRight/next";
 import PrevButton from "~/components/PaginationLeft/prev";
 

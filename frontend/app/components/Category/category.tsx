@@ -1,5 +1,5 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import Heading from "../Header/heading";
+import Heading from "../Heading/heading";
 import CategoryImage from "./categoryImage";
 import { category } from "~/data/category";
 import { useNavigate } from "@remix-run/react";

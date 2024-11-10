@@ -3,7 +3,7 @@ import { SiTransmission } from "react-icons/si";
 
 import { BsTelephone } from "react-icons/bs";
 import { cars } from "~/data/latestcars";
-import Heading from "../Header/heading";
+import Heading from "../Heading/heading";
 import Price from "../Price/price";
 import Button from "../Button/button";
 import { useNavigate } from "@remix-run/react";
@@ -25,8 +25,9 @@ const LatestCars = () => {
         <div className="mt-10 grid gap-10 xl:grid-cols-2">
           {cars.map((car, i) => (
             <div
-              className="box-border grid max-w-full gap-3 overflow-hidden md:grid-cols-12"
+              className="box-border grid max-w-full cursor-pointer gap-3 overflow-hidden md:grid-cols-12"
               key={i}
+              onClick={() => navigate("/listings")}
             >
               <img
                 src={car.img}
