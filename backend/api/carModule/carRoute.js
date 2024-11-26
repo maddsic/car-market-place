@@ -1,7 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-const { createCar, getCars, getCarById, updateCar, deleteCar, getCarMakes, getCarModel, getCarBodyTypes, createCarMakes } = require("./carController");
+const {
+   createCar,
+   getCars,
+   getCarById,
+   updateCar,
+   deleteCar,
+   getCarMakes,
+   getCarModel,
+   getCarBodyTypes,
+   createCarMakes,
+   getPremiumCars,
+   getLatestCars,
+} = require("./carController");
 
 const imageUploader = require("../helpers/upload");
 const { checkAuth } = require("../middlewares/verifyToken");
@@ -16,10 +28,16 @@ router.post("/carmodels", getCarModel);
 // -------------- BODY TYPES ----------------------------------
 router.get("/bodyType", getCarBodyTypes);
 
+// ------------------- PREMIUM CARS----------------------------------------------------------------
+router.get("/premium-cars", getPremiumCars);
+
+// ------------------- LATEST CARS----------------------------------------------------------------
+router.get("/latest-cars", getLatestCars);
+
 // ----------------- CAR CRUD ROUTES ------------------------------
 router.post("/", checkAuth, imageUploader.single("imageUrl"), createCar);
 router.get("/", getCars);
-router.get("/:carId", checkAuth, getCarById);
+router.get("/:carId", getCarById);
 router.put("/:carId", checkAuth, updateCar);
 router.delete("/:carId", checkAuth, deleteCar);
 

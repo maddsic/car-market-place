@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             onDelete: "paranoid",
          },
+         carType: { type: DataTypes.STRING, allowNull: false },
          make: { type: DataTypes.STRING, allowNull: false },
          model: { type: DataTypes.STRING, allowNull: false },
          year: { type: DataTypes.INTEGER, allowNull: false },
@@ -31,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
          description: { type: DataTypes.STRING, allowNull: true },
          imageUrl: { type: DataTypes.STRING, allowNull: false },
          engineType: { type: DataTypes.STRING, allowNull: false },
+         isPremium: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
+         status: { type: DataTypes.STRING, allowNull: true, defaultValue: "available" },
+         transmission: { type: DataTypes.STRING, allowNull: false },
       },
       {
          freezeTableName: true,
@@ -47,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Car.belongsTo(models.CarBodyType, {
-         foreignKey: "carTypeId",
+         foreignKey: "carType",
          as: "bodyType",
       });
    };

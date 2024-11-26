@@ -11,10 +11,6 @@ const BrowseBymake = ({ carMakes }: { carMakes: any }) => {
   const [carsPerPage, setCarsPerPage] = useState<number>(8);
   const navigate = useNavigate();
 
-  // const handleSelection = (makeId: string) => {
-  //   navigate(`/inventory?makeId=${makeId}`);
-  // };
-
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
   };

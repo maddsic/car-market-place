@@ -1,8 +1,8 @@
-const ListingImg = ({ imgUrl }: { imgUrl: string }) => {
+const ListingImg = ({ imageUrl }: { imageUrl: string }) => {
   return (
     <div className="relative h-32 w-[25%] cursor-pointer gap-4">
       <img
-        src={imgUrl}
+        src={imageUrl}
         alt=""
         sizes="30vw"
         className="rounded-md object-cover"

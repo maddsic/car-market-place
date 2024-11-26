@@ -18,10 +18,10 @@ const Highlight = () => {
 
   return (
     <div className="relative w-full bg-gray-900 bg-[url(/latest_cars/x7.jpg)] bg-center object-cover p-3 md:p-7 lg:max-h-[calc(100vh-500px)] lg:p-10">
-      <div className="max__container relative h-full">
+      <div className="max__container h-full">
         <div className="z-10 grid h-full grid-cols-1 gap-5 p-3 lg:grid-cols-2 lg:gap-10">
           {/* LOOKING FOR A CAR */}
-          <div className="max-w-content relative flex flex-col justify-between gap-5 overflow-hidden bg-card p-5 md:p-10 lg:p-6">
+          <div className="max-w-content flex flex-col justify-between gap-5 overflow-hidden bg-card p-5 md:p-10 lg:p-6">
             <div className="relative">
               <IoCarSportOutline size={80} className="text-extrabold" />
               <FcSearch
@@ -63,7 +63,7 @@ const Highlight = () => {
             <Link to="/">
               <Button
                 title="sell your car"
-                classNames="text-white font-montserrat hover:bg-gray-900"
+                classNames="text-white font-montserrat hover:bg-gray-900 bg-primary"
               />
             </Link>
           </div>
