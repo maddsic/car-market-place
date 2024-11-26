@@ -37,6 +37,7 @@ exports.createCar = async (req, res, next) => {
       imageUrl: imageUrl,
       engineType,
       carTypeId: carBodyType.typeId,
+      carType,
    };
 
    try {
@@ -49,6 +50,7 @@ exports.createCar = async (req, res, next) => {
    }
 };
 
+// GET ALL CARS BASE ON SECTION AND VALUE
 exports.getCars = async (req, res, next) => {
    const { section, value } = req.query;
 
@@ -65,8 +67,7 @@ exports.getCars = async (req, res, next) => {
             break;
          case "premium":
             // Fetch premium cars based on some premium condition
-            // cars = await Car.findAll({ where: { isPremium: true } });
-            cars = await Car.findAll();
+            cars = await Car.findAll({ where: { isPremium: true } });
             break;
          case "latest":
             // Fetch the latest cars
@@ -103,19 +104,79 @@ exports.getCars = async (req, res, next) => {
    }
 };
 
+// PREMIUM CARS
+exports.getPremiumCars = async (req, res, next) => {
+   const premiumCars = await Car.findAll({ where: { isPremium: true }, limit: 3 });
+
+   if (hasLength(premiumCars)) {
+      const premiumCarImages = await Promise.all(
+         // Map through all cars and convert to base64
+         premiumCars.map(async car => {
+            const imgPath = path.join(__dirname, "../../image_uploads", car.imageUrl);
+            // console.log(`Processing image for car ID ${car.id}: ${imgPath}`);
+
+            const base64Image = await convertImageToBase64(imgPath);
+
+            return {
+               ...car.toJSON(),
+               imageUrl: base64Image ? `data:image/jpg;base64,${base64Image}` : null,
+            };
+         })
+      );
+      return sendResponse(res, 200, true, "Car(s) Found", premiumCarImages);
+   }
+   return sendResponse(res, 404, false, "No Record Found");
+};
+
+//  LATEST CARS
+exports.getLatestCars = async (req, res, next) => {
+   const latestCars = await Car.findAll({ order: [["createdAt", "DESC"]], limit: 8 });
+   console.log(latestCars.length);
+
+   if (hasLength(latestCars)) {
+      const latestCarImages = await Promise.all(
+         // Map through all cars and convert to base64
+         latestCars.map(async car => {
+            const imgPath = path.join(__dirname, "../../image_uploads", car.imageUrl);
+            // console.log(`Processing image for car ID ${car.id}: ${imgPath}`);
+
+            const base64Image = await convertImageToBase64(imgPath);
+
+            return {
+               ...car.toJSON(),
+               imageUrl: base64Image ? `data:image/jpg;base64,${base64Image}` : null,
+            };
+         })
+      );
+      return sendResponse(res, 200, true, "Car(s) Found", latestCarImages);
+   }
+   return sendResponse(res, 404, false, "No Record Found");
+};
+
 exports.getCarById = async (req, res, next) => {
    const { carId } = req.params;
 
    try {
-      const car = await Car.findOne({
+      const carData = await Car.findOne({
          where: { carId },
          include: { model: CarBodyType, as: "bodyType" },
       });
-      // console.log("Get car by Id");
 
-      return hasLength(car) ? sendResponse(res, 200, true, "Car Found", car) : sendResponse(res, 404, false, "Car not found");
+      if (hasLength(carData)) {
+         const imgPath = path.join(__dirname, "../../image_uploads", carData.imageUrl);
+
+         const base64Image = await convertImageToBase64(imgPath);
+
+         const finalData = {
+            ...carData.toJSON(),
+            imageUrl: base64Image ? `data:image/jpg;base64,${base64Image}` : null,
+         };
+
+         return sendResponse(res, 200, true, "Record Found", finalData);
+      }
+      return sendResponse(res, 404, false, "No Record Found");
    } catch (error) {
-      console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
+      console.log("ERROR FROM GET ALL premiumCars CONTROLLER: " + error.message);
       next(error);
    }
 };
@@ -227,8 +288,3 @@ exports.getCarBodyTypes = async (req, res, next) => {
       next(error);
    }
 };
-
-// TODO:
-/**
- * 1. Create a new api - get cars by make, category, premium, lastest
- */

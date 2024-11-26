@@ -1,3 +1,4 @@
+// Custom Fetch fucntion
 export async function apiFetch(url: string, token?: string) {
   try {
     const response = await fetch(url, {

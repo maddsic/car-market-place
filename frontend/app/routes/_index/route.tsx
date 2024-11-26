@@ -2,42 +2,54 @@ import { type LoaderFunction, type MetaFunction } from "@vercel/remix";
 import {
   isRouteErrorResponse,
   useLoaderData,
+  useNavigation,
   useRouteError,
 } from "@remix-run/react";
-import Navbar from "~/components/Navbar/navbar";
 import Header from "~/components/Header/header";
 import BrowseBymake from "~/components/Browse/browse";
 import PremiumCars from "~/components/PremiumCars/premium";
 import Highlight from "~/components/Highlight/highlight";
 import Category from "~/components/Category/category";
 import LatestCars from "~/components/LatestCars/latestCars";
+import { apiFetch } from "~/utils/apiFetch";
+import Loader from "~/components/Loader/loader";
+import LoadingIndicator from "~/components/Loader/loadingIndicator";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "GamAutos" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Gam-autos" },
+    { name: "description", content: "Welcome to Gam-autos!" },
   ];
 };
 
+const API_BASE_URL = process.env.API_BASE_URL;
+
 export const loader: LoaderFunction = async () => {
-  // const response = await fetch("http://localhost:8080/api/v1/cars/carmakes");
-  const response = await fetch(
-    "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
+  const endPoints = [
+    { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
+    { key: "premiumCars", url: `${API_BASE_URL}/api/v1/cars/premium-cars` },
+    { key: "latestCars", url: `${API_BASE_URL}/api/v1/cars/latest-cars` },
+  ];
+
+  //
+  const results = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
+
+  return Object.fromEntries(
+    results.map((result, index) => [endPoints[index].key, result.data]),
   );
-  const carMakes = await response.json();
-
-  if (!carMakes.success) {
-    throw new Response("Failed to fetch car makes", { status: 500 });
-  }
-
-  return carMakes.data;
 };
 
+// MAIN
 export default function Index() {
-  const carMakes = useLoaderData<typeof loader>() || null;
+  const { carMakes, premiumCars, latestCars } =
+    useLoaderData<typeof loader>() || null;
+
+  const navigation = useNavigation();
+  const loading = navigation.state === "loading";
 
   return (
     <>
+      <LoadingIndicator isLoading={loading} />
       <header className="max-h-[70%]">
         <Header carMakes={carMakes} />
       </header>
@@ -46,7 +58,7 @@ export default function Index() {
           <BrowseBymake carMakes={carMakes} />
         </section>
         <section className="relative sm:mb-10 sm:mt-8">
-          <PremiumCars />
+          <PremiumCars premiumCars={premiumCars} />
         </section>
         <section className="relative mt-10 sm:mb-10">
           <Highlight />
@@ -55,7 +67,7 @@ export default function Index() {
           <Category />
         </section>
         <section className="relative sm:mb-14 sm:mt-8">
-          <LatestCars />
+          <LatestCars latestCars={latestCars} />
         </section>
       </main>
     </>
@@ -67,11 +79,11 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <main className="">
+      <main className="screen__height items-center justify-center">
         <div className="error">
-          <h1>Oooops!</h1>
+          <h1>Oops! Something went wrong.</h1>
           <p>Status: {error.status}</p>
-          <p className="info-message">{error.data.message}</p>
+          <pre>{error.data?.message || "An unexpected error occurred."}</pre>
         </div>
       </main>
     );
@@ -80,10 +92,12 @@ export function ErrorBoundary() {
   let errorMessage = "message kunta/flex to start backend server";
 
   return (
-    <main className="flex h-[calc(100vh-80px)] items-center justify-center">
+    <main className="screen__height flex items-center justify-center">
       <div className="error">
         <h1>Uh oh ...</h1>
-        <p>ngrok server down.</p>
+        <p>
+          looks like the server is down... please contact admin to start server
+        </p>
         <pre>{errorMessage}</pre>
       </div>
     </main>

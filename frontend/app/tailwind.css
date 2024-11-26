@@ -6,12 +6,24 @@
   @apply mx-auto max-w-7xl px-4;
 }
 
-.max__height {
-  @apply h-[calc(100vh-80px)];
-}
-
 a.active {
   @apply font-bold text-yellow;
+}
+
+.gray__text-light {
+  @apply text-gray-500;
+}
+
+.gray__text-medium {
+  @apply text-gray-700;
+}
+
+.gray__text-dark {
+  @apply text-gray-900;
+}
+
+.screen__height {
+  @apply h-[calc(100vh-80px)];
 }
 
 /* .latest_car_labels {

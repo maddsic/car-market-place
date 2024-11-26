@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 
 // Components
@@ -15,6 +15,8 @@ import { FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 import Special from "~/components/Special/special";
 import { apiFetch } from "~/utils/apiFetch";
+import Price from "~/components/Price/price";
+import { handleNavigateToListings } from "~/utils/handleNavigate";
 
 // Interfaces
 interface CarModel {
@@ -29,7 +31,7 @@ interface CarMake {
 }
 
 interface Car {
-  id: string;
+  carId: string;
   make: string;
   model: string;
   imageUrl: string;
@@ -37,6 +39,8 @@ interface Car {
   mileage: number;
   fuelType: string;
   engineType: string;
+  tranmission: string;
+  status: string;
 }
 
 // Getting car makes
@@ -45,22 +49,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const section = url.searchParams.get("section");
   const value = url.searchParams.get("value");
   const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
-  // console.log("token: " + token);
 
   try {
     const carData = await apiFetch(
       `https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars?section=${section}&value=${value}`,
-      token,
     );
 
     let carMakes = await apiFetch(
       "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
     );
-
-    // Ensure both fetches are successful and contain expected data
-    if (!carMakes?.success || !carData?.success) {
-      throw new Response("Failed to fetch records", { status: 500 });
-    }
 
     return { carMakes: carMakes.data, cars: carData.data };
   } catch (error) {
@@ -84,6 +81,12 @@ const InventoryPage = () => {
     transmission: "",
     listing_status: "",
   });
+  const navigate = useNavigate();
+
+  const handleNavigateToListings = (carId: string) => {
+    // Navigate to the listing page for the selected car
+    navigate(`/listings/${carId}`);
+  };
 
   const handleNext = () => {
     if (startIndex + 1 < cars.length - carsPerPage + 1) {
@@ -274,7 +277,8 @@ const InventoryPage = () => {
                 .map((car: Car) => (
                   <div
                     className="relative cursor-pointer overflow-clip"
-                    key={car.id}
+                    key={car.carId}
+                    onClick={() => handleNavigateToListings(car.carId!)}
                   >
                     {/* CAR IMAGE */}
                     <img
@@ -292,9 +296,7 @@ const InventoryPage = () => {
                       </label>
 
                       {/* CAR PRICE */}
-                      <span className="clip-path font-montserrat relative flex items-center bg-yellow px-5 py-0 text-[14px] font-extrabold text-white">
-                        ${car.price}
-                      </span>
+                      <Price price={car.price} className="text-[14px]" />
                     </div>
                     {/* CAR DESCRIPTION */}
                     <div className="mt-4 flex items-center gap-4 text-xs md:flex">
@@ -309,7 +311,7 @@ const InventoryPage = () => {
                       </span>
                       <span className="flex items-center gap-1 text-muted-foreground">
                         <SiTransmission />
-                        <span>{car.engineType}</span>
+                        <span>{car.transmission}</span>
                       </span>
                     </div>
                     <Special />

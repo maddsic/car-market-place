@@ -2,20 +2,26 @@ import { FaGasPump, FaRoad } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 
 import { BsTelephone } from "react-icons/bs";
-import { cars } from "~/data/latestcars";
 import Heading from "../Heading/heading";
 import Price from "../Price/price";
 import Button from "../Button/button";
 import { useNavigate } from "@remix-run/react";
+import { handleNavigateToListings } from "~/utils/handleNavigate";
 
-const LatestCars = () => {
+const LatestCars = ({ latestCars }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
   };
+
+  const handleNavigateToListings = (carId: string) => {
+    // Navigate to the listing page for the selected car
+    navigate(`/listings/${carId}`);
+  };
+
   return (
-    <div className="max__container">
+    <div className="max__container relative">
       <div className="mt-10">
         <Heading
           title="latest for"
@@ -23,15 +29,15 @@ const LatestCars = () => {
           classNames="text-center"
         />
         <div className="mt-10 grid gap-10 xl:grid-cols-2">
-          {cars.map((car, i) => (
+          {latestCars.map((car: any, i: number) => (
             <div
               className="box-border grid max-w-full cursor-pointer gap-3 overflow-hidden md:grid-cols-12"
               key={i}
-              onClick={() => navigate("/listings")}
+              onClick={() => handleNavigateToListings(car?.carId)}
             >
               <img
-                src={car.img}
-                alt={car.model}
+                src={car.imageUrl}
+                alt={car.model + " " + car.model}
                 className="col-span-1 h-auto max-w-full md:col-span-5"
               />
               <div className="ccol-span-1 flex flex-col justify-between gap-2 md:col-span-7">
@@ -54,7 +60,7 @@ const LatestCars = () => {
                       </span>
                       <div className="flex gap-1 text-xs text-black">
                         <span className="font-extrabold">{car.millage}</span>
-                        <span>mi</span>
+                        <span className="font-extrabold">{car.mileage}</span>
                       </div>
                     </div>
                   </span>

@@ -15,5 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       }
    );
 
+   CarBodyType.associate = models => {
+      const { Car } = models;
+
+      CarBodyType.hasMany(Car, {
+         foreignKey: "carType",
+         as: "cars",
+      });
+   };
+
    return CarBodyType;
 };
