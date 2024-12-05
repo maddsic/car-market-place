@@ -20,6 +20,11 @@ const PremiumCars = ({ premiumCars }) => {
     navigate(`/inventory?section=${section}&value=${value}`);
   };
 
+  const handleNavigateToListings = (carId: string) => {
+    // Navigate to the listing page for the selected car
+    navigate(`/listings/${carId}`);
+  };
+
   return (
     <div className="max__container relative">
       {/* SECTION TITLE */}

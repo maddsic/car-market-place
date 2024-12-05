@@ -32,7 +32,7 @@ const ListingSeller: React.FC<ListingSellerProps> = ({
         <h3 className="text-lg font-semibold capitalize text-gray-800">
           {name}
         </h3>
-        <span className="mt-1 flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 shadow-md md:text-xs">
+        <span className="mt-1 flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 shadow md:text-sm lg:shadow-md">
           <MdOutlineVerifiedUser size={16} className="text-green-600" />
           {desc}
         </span>

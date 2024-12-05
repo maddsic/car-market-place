@@ -49,13 +49,12 @@ type loaderData = {
   car: Car | null;
 };
 
+const API_BASE_URL = process.env.API_BASE_URL;
+
 export async function loader({ params }: LoaderFunctionArgs) {
   const { carId } = params;
 
-  const car = await apiFetch(
-    `https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/${carId}`,
-  );
-
+  const car = await apiFetch(`${API_BASE_URL}/api/v1/cars/${carId}`);
   console.log(car);
 
   return { car: car.data };
@@ -86,15 +85,11 @@ const CarDetails = () => {
           {/* TOP: ASIDE LEFT - CAR INFO */}
           <div className="col-span-12 flex flex-col gap-3 md:col-span-9">
             <Heading
-              title={
-                car?.description
-                  ? car.description + " " + car.model
-                  : car?.make + " " + car?.model
-              }
+              title={car?.make + " " + car?.model}
               classNames="lg:text-[38px] text-[24px] uppercase"
             />
             {/* SUB HEADER */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <ListingSubHeader
                 text={`added: ${formattedDate}`}
                 icon={<MdAccessTime size={16} />}
@@ -112,31 +107,36 @@ const CarDetails = () => {
                 icon={<MdShare size={16} />}
               />
             </div>
-            {/* CAR SECTION */}
+
             {/* BIG IMAGE */}
-            <div>
-              <div className="relative mb-5 mt-2 max-h-[500px] overflow-clip">
-                <img
-                  src={car?.imageUrl}
-                  alt=""
-                  // sizes="50vw"
-                  // width="100%"
-                  className="w-full rounded-md object-cover"
-                />
-                <span className="rotate-diagonal z-999 font-montserrat text-md absolute -left-10 top-6 bg-yellow px-14 py-2 text-center font-semibold uppercase text-white">
-                  special
-                </span>
-              </div>
-              {/* SMALL IMAGE */}
-              <div className="flex flex-row justify-between gap-4">
-                <ListingImg imageUrl={car?.imageUrl!} />
-                <ListingImg imageUrl={car?.imageUrl!} />
-                <ListingImg imageUrl={car?.imageUrl!} />
-                <ListingImg imageUrl={car?.imageUrl!} />
-              </div>
+            <div className="relative mb-5 mt-2 max-h-[500px] overflow-clip">
+              <img
+                src={car?.imageUrl}
+                alt=""
+                // sizes="50vw"
+                // width="100%"
+                className="max-h-[400px] w-full rounded-md object-cover md:max-h-[500px]"
+              />
+              <span className="rotate-diagonal z-999 font-montserrat text-md absolute -left-10 top-6 bg-yellow px-14 py-2 text-center font-semibold uppercase text-white">
+                special
+              </span>
+              <Price
+                price={car?.price!}
+                className="absolute bottom-0 right-0 border-b-4 border-b-primary px-3 text-sm md:text-base lg:hidden"
+              />
+            </div>
+
+            {/* SMALL IMAGE */}
+            <div className="relative flex flex-row justify-between gap-4">
+              <ListingImg imageUrl={car?.imageUrl!} />
+              <ListingImg imageUrl={car?.imageUrl!} />
+              <ListingImg imageUrl={car?.imageUrl!} />
+              <ListingImg imageUrl={car?.imageUrl!} />
             </div>
             {/* CAR INFO */}
-            <div className="mb-5 mt-0 grid grid-cols-1 gap-4 md:mt-5 md:grid-cols-3 md:gap-5 lg:mt-10 2xl:grid-cols-4">
+            <div className="mb-5 mt-10 grid grid-cols-1 gap-4 md:mt-5 md:grid-cols-3 md:gap-5 lg:mt-10 2xl:grid-cols-4">
+              {/* <SubHeading title="details" /> */}
+
               <CarDetail
                 type="condition"
                 value="certified used"
