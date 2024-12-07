@@ -43,6 +43,8 @@ interface Car {
   status: string;
 }
 
+const API_BASE_URL = process.env.API_BASE_URL
+
 // Getting car makes
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -52,11 +54,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   try {
     const carData = await apiFetch(
-      `https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars?section=${section}&value=${value}`,
+      `${API_BASE_URL}/api/v1/cars?section=${section}&value=${value}`,
     );
 
     let carMakes = await apiFetch(
-      "https://pumped-polliwog-fast.ngrok-free.app/api/v1/cars/carmakes",
+      `${API_BASE_URL}/api/v1/cars/carmakes`,
     );
 
     return { carMakes: carMakes.data, cars: carData.data };
@@ -284,7 +286,7 @@ const InventoryPage = () => {
                     <img
                       src={car.imageUrl}
                       alt={car.model + "-" + car.make}
-                      className="max-h-[70%] w-full"
+                      className="max-h-[70%] lg:h-full w-full bg-slate-200 onject-cover"
                     />
                     {/*CAR TITLE */}
                     <div className="mt-3 flex justify-between">

@@ -1,5 +1,6 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+// import { LoaderFunctionArgs } from "@remix-run/node";
 import { Form, json, useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@vercel/remix";
 import { useState } from "react";
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
 import { FaDollarSign, FaTruckMonster } from "react-icons/fa";
@@ -55,7 +56,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const { carId } = params;
 
   const car = await apiFetch(`${API_BASE_URL}/api/v1/cars/${carId}`);
-  console.log(car);
+  // console.log(car);
 
   return { car: car.data };
 }
@@ -77,6 +78,10 @@ const CarDetails = () => {
   const handleShowNumber = (): void => {
     setShowNumber(!showNumber);
   };
+
+
+
+
 
   return (
     <>

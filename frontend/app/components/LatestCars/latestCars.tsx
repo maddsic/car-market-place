@@ -6,7 +6,6 @@ import Heading from "../Heading/heading";
 import Price from "../Price/price";
 import Button from "../Button/button";
 import { useNavigate } from "@remix-run/react";
-import { handleNavigateToListings } from "~/utils/handleNavigate";
 
 const LatestCars = ({ latestCars }) => {
   const navigate = useNavigate();
@@ -29,16 +28,16 @@ const LatestCars = ({ latestCars }) => {
           classNames="text-center"
         />
         <div className="mt-10 grid gap-10 xl:grid-cols-2">
-          {latestCars.map((car: any, i: number) => (
+          {latestCars.map((car: any) => (
             <div
               className="box-border grid max-w-full cursor-pointer gap-3 overflow-hidden md:grid-cols-12"
-              key={i}
+              key={car.carId}
               onClick={() => handleNavigateToListings(car?.carId)}
             >
               <img
                 src={car.imageUrl}
                 alt={car.model + " " + car.model}
-                className="col-span-1 h-auto max-w-full md:col-span-5"
+                className="col-span-1 h-auto lg:h-full w-full lg:max-w-full md:col-span-5 bg-gray-200 onject-cover"
               />
               <div className="ccol-span-1 flex flex-col justify-between gap-2 md:col-span-7">
                 <div className="flex justify-between">
@@ -128,7 +127,7 @@ const LatestCars = ({ latestCars }) => {
 
         {/* BUTTON */}
         <div
-          className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10"
+          className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10 mb-5"
           onClick={() => handleNavigate("latest", "all")}
         >
           <Button

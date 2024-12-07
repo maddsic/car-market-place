@@ -3,6 +3,7 @@ import { IoCarSportOutline } from "react-icons/io5";
 import Button from "../Button/button";
 import { TbZoomReset } from "react-icons/tb";
 import { Fragment, useState } from "react";
+import { CloudCog } from "lucide-react";
 
 interface CarModel {
   id: string;
@@ -29,7 +30,9 @@ const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
 
     const makeId = e.target.value;
 
-    const foundMake = carMakes.find((make) => make.id === makeId);
+    const foundMake = carMakes.find((make: CarMake) => make.id === makeId);
+    console.log("found make")
+    console.log(foundMake)
 
     if (foundMake) {
       setSelectedMake(foundMake);

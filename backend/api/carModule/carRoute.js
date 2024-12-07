@@ -35,7 +35,7 @@ router.get("/premium-cars", getPremiumCars);
 router.get("/latest-cars", getLatestCars);
 
 // ----------------- CAR CRUD ROUTES ------------------------------
-router.post("/", checkAuth, imageUploader.single("imageUrl"), createCar);
+router.post("/", imageUploader.single("imageUrl"), createCar);
 router.get("/", getCars);
 router.get("/:carId", getCarById);
 router.put("/:carId", checkAuth, updateCar);

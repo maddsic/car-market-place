@@ -8,63 +8,71 @@ module.exports = {
          {
             id: uuidv4(),
             name: "Civic",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242", // Replace with the actual UUID of Honda
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a", 
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "Accord",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "CR-V",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "Pilot",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "Odyssey",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "Ridgeline",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "HR-V",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
          {
             id: uuidv4(),
             name: "Passport",
-            make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242",
+            make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a",
             createdAt: new Date(),
             updatedAt: new Date(),
+            deletedAt: null,
          },
       ]);
    },
 
    async down(queryInterface, Sequelize) {
-      await queryInterface.bulkDelete("CarModel", { make_id: "7a0b904b-c201-4708-b621-e8ecaadb3242" }, {});
+      await queryInterface.bulkDelete("CarModel", { make_id: "78182f89-fd22-48b7-8150-2f8d4a3f1a6a" }, {});
    },
 };

@@ -16,8 +16,9 @@ module.exports = {
                model: "User", // table name
                key: "userId",
             },
-            onDelete: "paranoid",
+            // onDelete: "SET NULL",
          },
+         carType: { type: Sequelize.STRING, allowNull: false },
          make: { type: Sequelize.STRING, allowNull: false },
          model: { type: Sequelize.STRING, allowNull: false },
          year: { type: Sequelize.INTEGER, allowNull: false },
@@ -28,6 +29,9 @@ module.exports = {
          description: { type: Sequelize.STRING, allowNull: true },
          imageUrl: { type: Sequelize.STRING, allowNull: false },
          engineType: { type: Sequelize.STRING, allowNull: false },
+         transmission: { type: Sequelize.STRING, allowNull: false },
+         status: { type: Sequelize.STRING, allowNull: true, defaultValue: "available" },
+         isPremium: { type: Sequelize.BOOLEAN, allowNull: true, defaultValue: false },
 
          createdAt: {
             allowNull: false,

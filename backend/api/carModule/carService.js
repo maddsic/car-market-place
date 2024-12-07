@@ -12,4 +12,6 @@ exports.carSchema = Joi.object({
    description: Joi.string().optional(),
    carType: Joi.string().required().messages({ "any.required": "Car Type is required" }),
    engineType: Joi.string().required().messages({ "any.required": "Engine Type is required" }),
+   transmission: Joi.string().required().messages({ "any.required": "transmission is required" }),
+   engineType: Joi.string().required().messages({ "any.required": "Engine Type is required" }),
 });

@@ -14,7 +14,7 @@ exports.createCar = async (req, res, next) => {
       return sendResponse(res, 400, false, error.details[0].message);
    }
 
-   const { userId, make, model, year, price, mileage, color, fuelType, description, engineType, carType } = req.body;
+   const { userId, make, model, year, price, mileage, color, fuelType, description, engineType, transmission, carType } = req.body;
 
    const imageUrl = req.file ? req.file.filename : null;
 
@@ -36,6 +36,7 @@ exports.createCar = async (req, res, next) => {
       description,
       imageUrl: imageUrl,
       engineType,
+      transmission,
       carTypeId: carBodyType.typeId,
       carType,
    };
@@ -71,11 +72,13 @@ exports.getCars = async (req, res, next) => {
             break;
          case "latest":
             // Fetch the latest cars
-            cars = await Car.findAll({ order: [["createdAt", "DESC"]], limit: 10 });
+            cars = await Car.findAll({ order: [["createdAt", "DESC"]] });
             break;
          case "category":
-            cars = await Car.findAll({ where: {} });
-         default:
+            cars = await Car.findAll({ where: { carType: value} });
+            
+            break;
+         default: 
             cars = await Car.findAll();
             break;
       }
@@ -223,6 +226,7 @@ exports.createCarMakes = async (req, res, next) => {
    // console.log(name);
 
    const imageUrl = req.file ? req.file.filename : null;
+   console.log("imageUrl", + imageUrl)
 
    const data = {
       name,

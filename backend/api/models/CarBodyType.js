@@ -8,10 +8,26 @@ module.exports = (sequelize, DataTypes) => {
       {
          typeId: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true, allowNull: false },
          typeName: { type: DataTypes.STRING, allowNull: false },
+         createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.fn("NOW"),
+         },
+         updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.fn("NOW"),
+         },
+         deletedAt: {
+            type: Sequelize.DATE,
+            allowNull: true,
+            defaultValue: null,
+         },
       },
       {
          freezeTableName: true,
-         paranoid: true, //
+         paranoid: true, 
+         timestamps: true,
       }
    );
 

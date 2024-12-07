@@ -15,14 +15,15 @@ const Category = () => {
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
   };
+  
 
   useEffect(() => {
-    const width = window.innerWidth;
+    const width: number = window.innerWidth;
 
     // Detect window Size
     const handleWindowSizeChanged = () => {
       if (width < 768) {
-        setCarsPerPage(1);
+        setCarsPerPage(4);
       } else {
         setCarsPerPage(4);
       }
@@ -38,6 +39,7 @@ const Category = () => {
 
   // next button
   const handleNext = () => {
+
     if (startIndex + 1 < category.length - carsPerPage + 1) {
       setStartIndex(startIndex + 4);
     }
