@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                model: "CarMake",
                key: "id",
             },
-            onDelete: "CASCADE",
+            onDelete: "SET NULL",
          },
       },
       {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
       CarMake.hasMany(CarModel, {
          foreignKey: "make_id",
-         onDelete: "CASCADE",
+         onDelete: "SET NULL",
       });
       CarModel.belongsTo(CarMake, {
          foreignKey: "make_id",

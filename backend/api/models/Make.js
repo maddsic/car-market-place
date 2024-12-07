@@ -9,6 +9,21 @@ module.exports = (sequelize, DataTypes) => {
          id: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true, allowNull: false },
          name: { type: DataTypes.STRING, allowNull: false },
          imageUrl: { type: DataTypes.STRING, allowNull: true },
+         createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.fn("NOW"),
+         },
+         updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.fn("NOW"),
+         },
+         deletedAt: {
+            type: Sequelize.DATE,
+            allowNull: true,
+            defaultValue: null
+         },
       },
       {
          freezeTableName: true,
@@ -20,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
 
       CarMake.hasMany(CarModel, {
          foreignKey: "make_id",
-         onDelete: "CASCADE",
+         onDelete: "SET NULL",
       });
    };
 

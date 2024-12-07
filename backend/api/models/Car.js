@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
          freezeTableName: true,
-         paranoid: true, // implement soft delete
+         paranoid: true, 
       }
    );
 

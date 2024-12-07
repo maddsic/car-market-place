@@ -12,12 +12,12 @@ module.exports = {
          name: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
+            // unique: true
          },
          make_id: {
             type: Sequelize.UUID,
             allowNull: false,
-            unique: true,
+            // unique: true,
          },
          createdAt: {
             allowNull: false,
@@ -32,6 +32,7 @@ module.exports = {
          deletedAt: {
             type: Sequelize.DATE,
             allowNull: true,
+            defaultValue: null
          },
       });
    },
