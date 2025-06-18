@@ -28,11 +28,11 @@ const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const makeId = e.target.value;
+    const makeName = e.target.value;
 
-    const foundMake = carMakes.find((make: CarMake) => make.id === makeId);
-    console.log("found make")
-    console.log(foundMake)
+    const foundMake = carMakes.find((make: CarMake) => make.name === makeName);
+    console.log("found make");
+    console.log(foundMake);
 
     if (foundMake) {
       setSelectedMake(foundMake);
@@ -42,7 +42,6 @@ const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
 
   return (
     <Fragment>
-      {/* {console.log(formData)} */}
       <main className="absolute bottom-[28%] mx-auto box-border hidden max-w-full flex-col justify-between gap-8 rounded bg-primary px-5 py-10 text-white shadow md:bottom-[6%] md:left-[44px] md:flex md:max-w-[90%] lg:bottom-[6%] lg:right-10 lg:max-w-[75%] xl:max-w-[50%] 2xl:max-w-[50%]">
         <div className="mb-5 flex items-center gap-3">
           <IoCarSportOutline size={24} className="text-yellow" />
@@ -60,7 +59,7 @@ const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
               <option value="">Make</option>
               <option value="all">All</option>
               {carMakes.map((make: CarMake) => (
-                <option key={make.id} value={make.id}>
+                <option key={make.id} value={make.name} className="capitalize">
                   {make.name}
                 </option>
               ))}
@@ -85,7 +84,11 @@ const SearchInventory = ({ carMakes }: { carMakes: [] }) => {
               {models &&
                 models.length > 0 &&
                 models.map((model: CarModel) => (
-                  <option key={model.id} value="">
+                  <option
+                    key={model.id}
+                    value={model.name}
+                    className="capitalize"
+                  >
                     {model.name}
                   </option>
                 ))}

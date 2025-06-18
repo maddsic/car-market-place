@@ -1,4 +1,4 @@
-import { NavLink } from "@remix-run/react";
+import { Link, NavLink } from "@remix-run/react";
 import { FaCarSide, FaUserCircle } from "react-icons/fa";
 import Logo from "../Logo/page";
 
@@ -13,11 +13,11 @@ const NavLinks = [
     title: "inventory",
     href: "/inventory",
   },
-  {
-    id: 3,
-    title: "listings",
-    href: "/listings",
-  },
+  // {
+  //   id: 3,
+  //   title: "listings",
+  //   href: "/listings",
+  // },
   {
     id: 4,
     title: "dealers",
@@ -27,6 +27,16 @@ const NavLinks = [
     id: 5,
     title: "auction",
     href: "/auctions",
+  },
+  {
+    id: 6,
+    title: "about us",
+    href: "/about",
+  },
+  {
+    id: 7,
+    title: "contact us",
+    href: "/contact",
   },
 ];
 
@@ -45,17 +55,27 @@ const Navbar = () => {
               ))}
             </ul>
             <div className="flex items-center justify-center gap-5 md:gap-10">
-              <span className="rounded-full bg-yellow p-2 md:hidden">
+              <Link
+                to="/addListing"
+                className="rounded-full bg-yellow p-2 md:hidden"
+              >
                 <FaCarSide size={24} className="cursor-pointer" />
-              </span>
-              <span className="rounded-full bg-gray-500 p-2">
+              </Link>
+              {/* SIGN-IN BUTTON */}
+              <Link
+                to={"/auth/signup"}
+                className="rounded-full bg-gray-500 p-2"
+              >
                 <FaUserCircle size={24} className="cursor-pointer" />
-              </span>
+              </Link>
 
-              <button className="hidden items-center gap-2 rounded bg-yellow px-4 py-3 text-sm font-semibold hover:bg-yellow/80 md:flex">
-                <FaCarSide size={20} color="black" />
-                Add Your Item
-              </button>
+              {/* ADD LISTING BUTTON */}
+              <Link to="/addListing">
+                <button className="hidden items-center gap-2 rounded bg-yellow px-4 py-3 text-sm font-semibold hover:bg-yellow/80 md:flex">
+                  <FaCarSide size={20} color="black" />
+                  Add Your Item
+                </button>
+              </Link>
             </div>
           </div>
         </div>
