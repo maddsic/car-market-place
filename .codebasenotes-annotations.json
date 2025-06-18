@@ -1,24 +1,3 @@
 {
-  "type": "dir",
-  "subNodes": {
-    "frontend": {
-      "type": "dir",
-      "subNodes": {
-        "app": {
-          "type": "dir",
-          "subNodes": {
-            "routes": {
-              "type": "dir",
-              "subNodes": {
-                "listings.$carId.tsx": {
-                  "type": "tsx",
-                  "annotation": "dynamic path\n\nlisting/yyegd6638900404093838840404049"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  "type": "dir"
 }
