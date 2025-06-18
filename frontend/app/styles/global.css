@@ -2,6 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+.input__bg {
+  background-color: #f0f2f5;
 }
 
 .error {
@@ -71,6 +76,7 @@
 
 .font-body {
   font-family: "Open Sans", Arial;
+  /* font-family: Montserrat, Arial; */
   font-size: 13px;
 }
 

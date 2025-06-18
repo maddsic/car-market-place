@@ -1,4 +1,3 @@
-import { span } from "framer-motion/client";
 import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -9,7 +8,7 @@ interface ListSubMenuProps {
   onClick?: () => void;
 }
 
-const ListingSubHeader: React.FC<ListSubMenuProps> = ({
+export const ListingSubHeader: React.FC<ListSubMenuProps> = ({
   text,
   icon,
   className,
@@ -18,7 +17,7 @@ const ListingSubHeader: React.FC<ListSubMenuProps> = ({
   return (
     <span
       className={twMerge(
-        `text-gray-500, w-content flex items-center gap-1 rounded-2xl border px-[8px] py-1 text-[8px] uppercase md:text-[10px] ${className}`,
+        `text-gray-500, w-content flex cursor-pointer items-center gap-1 rounded-2xl border px-[8px] py-1 text-[8px] uppercase md:text-[10px] ${className}`,
       )}
       onClick={onClick}
     >
@@ -27,5 +26,3 @@ const ListingSubHeader: React.FC<ListSubMenuProps> = ({
     </span>
   );
 };
-
-export default ListingSubHeader;

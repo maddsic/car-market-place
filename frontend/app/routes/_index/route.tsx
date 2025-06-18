@@ -12,7 +12,6 @@ import Highlight from "~/components/Highlight/highlight";
 import Category from "~/components/Category/category";
 import LatestCars from "~/components/LatestCars/latestCars";
 import { apiFetch } from "~/utils/apiFetch";
-import Loader from "~/components/Loader/loader";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 
 export const meta: MetaFunction = () => {

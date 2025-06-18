@@ -1,7 +1,12 @@
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
-const Price = ({ price, className }: { price: number; className?: string }) => {
+const Price = ({
+  price,
+  className,
+}: {
+  price: string | number;
+  className?: string;
+}) => {
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "GMD",
