@@ -21,23 +21,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-const API_BASE_URL = process.env.API_BASE_URL;
-
-export const loader: LoaderFunction = async () => {
-  const endPoints = [
-    { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
-    { key: "premiumCars", url: `${API_BASE_URL}/api/v1/cars/premium-cars` },
-    { key: "latestCars", url: `${API_BASE_URL}/api/v1/cars/latest-cars` },
-  ];
-
-  //
-  const results = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
-
-  return Object.fromEntries(
-    results.map((result, index) => [endPoints[index].key, result.data]),
-  );
-};
-
 // MAIN
 export default function Index() {
   const { carMakes, premiumCars, latestCars } =
@@ -73,6 +56,24 @@ export default function Index() {
   );
 }
 
+// Loader Function
+export const loader: LoaderFunction = async () => {
+  const API_BASE_URL = process.env.API_BASE_URL;
+  console.info("api base url -----------", API_BASE_URL);
+
+  const endPoints = [
+    { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
+    { key: "premiumCars", url: `${API_BASE_URL}/api/v1/cars/premium-cars` },
+    { key: "latestCars", url: `${API_BASE_URL}/api/v1/cars/latest-cars` },
+  ];
+
+  const results = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
+  return Object.fromEntries(
+    results.map((result, index) => [endPoints[index].key, result.data]),
+  );
+};
+
+// Route Error Boundary
 export function ErrorBoundary() {
   const error = useRouteError();
 

@@ -40,9 +40,6 @@ const Header = ({ carMakes }: { carMakes: any }) => {
             transition={{ duration: 0.5, type: "spring" }}
             className="z-999 w-content group absolute left-5 top-[18%] flex flex-col gap-3 overflow-hidden bg-black/30 p-5 text-white transition-all duration-1000 hover:bg-black/40 md:left-1/4 md:top-[15%] md:flex lg:w-auto lg:p-10"
           >
-            {/* <h1 className="text-5xl font-bold uppercase text-white group-hover:text-yellow md:text-6xl">
-            {Slider[currentState].title}
-          </h1> */}
             <motion.h1
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -51,9 +48,6 @@ const Header = ({ carMakes }: { carMakes: any }) => {
             >
               {Slider[currentState].title}
             </motion.h1>
-            {/* <h2 className="text-3xl font-bold uppercase text-white md:text-4xl">
-            {Slider[currentState].subTitle}
-          </h2> */}
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
