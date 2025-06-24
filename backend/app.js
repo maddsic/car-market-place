@@ -25,11 +25,11 @@ const app = express();
 
 // MIDDLEWARES
 
-app.use(helmet.xssFilter());
 app.use(express.json());
 app.use(
   cors({
     origin: "https://pumped-polliwog-fast.ngrok-free.app",
+    // origin: "*",
     methods: "GET,POST,PUT,DELETE",
   })
 );
@@ -39,11 +39,12 @@ app.use(morgan("combined", { stream: accessLogSream }));
 app.use(helmet());
 
 app.use((req, res, next) => {
-  console.log(
-    `[${new Date().toISOString()}] User ${req.user} ${req.user} accessed ${
-      req.method
-    } ${req.originalUrl} `
-  );
+  // console.log(
+  //   `[${new Date().toISOString()}] User ${req.user} ${req.user} accessed ${
+  //     req.method
+  //   } ${req.originalUrl} `
+  // );
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
 
   next();
 });

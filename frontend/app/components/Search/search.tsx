@@ -3,7 +3,6 @@ import { IoCarSportOutline } from "react-icons/io5";
 import Button from "../Button/button";
 import { TbZoomReset } from "react-icons/tb";
 import { Fragment, useState } from "react";
-import { CloudCog } from "lucide-react";
 
 interface CarModel {
   id: string;

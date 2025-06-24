@@ -15,7 +15,6 @@ const LatestCars = ({ latestCars }) => {
   };
 
   const handleNavigateToListings = (carId: string) => {
-    // Navigate to the listing page for the selected car
     navigate(`/listings/${carId}`);
   };
 
@@ -37,7 +36,7 @@ const LatestCars = ({ latestCars }) => {
               <img
                 src={car.imageUrl}
                 alt={car.model + " " + car.model}
-                className="col-span-1 h-auto lg:h-full w-full lg:max-w-full md:col-span-5 bg-gray-200 onject-cover"
+                className="onject-cover col-span-1 h-auto w-full bg-gray-200 md:col-span-5 lg:h-full lg:max-w-full"
               />
               <div className="ccol-span-1 flex flex-col justify-between gap-2 md:col-span-7">
                 <div className="flex justify-between">
@@ -127,7 +126,7 @@ const LatestCars = ({ latestCars }) => {
 
         {/* BUTTON */}
         <div
-          className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10 mb-5"
+          className="relative mb-5 mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10"
           onClick={() => handleNavigate("latest", "all")}
         >
           <Button
