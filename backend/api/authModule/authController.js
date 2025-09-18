@@ -34,7 +34,16 @@ exports.register = async (req, res, next) => {
     return sendResponse(res, 400, false, error.details[0].message);
   }
 
-  let { first_name, last_name, email, password, phone, address } = req.body;
+  let {
+    first_name,
+    last_name,
+    email,
+    password,
+    phone,
+    username,
+    role,
+    hasWhatsapp,
+  } = req.body;
 
   const formData = {
     first_name: first_name.trim(),
@@ -42,7 +51,9 @@ exports.register = async (req, res, next) => {
     email: email.trim(),
     password: password.trim(),
     phone: phone.trim(),
-    address: address.trim(),
+    username: username.trim(),
+    role,
+    hasWhatsapp,
   };
 
   try {
@@ -62,12 +73,13 @@ exports.register = async (req, res, next) => {
     const newUser = await createUser(formData);
 
     if (newUser?.accept) {
+      const { password, ...userData } = newUser.data;
       return sendResponse(
         res,
         201,
         true,
-        `User ${newUser.data.first_name} ${newUser.data.last_name} - created successfull`,
-        newUser.data
+        `User ${userData.first_name} ${userData.last_name} - created successfull`,
+        userData
       );
     } else {
       return sendResponse(res, newUser.status, false, "Cannot create user.");
@@ -121,7 +133,7 @@ exports.login = async (req, res, next) => {
     }
 
     // TODO - create a jwt token and assin user role, & ID
-    const token = await generateJwtToken({
+    const token = generateJwtToken({
       userId: user.data.userId,
       email: user.data.email,
       role: user.data.role,

@@ -16,6 +16,9 @@ exports.createCar = async (req, res, next) => {
 
   if (error) return sendResponse(res, 400, false, error.details[0].message);
 
+  // Get the user id form the middleware.
+  const userId = req.user && req.user.userId;
+
   // GETTING IMAGE URL FROM INCOMING req
   const imageUrl = req.file ? req.file.filename : null;
 
@@ -31,8 +34,8 @@ exports.createCar = async (req, res, next) => {
   // PREPARING OUR FORM
   const form = {
     ...req.body,
-    userId: "53389659-64c4-45eb-9490-bf4a3aaca599",
-    imageUrl: "Screenshot From 2024-12-22 15-41-49.png",
+    userId: userId,
+    imageUrl: imageUrl,
     year: "2023",
     carTypeId: carBodyType.typeId,
   };
@@ -211,7 +214,7 @@ exports.createCarMakes = async (req, res, next) => {
   // console.log(name);
 
   const imageUrl = req.file ? req.file.filename : null;
-  console.log("imageUrl", +imageUrl);
+  console.log("imageUrl", imageUrl);
 
   const data = {
     name,
@@ -269,6 +272,31 @@ exports.getCarBodyTypes = async (req, res, next) => {
       : sendResponse(res, 404, false, "No result found.", {});
   } catch (error) {
     console.log("ERROR FROM GET CAR BODY TYPES CONTROLLER: " + error.message);
+    next(error);
+  }
+};
+
+exports.searchCarInventory = async (req, res, next) => {
+  const { condition, carType, make, model } = req.query;
+
+  const whereClause = {};
+
+  if (condition) whereClause.condition = condition;
+  if (carType) whereClause.carType = carType;
+  if (make) whereClause.make = make;
+  if (model) whereClause.model = model;
+
+  console.log("Filtering with:", whereClause);
+
+  try {
+    const cars = await Car.findAll({ where: whereClause });
+    if (hasLength(cars)) {
+      const carImages = await processCarImages(cars);
+      return sendResponse(res, 200, true, "Result(s) found...", carImages);
+    }
+    return sendResponse(res, 404, false, "No result found.", {});
+  } catch (error) {
+    console.log("ERROR FROM SEARCH CAR INVENTORY CONTROLLER: " + error.message);
     next(error);
   }
 };

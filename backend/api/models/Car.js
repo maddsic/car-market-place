@@ -19,14 +19,14 @@ module.exports = (sequelize, DataTypes) => {
           model: "User", // table name
           key: "userId",
         },
-        onDelete: "paranoid",
+        onDelete: "RESTRICT",
       },
       carType: { type: DataTypes.STRING, allowNull: false },
       make: { type: DataTypes.STRING, allowNull: false },
       model: { type: DataTypes.STRING, allowNull: false },
       year: { type: DataTypes.INTEGER, allowNull: false },
-      price: { type: DataTypes.STRING, allowNull: false },
-      mileage: { type: DataTypes.STRING, allowNull: false },
+      price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+      mileage: { type: DataTypes.INTEGER, allowNull: false },
       fuelType: { type: DataTypes.STRING, allownull: false },
       imageUrl: { type: DataTypes.STRING, allowNull: false },
       engineType: { type: DataTypes.STRING, allowNull: false },
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     Car.belongsTo(models.User, {
       foreignKey: "userId",
       as: "owner",
-      onDelete: "paranoid",
+      onDelete: "CASCADE",
     });
 
     Car.belongsTo(models.CarBodyType, {

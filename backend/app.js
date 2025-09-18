@@ -23,29 +23,33 @@ const accessLogSream = fs.createWriteStream(
 // INITIALIZING OUR APP
 const app = express();
 
-// MIDDLEWARES
+const allowedOrigins = [
+  "https://pumped-polliwog-fast.ngrok-free.app",
+  "http://localhost:5173",
+  "http://localhost:8080",
+];
 
-app.use(express.json());
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    }
+  },
+};
+// MIDDLEWARES 3
 app.use(
-  cors({
-    origin: "https://pumped-polliwog-fast.ngrok-free.app",
-    // origin: "*",
+  cors(corsOptions, {
     methods: "GET,POST,PUT,DELETE",
   })
 );
+app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined", { stream: accessLogSream }));
 app.use(helmet());
 
 app.use((req, res, next) => {
-  // console.log(
-  //   `[${new Date().toISOString()}] User ${req.user} ${req.user} accessed ${
-  //     req.method
-  //   } ${req.originalUrl} `
-  // );
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
-
   next();
 });
 
