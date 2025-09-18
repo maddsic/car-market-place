@@ -1,13 +1,12 @@
 import { Link, useNavigate } from "@remix-run/react";
 
 // COMPONENT
+import Button from "../Button/button";
 
 // ICONS
 import { IoCarSportOutline } from "react-icons/io5";
-
 import { FcSearch } from "react-icons/fc";
 import { AiFillDollarCircle } from "react-icons/ai";
-import Button from "../Button/button";
 
 const Highlight = () => {
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ const Highlight = () => {
             <div onClick={() => handleNavigate("inventory", "all")}>
               <Button
                 title="Inventory"
-                classNames="text-white font-montserrat hover:bg-yellow"
+                className="font-montserrat text-white hover:bg-yellow"
               />
             </div>
           </div>
@@ -64,7 +63,7 @@ const Highlight = () => {
             <Link to="/addListing">
               <Button
                 title="sell your car"
-                classNames="text-white font-montserrat hover:bg-gray-900 bg-primary"
+                className="font-montserrat bg-primary text-white hover:bg-gray-900"
               />
             </Link>
           </div>
