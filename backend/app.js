@@ -54,9 +54,9 @@ app.use((req, res, next) => {
 authenticateDBConnection();
 
 // USING ROUTES
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/cars", carRouter);
+app.use("/auth", authRouter);
+app.use("/users", userRouter);
+app.use("/cars", carRouter);
 
 // GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
