@@ -13,6 +13,8 @@ import Category from "~/components/Category/category";
 import LatestCars from "~/components/LatestCars/latestCars";
 import { apiFetch } from "~/utils/apiFetch";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
+import { useEffect } from "react";
+import { useCarStore } from "~/store/carStore";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,24 +25,28 @@ export const meta: MetaFunction = () => {
 
 // MAIN
 export default function Index() {
-  const { carMakes, premiumCars, latestCars } =
-    useLoaderData<typeof loader>() || null;
-
+  const { carMakes, carBodyTypes, fetchCarData } = useCarStore();
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
+
+  useEffect(() => {
+    if (carMakes.length === 0 || carBodyTypes.length === 0) {
+      fetchCarData();
+    }
+  }, [carMakes.length, carBodyTypes.length]);
 
   return (
     <>
       <LoadingIndicator isLoading={loading} />
       <header className="max-h-[70%]">
-        <Header carMakes={carMakes} />
+        <Header />
       </header>
       <main className="relative mt-10 md:mt-24">
         <section className="">
-          <BrowseBymake carMakes={carMakes} />
+          <BrowseBymake />
         </section>
         <section className="relative sm:mb-10 sm:mt-8">
-          <PremiumCars premiumCars={premiumCars} />
+          <PremiumCars />
         </section>
         <section className="relative mt-10 sm:mb-10">
           <Highlight />
@@ -49,29 +55,12 @@ export default function Index() {
           <Category />
         </section>
         <section className="relative sm:mb-14 sm:mt-8">
-          <LatestCars latestCars={latestCars} />
+          <LatestCars />
         </section>
       </main>
     </>
   );
 }
-
-// Loader Function
-export const loader: LoaderFunction = async () => {
-  const API_BASE_URL = process.env.API_BASE_URL;
-  console.info("api base url -----------", API_BASE_URL);
-
-  const endPoints = [
-    { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
-    { key: "premiumCars", url: `${API_BASE_URL}/api/v1/cars/premium-cars` },
-    { key: "latestCars", url: `${API_BASE_URL}/api/v1/cars/latest-cars` },
-  ];
-
-  const results = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
-  return Object.fromEntries(
-    results.map((result, index) => [endPoints[index].key, result.data]),
-  );
-};
 
 // Route Error Boundary
 export function ErrorBoundary() {

@@ -2,27 +2,32 @@ import { twMerge } from "tailwind-merge";
 
 const Button = ({
   title,
-  classNames,
+  className,
   disabled,
   type,
 }: {
   title: string | any;
-  classNames?: string;
+  className?: string;
   disabled?: boolean;
   type?: "submit" | "reset" | "button";
 }) => {
+  const baseStyles =
+    "rounded-sm bg-yellow px-6 py-2 font-bold uppercase shadow-2xl transition-colors duration-200 ease-in-out";
+
+  const interactiveStyles =
+    "hover:bg-yellow/80 focus:outline-none focus:ring-2 focus:ring-yellow/50";
+
+  const disabledStyles = "cursor-not-allowed bg-gray-400 opacity-50";
+
+  const finalStyles = twMerge(
+    baseStyles,
+    disabled ? disabledStyles : interactiveStyles,
+    className,
+  );
   return (
-    <span>
-      <button
-        type={type}
-        disabled={disabled}
-        className={twMerge(
-          `rounded-sm bg-yellow px-6 py-2 font-bold uppercase shadow-2xl hover:bg-yellow/80 ${classNames}`,
-        )}
-      >
-        {title}
-      </button>
-    </span>
+    <button type={type} disabled={disabled} className={finalStyles}>
+      {title}
+    </button>
   );
 };
 

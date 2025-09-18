@@ -16,7 +16,10 @@ const VinNumber = () => {
           type="text"
           placeholder="Enter VIN..."
         />
-        <Button title="APPLY" classNames="text-white px-12 block w-full" />
+        <Button
+          title="APPLY"
+          className="block w-full px-12 text-white md:w-1/3 lg:w-1/4"
+        />
       </div>
     </div>
   );

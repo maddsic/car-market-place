@@ -4,13 +4,7 @@ import {
   LinksFunction,
   LoaderFunction,
 } from "@remix-run/node";
-import {
-  Form,
-  json,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from "@remix-run/react";
+import { Form, json, useActionData, useNavigation } from "@remix-run/react";
 
 // components
 import Divider from "~/components/Divider/divider";
@@ -18,7 +12,6 @@ import Heading from "~/components/Heading/heading";
 import VinNumber from "~/components/Vin/vin";
 import CreateListingDetails from "~/components/listing/listingDetails";
 import CreateListingInfo from "./createListingInfo";
-import CreateListingFeature from "./createListingFeature";
 import UploadListingImage from "./createListingImage";
 import CreateListingSellerNote from "./createListingSellerNode";
 
@@ -29,10 +22,11 @@ import { apiFetch } from "~/utils/apiFetch";
 import "react-quill/dist/quill.snow.css";
 import CreateListingPrice from "./crreateListingPrice";
 import Button from "~/components/Button/button";
-import { createListingValidateor } from "~/utils/validateForm";
+import { createListingValidateor } from "~/validations/validateForm";
 import { z } from "zod";
 import SelectListingFeature from "./createListingFeature";
 import Loader from "~/components/Loader/loader";
+import { useCarStore } from "~/store/carStore";
 
 interface CarModel {
   id: string;
@@ -45,28 +39,21 @@ interface CarMake {
   CarModels: CarModel[];
 }
 
-interface CarBodyTypes {
-  typeId: string;
-  typeName: string;
-}
-
 const AddListingPage = () => {
-  const { carMakes, carBodyTypes } = useLoaderData<typeof loader>() || null;
+  const { carMakes, carBodyTypes } = useCarStore();
   const actionData = useActionData<typeof loader>() || null;
-  const [selectedMAke, setSelectedMake] = useState<CarMake | null>(null);
+  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
-  const [formData, setFormData] = useState({
-    make: "",
-    model: "",
-  });
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
+  // Change model options based on selected make
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const makeName = e.target.value;
     const make = e.target.name;
 
+    // Check if the changed field is 'make'
     if (e.target.name === make) {
       const foundMake = carMakes.find(
         (make: CarMake) => make.name === makeName,
@@ -83,6 +70,7 @@ const AddListingPage = () => {
     console.log(actionData);
   }
 
+  // Check if the form is submitting
   if (isSubmitting) {
     return <Loader />;
   }
@@ -111,10 +99,7 @@ const AddListingPage = () => {
               onMakeChange={handleMakeChange}
             />
             {/* CAR DETAILS */}
-            <CreateListingInfo
-              carBodyTypes={carBodyTypes}
-              formData={actionData}
-            />
+            <CreateListingInfo formData={actionData} />
 
             {/* SEPARATOR */}
             <Divider classNames="mt-10" />
@@ -146,7 +131,7 @@ const AddListingPage = () => {
               type="submit"
               disabled={isSubmitting}
               title={isSubmitting ? <Loader /> : "Add Listing"}
-              classNames="mt-10 w-full py-4 font-extrabold lg:w-1/4 border text-white shadow"
+              className="mt-10 w-full border py-4 font-extrabold text-white shadow lg:w-1/4"
             />
           </Form>
         </div>
@@ -163,10 +148,11 @@ export const lisks: LinksFunction = () => [
 ];
 
 // BASE URL
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
 
 // LOADER -GETTING LOADER DATA
 export const loader: LoaderFunction = async () => {
+  const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
+
   const endPoints = [
     { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
     { key: "carBodyTypes", url: `${API_BASE_URL}/api/v1/cars/bodyType` },
@@ -185,16 +171,19 @@ export async function action({ request }: ActionFunctionArgs) {
   let formData = Object.fromEntries(form);
 
   try {
+    // Pass form for validation
     let validatedForm = createListingValidateor.parse(formData);
     console.log("Validated Data");
     console.info(validatedForm);
 
+    // Append additional data to the validated form data
     const validatedFormData = {
       ...validatedForm,
       userId: "53389659-64c4-45eb-9490-bf4a3aaca599",
       year: "2023",
     };
 
+    // Post the validated data to the API
     const response = await fetch(`${API_BASE_URL}/api/v1/cars`, {
       method: "POST",
       headers: {
@@ -204,6 +193,7 @@ export async function action({ request }: ActionFunctionArgs) {
       body: JSON.stringify(validatedFormData),
     });
 
+    // Handle non-2xx responses
     if (!response.ok) {
       let formError = await response.json();
       return json(

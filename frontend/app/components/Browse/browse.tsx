@@ -5,8 +5,10 @@ import Divider from "../Divider/divider";
 import NextButton from "../PaginationRight/next";
 import PrevButton from "../PaginationLeft/prev";
 import { useNavigate } from "@remix-run/react";
+import { useCarStore } from "~/store/carStore";
 
-const BrowseBymake = ({ carMakes }: { carMakes: any }) => {
+const BrowseBymake = () => {
+  const { carMakes } = useCarStore();
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(8);
   const navigate = useNavigate();

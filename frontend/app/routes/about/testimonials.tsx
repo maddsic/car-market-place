@@ -1,9 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { GiCelebrationFire } from "react-icons/gi";
 import { IoMdHappy } from "react-icons/io";
 import Heading from "~/components/Heading/heading";
-import { testimonialData } from "~/data/testimonail";
+import { testimonialData } from "~/data/testimonial";
 
 const Testimonials = () => {
   const [startIndex, setStartIndex] = useState<number>(0);
