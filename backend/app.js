@@ -25,7 +25,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://pumped-polliwog-fast.ngrok-free.app",
-  "http://localhost:5173",
+  "https://car-market-place-five.vercel.app/",
   "http://localhost:8080",
 ];
 
