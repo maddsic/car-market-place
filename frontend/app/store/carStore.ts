@@ -54,19 +54,19 @@ export const useCarStore = create<CarStore>((set) => ({
       const endPoints = [
         {
           key: "carMakes",
-          url: `${apiBaseUrl}/api/v1/cars/carmakes`,
+          url: `${apiBaseUrl}/cars/carmakes`,
         },
         {
           key: "carBodyTypes",
-          url: `${apiBaseUrl}/api/v1/cars/bodyType`,
+          url: `${apiBaseUrl}/cars/bodyType`,
         },
         {
           key: "premiumCars",
-          url: `${apiBaseUrl}/api/v1/cars/premium-cars`,
+          url: `${apiBaseUrl}/cars/premium-cars`,
         },
         {
           key: "latestCars",
-          url: `${apiBaseUrl}/api/v1/cars/latest-cars`,
+          url: `${apiBaseUrl}/cars/latest-cars`,
         },
       ];
 

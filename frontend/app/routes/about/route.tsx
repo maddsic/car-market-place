@@ -2,14 +2,13 @@ import React, { Fragment } from "react";
 import Heading from "../../components/Heading/heading";
 
 // icons
-import { GiCheckMark } from "react-icons/gi";
-import AboutCarousel from "~/components/AboutCarousel/Carousel";
+
 import CoreValues from "./coreValues";
 import AboutGamAutos from "./aboutGamAutos";
 import MediaGallary from "./mediaGallary";
 import Advantages from "./advantages";
 import Testimonials from "./testimonials";
-import { StyledUndeline } from "./underline";
+
 import Team from "./team";
 import OurPartners from "./partners";
 

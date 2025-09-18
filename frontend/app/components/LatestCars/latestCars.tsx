@@ -133,7 +133,7 @@ const LatestCars = () => {
         >
           <Button
             title="show all latest cars"
-            classNames="uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"
+            className="animate font-montserrat bg-yellow px-10 py-3 text-sm uppercase text-white shadow-md duration-1000 ease-in-out hover:bg-yellow/70"
           />
         </div>
       </div>
