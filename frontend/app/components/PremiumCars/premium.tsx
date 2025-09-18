@@ -1,18 +1,22 @@
 // Components
+import { useNavigate } from "@remix-run/react";
+import { links as loaderLinks } from "../Loader/loader";
+import { LinksFunction } from "@remix-run/node";
+
 import Heading from "../Heading/heading";
 import Button from "../Button/button";
 import Divider from "../Divider/divider";
-import { useNavigate } from "@remix-run/react";
 import Special from "../Special/special";
-import { links as loaderLinks } from "../Loader/loader";
-import { LinksFunction } from "@remix-run/node";
 import Price from "../Price/price";
 import CarMakeAndModel from "../CarMakeAndModel/CarMakeAndModel";
 import CarDescription from "../CarDescription/CarDescription";
 import Image from "../Image/Image";
-import { Car } from "~/interfaces";
 
-const PremiumCars = ({ premiumCars }: { premiumCars: [] }) => {
+import { Car } from "~/interfaces";
+import { useCarStore } from "~/store/carStore";
+
+const PremiumCars = () => {
+  const { premiumCars } = useCarStore();
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
@@ -59,7 +63,7 @@ const PremiumCars = ({ premiumCars }: { premiumCars: [] }) => {
       >
         <Button
           title="show all premium cars"
-          classNames="disabled:cursor-not-allowed disabled:bg-primary uppercase bg-yellow hover:bg-yellow/70 animate duration-1000 ease-in-out font-montserrat shadow-md text-white px-10 py-3 text-sm"
+          className="animate font-montserrat bg-yellow px-10 py-3 text-sm uppercase text-white shadow-md duration-1000 ease-in-out hover:bg-yellow/70 disabled:cursor-not-allowed disabled:bg-primary"
         />
       </div>
 

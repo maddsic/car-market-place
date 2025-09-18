@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../Button/button";
-import { Slider } from "~/data/slider";
 import SearchInventory from "../Search/search";
+import { Slider } from "~/data/slider";
 
-const Header = ({ carMakes }: { carMakes: any }) => {
+const Header = () => {
   const [currentState, setCurrentState] = useState(0);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const Header = ({ carMakes }: { carMakes: any }) => {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="mt-5 text-3xl font-semibold md:text-4xl"
             >
-              <span className="">${Slider[currentState].price}</span>
+              <span className="">D{Slider[currentState].price}</span>
               <span className="ml-2 text-white">/ MO</span>
             </motion.h3>
 
@@ -78,14 +78,14 @@ const Header = ({ carMakes }: { carMakes: any }) => {
             >
               <Button
                 title="Learn More"
-                classNames="bg-yellow hover:bg-white hover:text-yellow-500 text-black transition-colors duration-300 px-6 py-3 rounded-md shadow-lg"
+                className="hover:text-yellow-500 rounded-md bg-yellow px-6 py-3 text-black shadow-lg transition-colors duration-300 hover:bg-white"
               />
             </motion.div>
           </motion.div>
         </AnimatePresence>
       </header>
 
-      <SearchInventory carMakes={carMakes} />
+      <SearchInventory />
     </>
   );
 };

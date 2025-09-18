@@ -30,22 +30,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const { carId } = params;
 
   const car = await apiFetch(`${API_BASE_URL}/api/v1/cars/${carId}`);
-  console.log(car);
+  // console.log(car);
 
   return { car: car.data };
 }
 
 const ViewListing = () => {
   const { car } = useLoaderData<loaderData>();
-  const [index, setIndex] = useState<number>(0);
+  const [index, setIndex] = useState<number>(0); // FOR IMAGE GALLERY NOT USED YET
   const [showNumber, setShowNumber] = useState<Boolean>(false);
+  const navigation = useNavigation();
+  const loading = navigation.state === "loading";
 
   const handleShowNumber = (): void => {
     setShowNumber(!showNumber);
   };
-
-  const navigation = useNavigation();
-  const loading = navigation.state === "loading";
 
   return (
     <React.Fragment>

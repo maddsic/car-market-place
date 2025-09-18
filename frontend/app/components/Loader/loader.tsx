@@ -12,5 +12,6 @@ const Loader = () => {
 export default Loader;
 
 export const links: LinksFunction = () => [
+  // i've to call this styles in other components too so i exported it here
   { rel: "stylesheet", href: loaderStyles.styles },
 ];

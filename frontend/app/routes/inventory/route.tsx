@@ -20,24 +20,46 @@ import Image from "~/components/Image/Image";
 import { Car, CarMake, CarModel } from "~/interfaces";
 import InventoryForm from "./InventoryForm";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
+import { useCarStore } from "~/store/carStore";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
 // LOADER - FETCHING CAR MAKES
 export const loader: LoaderFunction = async ({ request }) => {
+  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
+
   const url = new URL(request.url);
   const section = url.searchParams.get("section");
   const value = url.searchParams.get("value");
-  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
+
+  const condition = url.searchParams.get("condition");
+  const carType = url.searchParams.get("carType");
+  const make = url.searchParams.get("make");
+  const model = url.searchParams.get("model");
 
   try {
-    const carData = await apiFetch(
-      `${API_BASE_URL}/api/v1/cars?section=${section}&value=${value}`,
-    );
+    let cars;
 
-    let carMakes = await apiFetch(`${API_BASE_URL}/api/v1/cars/carmakes`);
+    if (condition || carType || make || model) {
+      const queryParams = new URLSearchParams();
 
-    return { carMakes: carMakes.data, cars: carData.data };
+      if (condition) queryParams.append("condition", condition);
+      if (carType) queryParams.append("carType", carType);
+      if (make) queryParams.append("make", make);
+      if (model) queryParams.append("model", model);
+
+      const results = await apiFetch(
+        `${API_BASE_URL}/api/v1/cars/search?${queryParams.toString()}`,
+      );
+      cars = results.data;
+    } else {
+      const result = await apiFetch(
+        `${API_BASE_URL}/api/v1/cars?section=${section}&value=${value}`,
+      );
+      cars = result.data;
+    }
+
+    return { cars };
   } catch (error) {
     console.error("Error in loader:", error);
     return new Response("Failed to load data", { status: 500 });
@@ -45,8 +67,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 const InventoryPage = () => {
+  const { carMakes } = useCarStore();
   const [carsPerPage, setCarsPerPage] = useState<number>(6);
-  const { carMakes = [], cars = [] } = useLoaderData<typeof loader>() || {};
+  const { cars = [] } = useLoaderData<typeof loader>() || {};
   const [models, setModels] = useState<CarModel[]>([]);
   const [startIndex, setStartIndex] = useState<number>(0);
   const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);

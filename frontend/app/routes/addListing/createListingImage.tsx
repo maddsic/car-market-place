@@ -4,10 +4,11 @@ import Heading from "~/components/Heading/heading";
 
 const UploadListingImage = () => {
   // const fileInputRef = useRef()
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files && e.target.files[0];
+    if (!file) return;
     setSelectedFile(file.name);
     console.log("Selected File", file.name);
   };

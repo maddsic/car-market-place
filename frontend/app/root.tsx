@@ -6,13 +6,20 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
-// import type { LinksFunction } from "@remix-run/node";
 import { type LinksFunction } from "@vercel/remix";
-import tailwindStyles from "./tailwind.css?url";
-import globalStyles from "./styles/global.css?url";
+
 import Footer from "./components/Footer/page";
 import Navbar from "./components/Navbar/navbar";
+
+// import type { LinksFunction } from "@remix-run/node";
+import tailwindStyles from "./tailwind.css?url";
+import globalStyles from "./styles/global.css?url";
+
+import { ToastContainer } from "react-toastify";
+
+export default function App() {
+  return <Outlet />;
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,6 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Footer />
         </main>
         <ScrollRestoration />
+        <ToastContainer position="top-right" />
         <Scripts />
       </body>
     </html>
@@ -38,14 +46,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: globalStyles },
-  { rel: "styleSheet", href: tailwindStyles },
+  { rel: "stylesheet", href: tailwindStyles },
   {
-    rel: "styleSheet",
+    rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Lato:wght@100;400&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://cdn.jsdelivr.net/npm/react-toastify/dist/ReactToastify.css",
   },
 ];
 
-export function ErrorBoundary({ error }) {
+export function ErrorBoundary({ error }: { error: any }) {
   return (
     <html lang="en">
       <head>
@@ -71,8 +83,4 @@ export function ErrorBoundary({ error }) {
       </body>
     </html>
   );
-}
-
-export default function App() {
-  return <Outlet />;
 }

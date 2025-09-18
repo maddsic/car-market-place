@@ -6,8 +6,10 @@ import Heading from "../Heading/heading";
 import Price from "../Price/price";
 import Button from "../Button/button";
 import { useNavigate } from "@remix-run/react";
+import { useCarStore } from "~/store/carStore";
 
-const LatestCars = ({ latestCars }) => {
+const LatestCars = () => {
+  const { latestCars } = useCarStore();
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {

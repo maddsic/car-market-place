@@ -62,10 +62,7 @@ const Navbar = () => {
                 <FaCarSide size={24} className="cursor-pointer" />
               </Link>
               {/* SIGN-IN BUTTON */}
-              <Link
-                to={"/auth/signup"}
-                className="rounded-full bg-gray-500 p-2"
-              >
+              <Link to={"/auth/login"} className="rounded-full bg-gray-500 p-2">
                 <FaUserCircle size={24} className="cursor-pointer" />
               </Link>
 
