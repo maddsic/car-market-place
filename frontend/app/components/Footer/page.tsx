@@ -5,7 +5,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import Divider from "../Divider/divider";
-import Logo from "../Logo/page";
+import Logo from "../Logo/logo";
 
 const Footer = () => {
   return (
