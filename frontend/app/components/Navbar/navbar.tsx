@@ -1,6 +1,6 @@
 import { Link, NavLink } from "@remix-run/react";
 import { FaCarSide, FaUserCircle } from "react-icons/fa";
-import Logo from "../Logo/page";
+import Logo from "../Logo/logo";
 
 const NavLinks = [
   {
