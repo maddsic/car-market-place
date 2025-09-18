@@ -14,10 +14,8 @@ const authRouter = require("./api/authModule/authRoutes");
 const userRouter = require("./api/userModule/userRoute");
 const carRouter = require("./api/carModule/carRoute");
 const accessLogSream = fs.createWriteStream(
-  path.join(__dirname, "accessLogs"),
-  {
-    flags: "a",
-  }
+  path.join(__dirname, "access.logs"),
+  { flags: "a" }
 );
 
 // INITIALIZING OUR APP
@@ -25,7 +23,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://pumped-polliwog-fast.ngrok-free.app",
-  "https://car-market-place-five.vercel.app/",
+  "https://car-market-place-five.vercel.app",
   "http://localhost:8080",
 ];
 
@@ -33,15 +31,14 @@ const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
     }
   },
+  methods: "GET,POST,PUT,DELETE",
 };
 // MIDDLEWARES 3
-app.use(
-  cors(corsOptions, {
-    methods: "GET,POST,PUT,DELETE",
-  })
-);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
