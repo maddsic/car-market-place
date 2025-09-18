@@ -2,17 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 const {
-   createCar,
-   getCars,
-   getCarById,
-   updateCar,
-   deleteCar,
-   getCarMakes,
-   getCarModel,
-   getCarBodyTypes,
-   createCarMakes,
-   getPremiumCars,
-   getLatestCars,
+  createCar,
+  getCars,
+  getCarById,
+  updateCar,
+  deleteCar,
+  getCarMakes,
+  getCarModel,
+  getCarBodyTypes,
+  createCarMakes,
+  getPremiumCars,
+  getLatestCars,
+  searchCarInventory,
 } = require("./carController");
 
 const imageUploader = require("../helpers/upload");
@@ -33,6 +34,8 @@ router.get("/premium-cars", getPremiumCars);
 
 // ------------------- LATEST CARS----------------------------------------------------------------
 router.get("/latest-cars", getLatestCars);
+
+router.get("/search", searchCarInventory);
 
 // ----------------- CAR CRUD ROUTES ------------------------------
 router.post("/", imageUploader.single("imageUrl"), createCar);

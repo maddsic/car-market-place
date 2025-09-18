@@ -24,7 +24,7 @@ module.exports = {
       year: { type: Sequelize.INTEGER, allowNull: false },
       price: { type: Sequelize.DECIMAL(10, 2), allowNull: false },
       mileage: { type: Sequelize.INTEGER, allowNull: false },
-      fuelType: { type: Sequelize.ENUM("petrol", "gas"), allownull: false },
+      fuelType: { type: Sequelize.ENUM("petrol", "gas"), allowNull: false },
       description: { type: Sequelize.STRING, allowNull: true },
       imageUrl: { type: Sequelize.STRING, allowNull: false },
       engineType: { type: Sequelize.STRING, allowNull: false },
