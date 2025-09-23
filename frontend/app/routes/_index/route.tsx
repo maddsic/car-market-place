@@ -1,7 +1,6 @@
 import { type LoaderFunction, type MetaFunction } from "@vercel/remix";
 import {
   isRouteErrorResponse,
-  useLoaderData,
   useNavigation,
   useRouteError,
 } from "@remix-run/react";
@@ -11,7 +10,6 @@ import PremiumCars from "~/components/PremiumCars/premium";
 import Highlight from "~/components/Highlight/highlight";
 import Category from "~/components/Category/category";
 import LatestCars from "~/components/LatestCars/latestCars";
-import { apiFetch } from "~/utils/apiFetch";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 import { useEffect } from "react";
 import { useCarStore } from "~/store/carStore";

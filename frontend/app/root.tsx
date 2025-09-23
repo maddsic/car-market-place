@@ -1,12 +1,13 @@
 import {
   Link,
   Links,
-  Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { type MetaFunction } from "@remix-run/node";
 import { type LinksFunction } from "@vercel/remix";
+import { ToastContainer } from "react-toastify";
 
 import Footer from "./components/Footer/page";
 import Navbar from "./components/Navbar/navbar";
@@ -15,25 +16,24 @@ import Navbar from "./components/Navbar/navbar";
 import tailwindStyles from "./tailwind.css?url";
 import globalStyles from "./styles/global.css?url";
 
-import { ToastContainer } from "react-toastify";
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Car Marketplace", description: "Buy and sell cars" },
+    { charSet: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
+  ];
+};
 
 export default function App() {
-  return <Outlet />;
-}
-
-export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
         <Links />
       </head>
       <body>
         <main>
           <Navbar />
-          {children}
+          <Outlet />
           <Footer />
         </main>
         <ScrollRestoration />
@@ -63,7 +63,6 @@ export function ErrorBoundary({ error }: { error: any }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
         <Links />
       </head>
       <body className="h-[calc(100vh-80px)]">
