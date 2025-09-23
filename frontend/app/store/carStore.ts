@@ -1,26 +1,7 @@
 import { create } from "zustand";
 import { apiFetch } from "~/utils/apiFetch";
-
-// const apiBaseUrl = process.env.API_BASE_URL || "http://localhost:4000";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-
-// create interface for car model
-interface CarModel {
-  id: string;
-  name: string;
-}
-
-// create interface for carMake
-interface CarMake {
-  id: string;
-  name: string;
-  CarModels: CarModel[];
-}
-
-interface BodyType {
-  id: string;
-  typeName: string;
-}
+import { BodyType, CarMake, CarModel } from "./carStoreInterfaces";
+import { apiEndpoints } from "./apiEndpoints";
 
 // create interface for carStore
 interface CarStore {
@@ -52,31 +33,24 @@ export const useCarStore = create<CarStore>((set) => ({
   fetchCarData: async () => {
     try {
       const endPoints = [
-        {
-          key: "carMakes",
-          url: `${apiBaseUrl}/cars/carmakes`,
-        },
-        {
-          key: "carBodyTypes",
-          url: `${apiBaseUrl}/cars/bodyType`,
-        },
-        {
-          key: "premiumCars",
-          url: `${apiBaseUrl}/cars/premium-cars`,
-        },
-        {
-          key: "latestCars",
-          url: `${apiBaseUrl}/cars/latest-cars`,
-        },
+        apiEndpoints.carMakes,
+        apiEndpoints.carBodyTypes,
+        apiEndpoints.premiumCars,
+        apiEndpoints.latestCars,
       ];
 
-      const res = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
+      const res = await Promise.all(
+        endPoints.map((endpoint) => apiFetch(endpoint)),
+      );
       console.log('"fetched car data from store"');
       console.log(res);
 
-      const results = Object.fromEntries(
-        res.map((result, index) => [endPoints[index].key, result.data]),
-      );
+      const results = {
+        carMakes: res[0]?.data || [],
+        carBodyTypes: res[1]?.data || [],
+        premiumCars: res[2]?.data || [],
+        latestCars: res[3]?.data || [],
+      };
       // SET STATE IN ZUSTAND STORE
       set({
         carMakes: results.carMakes || [],

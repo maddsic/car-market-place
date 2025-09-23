@@ -40,7 +40,7 @@ interface CarMake {
 }
 
 const AddListingPage = () => {
-  const { carMakes, carBodyTypes } = useCarStore();
+  const { carMakes } = useCarStore();
   const actionData = useActionData<typeof loader>() || null;
   const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
@@ -167,6 +167,8 @@ export const loader: LoaderFunction = async () => {
 
 // ACTION - HANDLING FORM SUBMISSION
 export async function action({ request }: ActionFunctionArgs) {
+  const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
+
   let form = await request.formData();
   let formData = Object.fromEntries(form);
 

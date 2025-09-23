@@ -21,24 +21,24 @@ const accessLogSream = fs.createWriteStream(
 // INITIALIZING OUR APP
 const app = express();
 
-const allowedOrigins = [
-  "https://pumped-polliwog-fast.ngrok-free.app",
-  "https://car-market-place-five.vercel.app",
-  "http://localhost:8080",
-];
+// const allowedOrigins = [
+//   "https://pumped-polliwog-fast.ngrok-free.app/api/v1",
+//   "https://car-market-place-five.vercel.app",
+//   "http://localhost:8080",
+// ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: "GET,POST,PUT,DELETE",
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (allowedOrigins.includes(origin) || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   methods: "GET,POST,PUT,DELETE",
+// };
 // MIDDLEWARES 3
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -54,14 +54,14 @@ app.use((req, res, next) => {
 authenticateDBConnection();
 
 // USING ROUTES
-app.use("/auth", authRouter);
-app.use("/users", userRouter);
-app.use("/cars", carRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/cars", carRouter);
 
 // GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
   console.log("ERROR FROM GLOBAL ERROR HANDLER");
-  console.log(err.stack);
+  console.log(err.stack.message);
 
   return res.status(500).json({
     success: false,

@@ -102,14 +102,14 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-const API_BASE_URL = process.env.API_BASE_URL;
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 
+// Passing data to the profile cars component because remix does not fetch data on client components instead on routes.
 export async function loader({ params }: LoaderFunctionArgs) {
   const { userId } = params;
 
-  const user = await apiFetch(`${API_BASE_URL}/api/v1/users/${userId}`);
-  // console.log("User Data from profile page loader");
-  // console.log(user);
+  const user = await apiFetch(`${apiBaseUrl}${apiVersion}/users/${userId}`);
 
   return { user: user.data, userCars: user.data.cars };
 }

@@ -17,66 +17,15 @@ import Price from "~/components/Price/price";
 import CarMakeAndModel from "~/components/CarMakeAndModel/CarMakeAndModel";
 import CarDescription from "~/components/CarDescription/CarDescription";
 import Image from "~/components/Image/Image";
-import { Car, CarMake, CarModel } from "~/interfaces";
+import { Car } from "~/interfaces";
 import InventoryForm from "./InventoryForm";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
-import { useCarStore } from "~/store/carStore";
-
-const API_BASE_URL = process.env.API_BASE_URL;
-
-// LOADER - FETCHING CAR MAKES
-export const loader: LoaderFunction = async ({ request }) => {
-  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
-
-  const url = new URL(request.url);
-  const section = url.searchParams.get("section");
-  const value = url.searchParams.get("value");
-
-  const condition = url.searchParams.get("condition");
-  const carType = url.searchParams.get("carType");
-  const make = url.searchParams.get("make");
-  const model = url.searchParams.get("model");
-
-  try {
-    let cars;
-
-    if (condition || carType || make || model) {
-      const queryParams = new URLSearchParams();
-
-      if (condition) queryParams.append("condition", condition);
-      if (carType) queryParams.append("carType", carType);
-      if (make) queryParams.append("make", make);
-      if (model) queryParams.append("model", model);
-
-      const results = await apiFetch(
-        `${API_BASE_URL}/api/v1/cars/search?${queryParams.toString()}`,
-      );
-      cars = results.data;
-    } else {
-      const result = await apiFetch(
-        `${API_BASE_URL}/api/v1/cars?section=${section}&value=${value}`,
-      );
-      cars = result.data;
-    }
-
-    return { cars };
-  } catch (error) {
-    console.error("Error in loader:", error);
-    return new Response("Failed to load data", { status: 500 });
-  }
-};
 
 const InventoryPage = () => {
-  const { carMakes } = useCarStore();
   const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const { cars = [] } = useLoaderData<typeof loader>() || {};
-  const [models, setModels] = useState<CarModel[]>([]);
   const [startIndex, setStartIndex] = useState<number>(0);
-  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
-  const [formData, setFormData] = useState({
-    make: "",
-    model: "",
-  });
+
   const navigation = useNavigation();
   const navigate = useNavigate();
 
@@ -100,18 +49,6 @@ const InventoryPage = () => {
     }
   };
 
-  const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const makeId = e.target.value;
-    const foundMake = carMakes.find((make: any) => make.id === makeId);
-
-    if (foundMake) {
-      setSelectedMake(foundMake);
-      setModels(foundMake.CarModels || []);
-    }
-  };
-
   return (
     <>
       <LoadingIndicator isLoading={loading} />
@@ -126,11 +63,7 @@ const InventoryPage = () => {
             </div>
 
             {/* FORM */}
-            <InventoryForm
-              onChange={handleMakeChange}
-              carMakes={carMakes}
-              models={models}
-            />
+            <InventoryForm />
           </aside>
 
           {/*  CONTENT */}
@@ -210,3 +143,49 @@ const InventoryPage = () => {
 };
 
 export default InventoryPage;
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
+
+// LOADER - FETCHING CAR MAKES
+export const loader: LoaderFunction = async ({ request }) => {
+  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
+
+  const url = new URL(request.url);
+  const section = url.searchParams.get("section");
+  const value = url.searchParams.get("value");
+
+  const condition = url.searchParams.get("condition");
+  const carType = url.searchParams.get("carType");
+  const make = url.searchParams.get("make");
+  const model = url.searchParams.get("model");
+
+  try {
+    let cars;
+
+    if (condition || carType || make || model) {
+      const queryParams = new URLSearchParams();
+
+      if (condition) queryParams.append("condition", condition);
+      if (carType) queryParams.append("carType", carType);
+      if (make) queryParams.append("make", make);
+      if (model) queryParams.append("model", model);
+
+      const results = await apiFetch(
+        `${API_BASE_URL}${API_VERSION}/cars/search?${queryParams.toString()}`,
+      );
+      cars = results.data;
+    } else {
+      const result = await apiFetch(
+        `${API_BASE_URL}${API_VERSION}/cars?section=${section}&value=${value}`,
+      );
+      cars = result.data;
+    }
+
+    return { cars };
+  } catch (error) {
+    console.error("Error in loader:", error);
+    return new Response("Failed to load data", { status: 500 });
+  }
+};

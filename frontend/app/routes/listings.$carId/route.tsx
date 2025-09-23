@@ -24,17 +24,6 @@ interface loaderData {
   car: Car | null;
 }
 
-const API_BASE_URL = process.env.API_BASE_URL;
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { carId } = params;
-
-  const car = await apiFetch(`${API_BASE_URL}/api/v1/cars/${carId}`);
-  // console.log(car);
-
-  return { car: car.data };
-}
-
 const ViewListing = () => {
   const { car } = useLoaderData<loaderData>();
   const [index, setIndex] = useState<number>(0); // FOR IMAGE GALLERY NOT USED YET
@@ -148,4 +137,16 @@ function SellerNote({}) {
       </p>
     </div>
   );
+}
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { carId } = params;
+
+  const car = await apiFetch(`${apiBaseUrl}${apiVersion}/cars/${carId}`);
+  // console.log(car);
+
+  return { car: car.data };
 }

@@ -1,17 +1,38 @@
 import { Form } from "@remix-run/react";
-import React from "react";
+import { useEffect, useState } from "react";
 import Button from "~/components/Button/button";
 import { CarMake, CarModel } from "~/interfaces";
+import { useCarStore } from "~/store/carStore";
 
-const InventoryForm = ({
-  handleMakeChange,
-  carMakes,
-  models,
-}: {
-  handleMakeChange: () => void;
-  carMakes: { id: string; name: string }[];
-  models: { id: string; name: string }[];
-}) => {
+const InventoryForm = () => {
+  const { carBodyTypes, carMakes, fetchCarData } = useCarStore();
+  const [models, setModels] = useState<CarModel[]>([]);
+  const [formData, setFormData] = useState({
+    make: "",
+    model: "",
+  });
+
+  useEffect(() => {
+    if (carBodyTypes.length === 0 || carMakes.length === 0) {
+      fetchCarData();
+    }
+  }, [carBodyTypes, carMakes, fetchCarData]);
+
+  // Handle Make change
+  const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const makeId = e.target.value;
+    const foundMake = carMakes.find((make: any) => make.id === makeId);
+
+    // Update formdata for the make and reset model
+    setFormData({ ...formData, make: makeId, model: "" });
+
+    if (foundMake) {
+      setModels(foundMake.CarModels || []);
+    } else {
+      setModels([]);
+    }
+  };
+
   return (
     <Form className="grid gap-4 p-5 lg:gap-6">
       {/* CONDITION */}
@@ -33,6 +54,11 @@ const InventoryForm = ({
       >
         <option value="">body</option>
         <option value="all">All</option>
+        {carBodyTypes.map((bodyType: any) => (
+          <option value={bodyType.typeName} key={bodyType.typeId} className="">
+            {bodyType.typeName}
+          </option>
+        ))}
       </select>
 
       {/* MAKE */}
@@ -54,7 +80,6 @@ const InventoryForm = ({
       <select
         name="model"
         className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
-        onChange={handleMakeChange}
       >
         <option value="">Model</option>
         <option value="all">All</option>
@@ -101,7 +126,7 @@ const InventoryForm = ({
       {/* button */}
       <Button
         title="reset all"
-        classNames="bg-yellow w-full py-4 px-2 text-white font-bold tracking-wide"
+        className="w-full bg-yellow px-2 py-4 font-bold tracking-wide text-white"
       />
     </Form>
   );

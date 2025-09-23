@@ -6,7 +6,6 @@ import Image from "~/components/Image/Image";
 import PrevButton from "~/components/PaginationLeft/prev";
 import NextButton from "~/components/PaginationRight/next";
 import Price from "~/components/Price/price";
-import Special from "~/components/Special/special";
 import { Car } from "~/interfaces";
 
 export const ProfileCars = ({
