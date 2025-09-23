@@ -23,6 +23,7 @@ const CreateListingDetails: React.FC<ListingDetailsProps> = ({
   return (
     <div className="relative grid gap-5 border bg-primary p-5 md:grid-cols-2 lg:grid-cols-4">
       <div className="flex flex-col gap-2">
+        {" "}
         <p className="text-sm font-extrabold capitalize text-white">
           condition*
         </p>

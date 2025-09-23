@@ -4,7 +4,13 @@ import {
   LinksFunction,
   LoaderFunction,
 } from "@remix-run/node";
-import { Form, json, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  json,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 
 // components
 import Divider from "~/components/Divider/divider";
@@ -22,11 +28,11 @@ import { apiFetch } from "~/utils/apiFetch";
 import "react-quill/dist/quill.snow.css";
 import CreateListingPrice from "./crreateListingPrice";
 import Button from "~/components/Button/button";
-import { createListingValidateor } from "~/validations/validateForm";
+// import { createListingValidateor } from "~/schemas/validateForm";
 import { z } from "zod";
 import SelectListingFeature from "./createListingFeature";
 import Loader from "~/components/Loader/loader";
-import { useCarStore } from "~/store/carStore";
+import { createListingValidateor } from "~/validations/validateForm";
 
 interface CarModel {
   id: string;
@@ -39,21 +45,28 @@ interface CarMake {
   CarModels: CarModel[];
 }
 
+interface CarBodyTypes {
+  typeId: string;
+  typeName: string;
+}
+
 const AddListingPage = () => {
-  const { carMakes } = useCarStore();
+  const { carMakes, carBodyTypes } = useLoaderData<typeof loader>() || null;
   const actionData = useActionData<typeof loader>() || null;
-  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
+  const [selectedMAke, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
+  const [formData, setFormData] = useState({
+    make: "",
+    model: "",
+  });
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  // Change model options based on selected make
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const makeName = e.target.value;
     const make = e.target.name;
 
-    // Check if the changed field is 'make'
     if (e.target.name === make) {
       const foundMake = carMakes.find(
         (make: CarMake) => make.name === makeName,
@@ -70,7 +83,6 @@ const AddListingPage = () => {
     console.log(actionData);
   }
 
-  // Check if the form is submitting
   if (isSubmitting) {
     return <Loader />;
   }
@@ -99,7 +111,10 @@ const AddListingPage = () => {
               onMakeChange={handleMakeChange}
             />
             {/* CAR DETAILS */}
-            <CreateListingInfo formData={actionData} />
+            <CreateListingInfo
+              carBodyTypes={carBodyTypes}
+              formData={actionData}
+            />
 
             {/* SEPARATOR */}
             <Divider classNames="mt-10" />
@@ -148,14 +163,21 @@ export const lisks: LinksFunction = () => [
 ];
 
 // BASE URL
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // LOADER -GETTING LOADER DATA
 export const loader: LoaderFunction = async () => {
-  const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
-
   const endPoints = [
-    { key: "carMakes", url: `${API_BASE_URL}/api/v1/cars/carmakes` },
-    { key: "carBodyTypes", url: `${API_BASE_URL}/api/v1/cars/bodyType` },
+    {
+      key: "carMakes",
+      url: `${API_BASE_URL}${API_VERSION}/cars/carmakes`,
+    },
+    {
+      key: "carBodyTypes",
+      url: `${API_BASE_URL}${API_VERSION}/cars/bodyType`,
+    },
   ];
 
   const result = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
@@ -167,8 +189,6 @@ export const loader: LoaderFunction = async () => {
 
 // ACTION - HANDLING FORM SUBMISSION
 export async function action({ request }: ActionFunctionArgs) {
-  const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
-
   let form = await request.formData();
   let formData = Object.fromEntries(form);
 

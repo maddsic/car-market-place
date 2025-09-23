@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaGasPump, FaRoad, FaTruckMonster } from "react-icons/fa";
 import { TbEngine } from "react-icons/tb";
 import { GiSteeringWheel } from "react-icons/gi";
@@ -10,9 +10,9 @@ import { Input } from "~/components/ui/input";
 import { SiTransmission } from "react-icons/si";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import CreateListingLocation from "./createListingLocation";
-import { useCarStore } from "~/store/carStore";
 
 type CreateListingInfoProps = {
+  carBodyTypes: { id: string; typeName: string }[];
   formData: {
     errors: {
       bodyType: string;
@@ -24,16 +24,10 @@ type CreateListingInfoProps = {
   };
 };
 
-const CreateListingInfo: React.FC<CreateListingInfoProps> = ({ formData }) => {
-  const { carBodyTypes, fetchCarData } = useCarStore();
-
-  useEffect(() => {
-    if (!carBodyTypes || carBodyTypes.length === 0) {
-      fetchCarData();
-    }
-  }, [carBodyTypes, fetchCarData]);
-
-  console.log("car body types from addlisting", carBodyTypes);
+const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
+  carBodyTypes,
+  formData,
+}) => {
   return (
     <>
       <div className="relative grid gap-5 pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-5">
@@ -54,7 +48,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({ formData }) => {
             options={carBodyTypes.map((bodyType: any) => ({
               label: bodyType.typeName,
               value: bodyType.typeName,
-              key: bodyType.id,
+              // key: bodyType.typeId,
             }))}
           />
           <DropDownIcon />
