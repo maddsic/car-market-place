@@ -66,7 +66,7 @@ export const MessageDealerForm = ({}) => {
 
           <Button
             title="send message"
-            classNames="text-[13px] mt-5 text-white mb-5 lg:mb-20"
+            className="mb-5 mt-5 text-[13px] text-white lg:mb-20"
           />
         </Form>
       </div>
