@@ -28,7 +28,6 @@ const InventoryPage = () => {
 
   const navigation = useNavigation();
   const navigate = useNavigate();
-
   const loading = navigation.state === "loading";
 
   const handleNavigateToListings = (carId: string) => {

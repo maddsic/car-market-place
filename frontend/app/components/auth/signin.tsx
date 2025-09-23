@@ -23,7 +23,7 @@ const SignIn = ({ actionData }: { actionData: any }) => {
   }, [actionData, navigate]);
 
   return (
-    <div className="input__bg screen__height flex justify-center px-4">
+    <div className="input__bg screen__height flex items-center justify-center px-4">
       <div className="relative w-full max-w-3xl pt-10 md:mt-20 md:p-20">
         <Heading title="Sign In" classNames="uppercase lg:text-[28px]" />
         <Card className="relative flex flex-col gap-5 border-t-4 border-t-gray-900 p-7 pt-5 shadow-lg md:p-10">
