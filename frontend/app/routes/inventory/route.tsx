@@ -22,8 +22,8 @@ import InventoryForm from "./InventoryForm";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 
 const InventoryPage = () => {
-  const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const { cars = [] } = useLoaderData<typeof loader>() || {};
+  const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const [startIndex, setStartIndex] = useState<number>(0);
 
   const navigation = useNavigation();
@@ -88,15 +88,11 @@ const InventoryPage = () => {
                       key={car.carId}
                       onClick={() => handleNavigateToListings(car.carId!)}
                     >
-                      {/* CAR IMAGE */}
                       <Image car={car} className="max-h-[70%] lg:h-full" />
-                      {/*CAR TITLE */}
                       <div className="mt-3 flex justify-between">
                         <CarMakeAndModel car={car} />
-                        {/* CAR PRICE */}
                         <Price price={car.price} className="text-[14px]" />
                       </div>
-                      {/* CAR DESCRIPTION */}
                       <CarDescription car={car} />
                       <Special />
                       <hr className="mt-3 border-gray-300" />

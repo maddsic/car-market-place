@@ -8,13 +8,7 @@ import NextButton from "~/components/PaginationRight/next";
 import Price from "~/components/Price/price";
 import { Car } from "~/interfaces";
 
-export const ProfileCars = ({
-  userCars,
-}: {
-  userCars: any;
-  startIndex: number;
-  carsPerPage: number;
-}) => {
+export const ProfileCars = ({ userCars }: { userCars: any }) => {
   const navigation = useNavigate();
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(9);
