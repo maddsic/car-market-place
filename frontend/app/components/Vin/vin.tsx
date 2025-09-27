@@ -1,5 +1,6 @@
 import { Input } from "../ui/input";
 import Button from "../Button/button";
+import { SendIcon } from "lucide-react";
 
 const VinNumber = () => {
   return (
@@ -18,7 +19,8 @@ const VinNumber = () => {
         />
         <Button
           title="APPLY"
-          className="block w-full px-12 text-white md:w-1/3 lg:w-1/4"
+          className="w-full px-12 text-white md:w-1/3 lg:w-1/4"
+          icon={<SendIcon size={18} />}
         />
       </div>
     </div>
