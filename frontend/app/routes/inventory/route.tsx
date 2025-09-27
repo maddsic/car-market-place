@@ -145,12 +145,14 @@ const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // LOADER - FETCHING CAR MAKES
 export const loader: LoaderFunction = async ({ request }) => {
-  const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
+  // const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
 
   const url = new URL(request.url);
+  //
   const section = url.searchParams.get("section");
   const value = url.searchParams.get("value");
 
+  // For filters
   const condition = url.searchParams.get("condition");
   const carType = url.searchParams.get("carType");
   const make = url.searchParams.get("make");

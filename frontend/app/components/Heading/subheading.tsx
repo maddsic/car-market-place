@@ -3,16 +3,16 @@ import { twMerge } from "tailwind-merge";
 const SubHeading = ({
   title,
   colouredText,
-  classNames,
+  className,
 }: {
   title: string;
   colouredText?: string;
-  classNames?: string;
+  className?: string;
 }) => {
   return (
     <h3
       className={twMerge(
-        `font-montserrat box-border font-bold uppercase ${classNames}`,
+        `font-montserrat box-border font-bold uppercase ${className}`,
       )}
     >
       {title}{" "}

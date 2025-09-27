@@ -16,7 +16,6 @@ import {
 import Divider from "~/components/Divider/divider";
 import Heading from "~/components/Heading/heading";
 import VinNumber from "~/components/Vin/vin";
-import CreateListingDetails from "~/components/listing/listingDetails";
 import CreateListingInfo from "./createListingInfo";
 import UploadListingImage from "./createListingImage";
 import CreateListingSellerNote from "./createListingSellerNode";
@@ -28,58 +27,22 @@ import { apiFetch } from "~/utils/apiFetch";
 import "react-quill/dist/quill.snow.css";
 import CreateListingPrice from "./crreateListingPrice";
 import Button from "~/components/Button/button";
-// import { createListingValidateor } from "~/schemas/validateForm";
 import { z } from "zod";
 import SelectListingFeature from "./createListingFeature";
 import Loader from "~/components/Loader/loader";
 import { createListingValidateor } from "~/validations/validateForm";
-
-interface CarModel {
-  id: string;
-  name: string;
-}
-
-interface CarMake {
-  id: string;
-  name: string;
-  CarModels: CarModel[];
-}
-
-interface CarBodyTypes {
-  typeId: string;
-  typeName: string;
-}
+import CreateListingSearchFilter from "~/components/listing/listingSearchFilter";
+import { PlusCircle } from "lucide-react";
 
 const AddListingPage = () => {
   const { carMakes, carBodyTypes } = useLoaderData<typeof loader>() || null;
   const actionData = useActionData<typeof loader>() || null;
-  const [selectedMAke, setSelectedMake] = useState<CarMake | null>(null);
-  const [models, setModels] = useState<CarModel[]>([]);
-  const [formData, setFormData] = useState({
-    make: "",
-    model: "",
-  });
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const makeName = e.target.value;
-    const make = e.target.name;
-
-    if (e.target.name === make) {
-      const foundMake = carMakes.find(
-        (make: CarMake) => make.name === makeName,
-      );
-      if (foundMake) {
-        setSelectedMake(foundMake);
-        setModels(foundMake.CarModels || []);
-      }
-    }
-  };
-
   if (actionData) {
-    console.log("FORM DATA ERROR");
+    console.log("FORM DATA ERROR FROM ADD LISTING PAGE");
     console.log(actionData);
   }
 
@@ -104,11 +67,9 @@ const AddListingPage = () => {
           />
           {/* FORM */}
           <Form action="/addListing" method="post">
-            <CreateListingDetails
+            <CreateListingSearchFilter
               carMakes={carMakes}
-              models={models}
               formData={actionData}
-              onMakeChange={handleMakeChange}
             />
             {/* CAR DETAILS */}
             <CreateListingInfo
@@ -147,6 +108,7 @@ const AddListingPage = () => {
               disabled={isSubmitting}
               title={isSubmitting ? <Loader /> : "Add Listing"}
               className="mt-10 w-full border py-4 font-extrabold text-white shadow lg:w-1/4"
+              icon={<PlusCircle />}
             />
           </Form>
         </div>

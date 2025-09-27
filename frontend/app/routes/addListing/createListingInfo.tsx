@@ -10,6 +10,7 @@ import { Input } from "~/components/ui/input";
 import { SiTransmission } from "react-icons/si";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import CreateListingLocation from "./createListingLocation";
+import { useCarStore } from "~/store/carStore";
 
 type CreateListingInfoProps = {
   carBodyTypes: { id: string; typeName: string }[];
@@ -28,6 +29,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
   carBodyTypes,
   formData,
 }) => {
+  // const { carBodyTypes } = useCarStore();
   return (
     <>
       <div className="relative grid gap-5 pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-5">
@@ -48,7 +50,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
             options={carBodyTypes.map((bodyType: any) => ({
               label: bodyType.typeName,
               value: bodyType.typeName,
-              // key: bodyType.typeId,
+              key: bodyType.typeId,
             }))}
           />
           <DropDownIcon />
