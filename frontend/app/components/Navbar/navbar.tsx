@@ -42,8 +42,8 @@ const NavLinks = [
 
 const Navbar = () => {
   return (
-    <main className="relative h-[100px] w-full">
-      <nav className="fixed left-0 top-0 z-20 h-[100px] w-full bg-primary">
+    <main className="relative h-[80px] w-full">
+      <nav className="fixed left-0 top-0 z-20 h-[80px] w-full bg-primary">
         <div className="max__container z-999 relative h-full text-white">
           <div className="flex h-full items-center justify-between">
             <Logo />
@@ -54,7 +54,7 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex items-center justify-center gap-5 md:gap-10">
+            <div className="flex items-center justify-center gap-2 md:gap-10">
               <Link
                 to="/addListing"
                 className="rounded-full bg-yellow p-2 md:hidden"

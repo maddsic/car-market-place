@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="relative h-[calc(100vh-350px)] w-full overflow-hidden md:h-[calc(100vh-250px)]">
+      <header className="relative h-[calc(100vh-250px)] w-full overflow-hidden">
         <motion.div
           style={bgImageStyle}
           className="duration-[3000ms] absolute inset-0 z-0 scale-100 transform transition-all ease-in-out group-hover:scale-105"
