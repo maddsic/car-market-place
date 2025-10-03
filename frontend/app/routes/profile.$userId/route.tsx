@@ -15,7 +15,9 @@ import Button from "~/components/Button/button";
 import { ProfileCars } from "./ProfileCars";
 
 const ProfilePage = () => {
-  const { user, userCars } = useLoaderData<typeof loader>();
+  const { user, userCars, dealers } = useLoaderData<typeof loader>();
+  console.log("dealers", dealers);
+  console.log("users", user);
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -26,7 +28,8 @@ const ProfilePage = () => {
   const emailDesc: string =
     user?.role === "user" ? "Seller Email" : "Dealer Email";
 
-  const fullname: string = user?.first_name + " " + user?.last_name;
+  const fullname: string = user ? user?.first_name || user?.last_name : null;
+  const dealerFullname: string = dealers ? dealers?.username : null;
 
   return (
     <main className="max__container relative mb-10 box-border p-4 md:p-10">
@@ -37,7 +40,7 @@ const ProfilePage = () => {
             <span className="">
               <ListingSellerImage
                 imgUrl="/sain.jpeg"
-                name={fullname}
+                name={fullname || dealerFullname}
                 className="h-22 w-22 border-b md:border-none"
                 desc={description}
               />
@@ -46,7 +49,7 @@ const ProfilePage = () => {
               {/* TEL */}
               <span className="w-full cursor-pointer lg:border lg:bg-gray-200 lg:p-2">
                 <ProfileInfo
-                  phone={user?.phone}
+                  phone={user?.phone || dealers.phone}
                   phoneDesc={phoneDesc}
                   icon={
                     <BsFillTelephoneOutboundFill
@@ -59,7 +62,7 @@ const ProfilePage = () => {
               {/* EMAIL */}
               <span className="w-full cursor-pointer lg:border lg:bg-gray-200 lg:p-2">
                 <ProfileInfo
-                  email={user?.email}
+                  email={user?.email || dealers.email}
                   emailDesc={emailDesc}
                   icon={
                     <HiOutlineMailOpen className="mt-2 text-yellow" size={18} />
@@ -72,7 +75,7 @@ const ProfilePage = () => {
           {/* INVENTORY SECTION */}
           <section className="relative pt-5">
             <SubHeading
-              classNames="font-extrabold md:text-xl capitalize"
+              className="font-extrabold capitalize md:text-xl"
               title="seller inventory"
             />
             <div className="mt-5">
@@ -87,7 +90,7 @@ const ProfilePage = () => {
                   <FaListUl size={18} className="gray__text-light" />
                 </span>
               </div>
-              <ProfileCars userCars={userCars} />
+              <ProfileCars userCars={userCars} dealerFilteredCars={dealers} />
             </div>
           </section>
           {/* INVENTORY SECTION ENDS */}
@@ -106,12 +109,35 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // Passing data to the profile cars component because remix does not fetch data on client components instead on routes.
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { userId } = params;
+  const url = new URL(request.url);
 
-  const user = await apiFetch(`${apiBaseUrl}${apiVersion}/users/${userId}`);
+  // Get search params
+  const condition = url.searchParams.get("condition");
+  const carMake = url.searchParams.get("make");
+  const carModel = url.searchParams.get("model");
 
-  return { user: user.data, userCars: user.data.cars };
+  const searchParams = new URLSearchParams();
+
+  if (condition) searchParams.append("condition", condition);
+  if (carMake) searchParams.append("make", carMake);
+  if (carModel) searchParams.append("model", carModel);
+
+  const queryString = searchParams.toString();
+
+  const endPoints = queryString
+    ? `${apiBaseUrl}${apiVersion}/dealers/filtered-cars/${userId}?${searchParams.toString()}`
+    : `${apiBaseUrl}${apiVersion}/users/${userId}`;
+
+  const result = await apiFetch(endPoints);
+
+  return {
+    user: result.data,
+    userCars: result.data.cars,
+    dealers: result.data,
+    queryString: { carMake, carModel, condition },
+  };
 }
 
 function ProfileInfo({
@@ -199,7 +225,7 @@ function ProfileForm({}) {
 
         <Button
           title="Send Message"
-          classNames="text-white w-full text-[14px] my-6 py-3"
+          className="my-6 w-full py-3 text-[14px] text-white"
         />
       </div>
     </Form>

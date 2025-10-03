@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { Link } from "@remix-run/react";
 import { Car, ExternalLink, MapPin, Phone, Star } from "lucide-react";
 
-interface DealershipHeaderProps {
-  dealerName: string;
-  reviewCount: number;
-  newCarsCount: number;
-  phoneNumber: string;
-  location: string;
+interface DealershipInfoProps {
+  username: string;
+  address: string;
+  phone: string;
+  carsCount: number;
+  reviewCount?: number;
   logoUrl?: string;
 }
 
-const DisplayDealerInfo = ({
-  dealerName = "SS Jammeh Motors",
-  reviewCount = 2,
-  newCarsCount = 5,
-  phoneNumber = "(71*******",
-  location = "Kanifing, The Gambia",
+const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
+  username,
+  address,
+  phone,
+  carsCount,
+  reviewCount = 34, // Placeholder for review count
   logoUrl,
 }) => {
   const [showFullNumber, setShowFullNumber] = useState(false);
@@ -37,7 +37,7 @@ const DisplayDealerInfo = ({
               {logoUrl ? (
                 <img
                   src={logoUrl || "/placeholder.svg"}
-                  alt={`${dealerName} Logo`}
+                  alt={`${username} Logo`}
                   className="h-12 w-auto"
                 />
               ) : (
@@ -58,7 +58,7 @@ const DisplayDealerInfo = ({
             {/* Business Name and Reviews */}
             <div>
               <h1 className="text-lg font-bold text-gray-900 lg:text-xl">
-                {dealerName}
+                {username}
               </h1>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>(Reviews {reviewCount})</span>
@@ -83,7 +83,7 @@ const DisplayDealerInfo = ({
               </div>
               <div>
                 <div className="font-semibold text-gray-900">
-                  {newCarsCount} New
+                  {carsCount} New
                 </div>
                 <div className="text-sm font-medium text-orange-600">
                   Cars in stock
@@ -98,7 +98,7 @@ const DisplayDealerInfo = ({
               </div>
               <div>
                 <div className="font-semibold text-gray-900">
-                  {showFullNumber ? fullPhoneNumber : phoneNumber}
+                  {showFullNumber ? "(+220) " + phone : "(+220) ***-****"}
                 </div>
                 {!showFullNumber && (
                   <button
@@ -117,7 +117,7 @@ const DisplayDealerInfo = ({
                 <MapPin className="h-5 w-5 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-gray-900">{location}</div>
+                <div className="font-semibold text-gray-900">{address}</div>
                 {/* open the map in a popup  */}
                 <Link
                   to="/map"

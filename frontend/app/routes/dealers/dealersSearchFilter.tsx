@@ -1,29 +1,29 @@
-import { LoaderFunction } from "@remix-run/node";
+import { Form, useNavigate, useNavigation } from "@remix-run/react";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import Button from "~/components/Button/button";
+import Loader from "~/components/Loader/loader";
 import Select from "~/components/Select/select";
 // import { Select } from "~/components/ui/select";
 import { CarMake, CarModel } from "~/interfaces";
-import { apiFetch } from "~/utils/apiFetch";
 
 interface DealersSearchFilterProps {
   carMakes: any[];
-  formData: {
-    errors: {
-      condition: string;
-      make: string;
-      model: string;
-    };
-  };
 }
 
 const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   carMakes,
-  formData,
 }) => {
   const [selectedMAke, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
+  const navigation = useNavigation();
+  const loading = navigation?.state === "loading";
+
+  // HANDLE TOGGLE BETWEEN FILTERED DEALERS AND ALL DEALERS
+
+  if (loading) {
+    return <Loader />;
+  }
 
   //   Handles changes in the make selection
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,7 +42,12 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   };
 
   return (
-    <div className="relative grid gap-5 border bg-primary p-5 md:grid-cols-2 lg:grid-cols-4">
+    <Form
+      className="relative grid gap-5 border bg-primary p-5 md:grid-cols-2 lg:grid-cols-4"
+      // onSubmit={handleSubmit}
+      method="get"
+      action="/dealers"
+    >
       <div className="flex flex-col gap-2">
         {" "}
         <p className="text-sm font-extrabold capitalize text-white">
@@ -58,9 +63,6 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
             { label: "Used", value: "used" },
           ]}
         />
-        {/* {formData?.errors?.condition && (
-          <Error error={formData.errors.condition} />
-        )} */}
       </div>
       {/* MAKE */}
       <div className="flex flex-col gap-2">
@@ -75,7 +77,6 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
             value: make.name,
           }))}
         />
-        {/* {formData?.errors?.make && <Error error={formData.errors.make} />} */}
       </div>
       {/* models */}
       <div className="flex flex-col gap-2">
@@ -89,13 +90,12 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
             value: model.name,
           }))}
         />
-        {/* {formData?.errors?.model && <Error error={formData.errors.model} />} */}
       </div>
       {/* year */}
       <div className="mt-7 flex flex-col gap-2">
         <Button title="find dealer" icon={<SearchIcon />} className="p-3" />
       </div>
-    </div>
+    </Form>
   );
 };
 

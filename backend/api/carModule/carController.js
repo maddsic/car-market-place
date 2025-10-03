@@ -1,11 +1,14 @@
-const Car = require("../models").Car;
-const User = require("../models").User;
 const path = require("path");
 const fs = require("fs").promises;
+
+// SCHEMAS & HELPERS
 const { carSchema } = require("./carService");
 const { sendResponse, hasLength } = require("../helpers/response");
 const { processCarImages } = require("../helpers/processCarImage");
 
+// MODELS
+const Car = require("../models").Car;
+const User = require("../models").User;
 const CarBodyType = require("../models/").CarBodyType;
 const CarMake = require("../models/").CarMake;
 const CarModel = require("../models/").CarModel;
