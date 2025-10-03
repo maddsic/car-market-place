@@ -13,6 +13,8 @@ const { authenticateDBConnection } = require("./db");
 const authRouter = require("./api/authModule/authRoutes");
 const userRouter = require("./api/userModule/userRoute");
 const carRouter = require("./api/carModule/carRoute");
+const dealerRouter = require("./api/dealerModule/dealerRoute");
+
 const accessLogSream = fs.createWriteStream(
   path.join(__dirname, "access.logs"),
   { flags: "a" }
@@ -57,6 +59,7 @@ authenticateDBConnection();
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/cars", carRouter);
+app.use("/api/v1/dealers", dealerRouter);
 
 // GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
