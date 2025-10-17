@@ -13,11 +13,10 @@ import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
 
 import { ProfileCars } from "./ProfileCars";
+import ProfileTabs from "./profileTabs";
 
 const ProfilePage = () => {
   const { user, userCars, dealers } = useLoaderData<typeof loader>();
-  console.log("dealers", dealers);
-  console.log("users", user);
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -28,7 +27,9 @@ const ProfilePage = () => {
   const emailDesc: string =
     user?.role === "user" ? "Seller Email" : "Dealer Email";
 
-  const fullname: string = user ? user?.first_name || user?.last_name : null;
+  const sellerFullname: string = user
+    ? user?.first_name || user?.last_name
+    : null;
   const dealerFullname: string = dealers ? dealers?.username : null;
 
   return (
@@ -40,7 +41,7 @@ const ProfilePage = () => {
             <span className="">
               <ListingSellerImage
                 imgUrl="/sain.jpeg"
-                name={fullname || dealerFullname}
+                name={sellerFullname || dealerFullname}
                 className="h-22 w-22 border-b md:border-none"
                 desc={description}
               />
@@ -73,26 +74,12 @@ const ProfilePage = () => {
           </div>
           <Divider />
           {/* INVENTORY SECTION */}
-          <section className="relative pt-5">
-            <SubHeading
-              className="font-extrabold capitalize md:text-xl"
-              title="seller inventory"
-            />
-            <div className="mt-5">
-              <div className="flex items-center gap-2">
-                <span className="font-body uppercase antialiased">
-                  View as:
-                </span>{" "}
-                <span className="cursor-pointer bg-gray-200 p-1 hover:bg-gray-300/40">
-                  <MdOutlineGridView size={18} className="gray__text-light" />
-                </span>
-                <span className="cursor-pointer bg-gray-200 p-1 hover:bg-gray-300/40">
-                  <FaListUl size={18} className="gray__text-light" />
-                </span>
-              </div>
-              <ProfileCars userCars={userCars} dealerFilteredCars={dealers} />
-            </div>
-          </section>
+
+          <ProfileTabs
+            userCars={userCars}
+            dealers={dealers}
+            isLoggedIn={!!user} // boolean
+          />
           {/* INVENTORY SECTION ENDS */}
         </aside>
         <aside className="relative mt-5 box-border md:col-span-12 lg:col-span-3">

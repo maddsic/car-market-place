@@ -4,8 +4,6 @@ import SignIn from "~/components/auth/signin";
 import SignUp from "~/components/auth/signup";
 import { handleSignIn, handleSignUp } from "~/utils/authHandler";
 
-// ACTION FUNCTION TO HANDLE FORM SUBMISSION
-
 const AuthRoute = () => {
   const { authRoute } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();

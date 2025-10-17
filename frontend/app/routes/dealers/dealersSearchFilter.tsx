@@ -19,8 +19,6 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   const navigation = useNavigation();
   const loading = navigation?.state === "loading";
 
-  // HANDLE TOGGLE BETWEEN FILTERED DEALERS AND ALL DEALERS
-
   if (loading) {
     return <Loader />;
   }

@@ -6,4 +6,5 @@ export const apiEndpoints = {
   carBodyTypes: `${apiBaseUrl}${apiVersion}/cars/bodyType`,
   premiumCars: `${apiBaseUrl}${apiVersion}/cars/premium-cars`,
   latestCars: `${apiBaseUrl}${apiVersion}/cars/latest-cars`,
+  allDealers: `${apiBaseUrl}${apiVersion}/dealers`,
 };

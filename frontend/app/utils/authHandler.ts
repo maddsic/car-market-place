@@ -2,6 +2,7 @@ import { json } from "@remix-run/react";
 import { SignInSchema, SignUpSchema } from "~/schemas/authSchema";
 import { LoginUser, RegisterUser } from "./user.server";
 
+// HANDLE SIGN UP LOGIC
 export const handleSignUp = async (formData: FormData) => {
   const data = {
     first_name: formData.get("first_name"),
@@ -42,6 +43,7 @@ export const handleSignUp = async (formData: FormData) => {
   }
 };
 
+// HANDLE SIGN IN LOGIC
 export const handleSignIn = async (formData: FormData) => {
   const data = {
     email: formData.get("email"),

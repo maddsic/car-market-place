@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 import { Form, Link, useNavigate } from "@remix-run/react";
+import { cn } from "~/lib/utils";
+
+// components
+import Heading from "~/components/Heading/heading";
 import { Checkbox } from "~/components/ui/checkbox";
 import { FormInput } from "~/components/FormInput/formInput";
-import Heading from "~/components/Heading/heading";
 import { Card } from "~/components/ui/card";
-import { cn } from "~/lib/utils";
 import Button from "~/components/Button/button";
 import DisplayError from "../DisplayError/displayError";
-import { useEffect, useState } from "react";
 import PasswordRequirements from "../PasswordRequirement/passwordRequirement";
+
+// Third party libraries
 import { toast } from "react-toastify";
 
 const SignUp = ({ actionData }: { actionData?: ActionData }) => {

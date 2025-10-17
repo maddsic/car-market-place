@@ -56,6 +56,10 @@ app.use((req, res, next) => {
 authenticateDBConnection();
 
 // USING ROUTES
+// app.use("/.well-known", (req, res) => {
+//   // Silently handle Chrome DevTools requests
+//   res.status(204).end();
+// });
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/cars", carRouter);
