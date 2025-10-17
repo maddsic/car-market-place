@@ -3,24 +3,34 @@ import { Link } from "@remix-run/react";
 import { Car, ExternalLink, MapPin, Phone, Star } from "lucide-react";
 
 interface DealershipInfoProps {
+  userId: string;
   username: string;
   address: string;
   phone: string;
   carsCount: number;
   reviewCount?: number;
   logoUrl?: string;
+  query?: {
+    condition?: string;
+    make?: string;
+    model?: string;
+  };
 }
 
 const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
+  userId,
   username,
   address,
   phone,
   carsCount,
   reviewCount = 34, // Placeholder for review count
   logoUrl,
+  query,
 }) => {
   const [showFullNumber, setShowFullNumber] = useState(false);
-  const fullPhoneNumber = "(+220) 753-1646"; // This would come from props in real app
+  const profileUrl = `/profile/${userId}?condition=${query?.condition || ""}&make=${
+    query?.make || ""
+  }&model=${query?.model || ""}`;
 
   const handleShowNumber = () => {
     setShowFullNumber(true);
@@ -33,7 +43,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
           {/* Left Section - Logo and Business Name */}
           <div className="flex items-center space-x-4">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <Link to={profileUrl} className="flex-shrink-0 cursor-pointer">
               {logoUrl ? (
                 <img
                   src={logoUrl || "/placeholder.svg"}
@@ -53,20 +63,22 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                   </div>
                 </div>
               )}
-            </div>
+            </Link>
 
             {/* Business Name and Reviews */}
             <div>
-              <h1 className="text-lg font-bold text-gray-900 lg:text-xl">
-                {username}
-              </h1>
+              <Link to={profileUrl} className="">
+                <h1 className="text-lg font-bold text-gray-900 transition duration-1000 hover:text-yellow lg:text-xl">
+                  {username}
+                </h1>
+              </Link>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>(Reviews {reviewCount})</span>
                 <div className="ml-2 flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-3 w-3 ${i < 4 ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                      className={`h-3 w-3 ${i < 4 ? "fill-current text-yellow" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
@@ -77,7 +89,10 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
           {/* Right Section - Info Cards */}
           <div className="flex flex-col gap-4 sm:flex-row lg:gap-6">
             {/* Cars in Stock */}
-            <div className="flex items-center space-x-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+            <Link
+              to={profileUrl}
+              className="flex items-center space-x-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3"
+            >
               <div className="rounded-full bg-orange-500 p-2">
                 <Car className="h-5 w-5 text-white" />
               </div>
@@ -89,7 +104,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                   Cars in stock
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Phone Number */}
             <div className="flex items-center space-x-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">

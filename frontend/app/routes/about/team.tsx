@@ -50,7 +50,7 @@ function TeamMember({
       <img
         src={member.image}
         alt=""
-        className="aspect-[4/3] h-auto max-w-full overflow-hidden rounded-sm bg-slate-300 object-cover"
+        className="aspect-square h-auto max-w-full overflow-hidden rounded-sm bg-slate-300 object-cover"
       />
       {/* INFO */}
       <span className="font-body rounded-sm border-yellow bg-white px-10 py-5 text-center transition-all duration-500 group-hover:bg-black group-hover:text-white">

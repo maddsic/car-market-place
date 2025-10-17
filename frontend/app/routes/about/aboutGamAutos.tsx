@@ -6,9 +6,9 @@ const AboutGamAutos = () => {
       <aside className="aside-left">
         <div className="">
           <img
-            src="/aboutus.jpg"
+            src="/aboutsUs3.jpeg"
             alt="ceo of gamautos image"
-            className="h-[290px] w-full"
+            className="aspect-square h-[290px] w-full md:h-[380px]"
           />
         </div>
       </aside>
@@ -20,17 +20,19 @@ const AboutGamAutos = () => {
         />
 
         <p className="gray__text-light text-[14px] leading-normal tracking-wide">
-          Before we get ahead of ourselves, we want to welcome you to Loeber
-          Motors. While nothing can replace thing on-the-lot experience.
+          Before we get ahead of ourselves, we want to welcome you to Gamautos .
+          While nothing can replace thing on-the-lot experience.
         </p>
         <p className="gray__text-light text-[14px] leading-normal tracking-wide">
-          We appreciate you taking the time today to visit our web site. Our
-          goal is to give you an interactive tour of our new and used inventory,
-          as well as allow you to conveniently get a quote, schedule a service
-          appointment, or apply for financing. The search for a luxury car is
-          filled with high expectations. Undoubtedly, that has a lot to do with
-          the vehicles you are considering, but at Motors, we think you should
-          also have pretty high expectations for your dealership.
+          Thank you for taking the time to visit our website. Our mission is to
+          provide you with an engaging experience that lets you explore our wide
+          selection of new and pre-owned vehicles, request a quote, schedule a
+          service, or apply for financing—all in one convenient place. We
+          understand that shopping for a vehicle comes with high expectations.
+          While the quality of the cars we offer certainly sets the standard, we
+          believe your experience with our dealership should exceed it. At
+          Gamautos, we’re committed to delivering not just exceptional vehicles,
+          but exceptional service.
         </p>
 
         <em className="gray__text-light text-[14px] tracking-wide">
