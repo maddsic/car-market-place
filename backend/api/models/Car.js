@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "RESTRICT",
       },
+      stockNumber: { type: DataTypes.STRING, allowNull: true, unique: true },
       carType: { type: DataTypes.STRING, allowNull: false },
       make: { type: DataTypes.STRING, allowNull: false },
       model: { type: DataTypes.STRING, allowNull: false },
@@ -56,6 +57,13 @@ module.exports = (sequelize, DataTypes) => {
       as: "bodyType",
     });
   };
+
+  // Generate stockNumber before creating a Car
+  Car.beforeCreate((car) => {
+    const makeSlug = car.make?.substring(0, 3).toUpperCase() || "UNK";
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    car.stockNumber = `${makeSlug}${car.year}-${randomNumber}`;
+  });
 
   return Car;
 };

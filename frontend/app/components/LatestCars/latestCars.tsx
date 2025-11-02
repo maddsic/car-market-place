@@ -11,6 +11,7 @@ import { useCarStore } from "~/store/carStore";
 const LatestCars = () => {
   const { latestCars } = useCarStore();
   const navigate = useNavigate();
+  // console.log("latest", latestCars);
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
@@ -33,12 +34,12 @@ const LatestCars = () => {
             <div
               className="box-border grid max-w-full cursor-pointer gap-3 overflow-hidden md:grid-cols-12"
               key={car.carId}
-              onClick={() => handleNavigateToListings(car?.carId)}
             >
               <img
                 src={car.imageUrl}
                 alt={car.model + " " + car.model}
                 className="onject-cover col-span-1 h-auto w-full bg-gray-200 md:col-span-5 lg:h-full lg:max-w-full"
+                onClick={() => handleNavigateToListings(car?.carId)}
               />
               <div className="ccol-span-1 flex flex-col justify-between gap-2 md:col-span-7">
                 <div className="flex justify-between">
@@ -97,25 +98,29 @@ const LatestCars = () => {
                     />
                   </div>
                   <div className="w-full text-sm">
-                    <span className="text-gray-500">Personal Seller:</span>
-                    <span className="text-sm text-yellow">Shabri Alexis</span>
+                    {/* <span className="text-gray-500">Personal Seller:</span> */}
+                    <span className="text-sm text-yellow">
+                      {car.owner.first_name + " " + car.owner.last_name}
+                    </span>
                     <span className="flex w-full items-center justify-between gap-4">
                       <div className="flex gap-1 text-xs md:gap-2">
                         <span className="font-bold text-yellow">
                           <BsTelephone />
                         </span>
                         <a
-                          href="tel:+1 1234567890 "
+                          href={`tel:+220 ${car.phone}`}
                           className="text-xs text-btn"
                         >
-                          (512) 999-9999
+                          {car.owner.phone}
                         </a>
                       </div>
                       <div className="flex gap-1 rounded-sm bg-muted-foreground p-1 text-xs text-white">
                         <span className="text-[10px] capitalize md:text-xs">
                           stock#
                         </span>
-                        <span className="text-[10px] md:text-xs">2274HG76</span>
+                        <span className="text-[10px] md:text-xs">
+                          {car.stockNumber}
+                        </span>
                       </div>
                     </span>
                   </div>

@@ -6,13 +6,10 @@ import Divider from "~/components/Divider/divider";
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
 import { ReactNode } from "react";
 import { HiOutlineMailOpen } from "react-icons/hi";
-import SubHeading from "~/components/Heading/subheading";
-import { MdOutlineGridView } from "react-icons/md";
-import { FaListUl } from "react-icons/fa";
+
 import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
 
-import { ProfileCars } from "./ProfileCars";
 import ProfileTabs from "./profileTabs";
 
 const ProfilePage = () => {
