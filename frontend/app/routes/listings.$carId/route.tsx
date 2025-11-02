@@ -111,7 +111,10 @@ function SubHeader({ car }: { car: Car }) {
         text={`added: ${formattedDate}`}
         icon={<MdAccessTime size={16} />}
       />
-      <ListingSubHeader text="stock #153093" className="bg-muted" />
+      <ListingSubHeader
+        text={`stock ${car.stockNumber}`}
+        className="bg-muted"
+      />
       <ListingSubHeader
         text="schedule test drive"
         icon={<GrSchedule size={16} />}

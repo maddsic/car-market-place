@@ -1,0 +1,360 @@
+openapi: 3.0.0
+info:
+  title: Car Marketplace API
+  version: 1.0.0
+  description: |
+    RESTful API documentation for GamAutos Car Marketplace platform.
+    It includes authentication, car management, and dealer endpoints.
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+
+tags:
+  - name: Auth
+    description: Authentication endpoints for registration and login
+  - name: Cars
+    description: Endpoints for managing and fetching cars
+  - name: Dealers
+    description: Endpoints for managing and fetching dealers
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                [first_name, last_name, email, password, phone, username]
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                username:
+                  type: string
+                role:
+                  type: string
+                hasWhatsapp:
+                  type: boolean
+      responses:
+        "201":
+          description: User created successfully
+        "400":
+          description: Invalid input data
+        "409":
+          description: Email already exists
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login user and receive JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: Authentication failed
+        "401":
+          description: Invalid credentials
+
+  /cars:
+    get:
+      tags: [Cars]
+      summary: Get all cars (supports query filtering)
+      parameters:
+        - in: query
+          name: section
+          schema:
+            type: string
+            enum: [inventory, make, premium, latest, category]
+          description: Type of car section to fetch
+        - in: query
+          name: value
+          schema:
+            type: string
+          description: The value to filter the section by
+      responses:
+        "200":
+          description: Cars fetched successfully
+        "404":
+          description: No records found
+    post:
+      tags: [Cars]
+      summary: Create a new car
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                make:
+                  type: string
+                model:
+                  type: string
+                price:
+                  type: number
+                carType:
+                  type: string
+                condition:
+                  type: string
+                imageUrl:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Car created successfully
+        "400":
+          description: Validation error
+
+  /cars/{carId}:
+    get:
+      tags: [Cars]
+      summary: Get a car by ID
+      parameters:
+        - in: path
+          name: carId
+          required: true
+          schema:
+            type: string
+          description: Car UUID
+      responses:
+        "200":
+          description: Car details fetched successfully
+        "404":
+          description: Car not found
+    put:
+      tags: [Cars]
+      summary: Update a car by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: carId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Car updated successfully
+        "409":
+          description: Update failed
+    delete:
+      tags: [Cars]
+      summary: Delete a car by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: carId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Car deleted successfully
+        "404":
+          description: Car not found
+
+  /cars/latest-cars:
+    get:
+      tags: [Cars]
+      summary: Get the latest 8 cars
+      responses:
+        "200":
+          description: Latest cars fetched successfully
+        "404":
+          description: No cars found
+
+  /cars/premium-cars:
+    get:
+      tags: [Cars]
+      summary: Get premium cars (limit 3)
+      responses:
+        "200":
+          description: Premium cars fetched successfully
+        "404":
+          description: No premium cars found
+
+  /cars/carmakes:
+    get:
+      tags: [Cars]
+      summary: Get all car makes
+      responses:
+        "200":
+          description: Car makes fetched successfully
+    post:
+      tags: [Cars]
+      summary: Create a new car make
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                imageUrl:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Car make created successfully
+        "400":
+          description: Error creating car make
+
+  /cars/carmodels:
+    post:
+      tags: [Cars]
+      summary: Get all models by make ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                make_id:
+                  type: string
+      responses:
+        "200":
+          description: Car models fetched successfully
+        "404":
+          description: No models found
+
+  /cars/bodyType:
+    get:
+      tags: [Cars]
+      summary: Get all car body types
+      responses:
+        "200":
+          description: Car body types fetched successfully
+        "404":
+          description: No records found
+
+  /cars/search:
+    get:
+      tags: [Cars]
+      summary: Search cars in inventory
+      parameters:
+        - in: query
+          name: condition
+          schema:
+            type: string
+        - in: query
+          name: carType
+          schema:
+            type: string
+        - in: query
+          name: make
+          schema:
+            type: string
+        - in: query
+          name: model
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Cars found
+        "404":
+          description: No cars found
+
+  /dealers:
+    get:
+      tags: [Dealers]
+      summary: Get all car dealers
+      responses:
+        "200":
+          description: Dealers fetched successfully
+        "404":
+          description: No dealers found
+
+  /dealers/search-dealers:
+    get:
+      tags: [Dealers]
+      summary: Search dealers by car criteria
+      parameters:
+        - in: query
+          name: condition
+          schema:
+            type: string
+        - in: query
+          name: make
+          schema:
+            type: string
+        - in: query
+          name: model
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dealers found
+        "404":
+          description: No dealers found
+
+  /dealers/filtered-cars/{userId}:
+    get:
+      tags: [Dealers]
+      summary: Get a dealer's cars filtered by query parameters
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: condition
+          schema:
+            type: string
+        - in: query
+          name: make
+          schema:
+            type: string
+        - in: query
+          name: model
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dealer and cars fetched successfully
+        "404":
+          description: Dealer not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

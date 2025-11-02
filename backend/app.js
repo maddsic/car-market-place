@@ -5,11 +5,17 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const fs = require("fs");
 const path = require("path");
+
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./docs/swagger.yaml");
+
 require("dotenv").config();
 
 const { authenticateDBConnection } = require("./db");
 
 // IMPORTING ROUTES
+
 const authRouter = require("./api/authModule/authRoutes");
 const userRouter = require("./api/userModule/userRoute");
 const carRouter = require("./api/carModule/carRoute");
@@ -40,6 +46,7 @@ const app = express();
 //   methods: "GET,POST,PUT,DELETE",
 // };
 // MIDDLEWARES 3
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -55,11 +62,6 @@ app.use((req, res, next) => {
 // DATABASE CONNECTION
 authenticateDBConnection();
 
-// USING ROUTES
-// app.use("/.well-known", (req, res) => {
-//   // Silently handle Chrome DevTools requests
-//   res.status(204).end();
-// });
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/cars", carRouter);

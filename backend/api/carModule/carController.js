@@ -76,7 +76,17 @@ exports.getCars = async (req, res, next) => {
         break;
       case "latest":
         // Fetch the latest cars
-        cars = await Car.findAll({ order: [["createdAt", "DESC"]] });
+        cars = await Car.findAll({
+          include: [
+            {
+              model: User,
+              as: "owner",
+              attributes: ["first_name", "last_name", "phone"],
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
+        console.log("latest car with user data in it");
         break;
       case "category":
         cars = await Car.findAll({ where: { carType: value } });
@@ -119,10 +129,17 @@ exports.getPremiumCars = async (req, res, next) => {
 //  LATEST CARS
 exports.getLatestCars = async (req, res, next) => {
   const latestCars = await Car.findAll({
+    include: [
+      {
+        model: User,
+        as: "owner",
+        attributes: ["first_name", "last_name", "phone", "role"],
+      },
+    ],
     order: [["createdAt", "DESC"]],
     limit: 8,
   });
-  console.log(latestCars.length);
+  // console.log(latestCars.length);
 
   if (hasLength(latestCars)) {
     const latestCarImages = await processCarImages(latestCars);

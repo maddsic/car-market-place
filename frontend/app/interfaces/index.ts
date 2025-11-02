@@ -24,6 +24,7 @@ export interface Owner {
 
 export interface Car {
   carId: string;
+  stockNumber: string;
   condition: string;
   make: string;
   model: string;

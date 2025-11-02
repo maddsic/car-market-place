@@ -13,7 +13,6 @@ exports.hashPassword = async (data, salt = 10) => {
 exports.comparePassword = async (data, password) => {
   try {
     const result = await bcrypt.compare(data, password);
-
     return result;
   } catch (error) {
     throw error;

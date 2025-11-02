@@ -9,6 +9,7 @@ interface DealerTabsProps {
   dealers: any;
   isLoggedIn: boolean;
 }
+// TABS DEFINITION
 const tabs = [
   { key: "inventory", label: "View Inventory", icon: <FaCarSide size={16} /> },
   { key: "reviews", label: "View Reviews", icon: <FaStar size={16} /> },
