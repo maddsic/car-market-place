@@ -39,3 +39,22 @@ exports.createReview = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getReviewsById = async (req, res, next) => {
+  const { dealerId } = req.params;
+
+  if (!dealerId) {
+    return sendResponse(res, 400, false, "Review ID is required");
+  }
+
+  try {
+    const review = await Review.findAll({ where: { dealerId }, limit: 5 });
+    if (!review) {
+      return sendResponse(res, 404, false, "User has No review(s) yet");
+    }
+    return sendResponse(res, 200, true, "Review(s) found", review);
+  } catch (error) {
+    console.log("ERROR FROM GET REVIEW BY ID CONTROLLER: " + error.message);
+    next(error);
+  }
+};
