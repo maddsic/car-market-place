@@ -13,6 +13,7 @@ const CarBodyType = require("../models/").CarBodyType;
 const CarMake = require("../models/").CarMake;
 const CarModel = require("../models/").CarModel;
 
+// CREATE NEW CAR
 exports.createCar = async (req, res, next) => {
   // VALIDATE INCOMING FORM
   const { error } = carSchema.validate(req.body);
@@ -149,6 +150,7 @@ exports.getLatestCars = async (req, res, next) => {
   return sendResponse(res, 404, false, "No Record Found");
 };
 
+// GET CAR BY ID
 exports.getCarById = async (req, res, next) => {
   const { carId } = req.params;
 
@@ -182,6 +184,7 @@ exports.getCarById = async (req, res, next) => {
   }
 };
 
+// UPDATE CAR BY ID
 exports.updateCar = async (req, res, next) => {
   const { carId } = req.params;
   const updateForm = req.body;
@@ -211,6 +214,7 @@ exports.updateCar = async (req, res, next) => {
   }
 };
 
+// DELETE CAR BY ID
 exports.deleteCar = async (req, res, next) => {
   const { carId } = req.params;
 
@@ -228,6 +232,7 @@ exports.deleteCar = async (req, res, next) => {
   }
 };
 
+// CREATE CAR MAKES
 exports.createCarMakes = async (req, res, next) => {
   const { name } = req.body;
   // console.log("MAKES");
@@ -254,6 +259,7 @@ exports.createCarMakes = async (req, res, next) => {
   }
 };
 
+// GET CAR MAKES
 exports.getCarMakes = async (req, res, next) => {
   try {
     const carMakes = await CarMake.findAll({ include: { model: CarModel } });
@@ -269,6 +275,7 @@ exports.getCarMakes = async (req, res, next) => {
   }
 };
 
+//
 exports.getCarModel = async (req, res, next) => {
   const { make_id } = req.body;
   try {
@@ -283,6 +290,7 @@ exports.getCarModel = async (req, res, next) => {
   }
 };
 
+// GET CAR BODY TYPES
 exports.getCarBodyTypes = async (req, res, next) => {
   try {
     const bodyType = await CarBodyType.findAll();
@@ -296,6 +304,7 @@ exports.getCarBodyTypes = async (req, res, next) => {
   }
 };
 
+// SEARCH CAR INVENTORY
 exports.searchCarInventory = async (req, res, next) => {
   const { condition, carType, make, model } = req.query;
 

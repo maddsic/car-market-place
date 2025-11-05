@@ -115,19 +115,14 @@ exports.login = async (req, res, next) => {
   }
 
   const { email, password } = req.body;
-
-  // Find user by email
   try {
     const user = await findUser(email);
-
-    // Not found
     if (!user?.accept) {
       return sendResponse(res, 400, false, "Auth Fail");
     }
 
     // Compare password
     const validPassword = await comparePassword(password, user.data.password);
-
     if (!validPassword) {
       return sendResponse(res, 401, false, "Auth Fail");
     }

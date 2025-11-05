@@ -1,19 +1,17 @@
 "use strict";
 
-const Sequelize = require("sequelize");
-
 module.exports = (sequelize, DataTypes) => {
   const Car = sequelize.define(
     "Car",
     {
       carId: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
       },
       userId: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: "User", // table name
