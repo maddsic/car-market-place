@@ -2,6 +2,7 @@ const { processCarImages } = require("../helpers/processCarImage");
 const { sendResponse, hasLength } = require("../helpers/response");
 const User = require("../models").User;
 const Car = require("../models").Car;
+const Review = require("../models").Review;
 const path = require("path");
 
 /** Get all users controller @route get / */
@@ -32,11 +33,18 @@ exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { userId },
-      include: { model: Car, as: "cars" },
+      include: [
+        {
+          model: Car,
+          as: "cars",
+        },
+        {
+          model: Review,
+          as: "dealerReviews",
+          include: [{ model: User, as: "user", attributes: ["username"] }],
+        },
+      ],
     });
-
-    // console.log("USER DATA FROM GET USER BY ID");
-    // console.log(user);
 
     if (hasLength(user)) {
       const userCars = await processCarImages(user.cars);

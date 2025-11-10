@@ -1,4 +1,8 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { createReview } from "~/utils/user.server";
+import { parse } from "cookie";
 import { Form, useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
@@ -11,9 +15,11 @@ import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
 
 import ProfileTabs from "./profileTabs";
+import { getAuthToken } from "~/utils/auth.server";
+import { verifyJwtToken } from "~/utils/jwt.server";
 
 const ProfilePage = () => {
-  const { user, userCars, dealers } = useLoaderData<typeof loader>();
+  const { user, userCars, dealers, reviews } = useLoaderData<typeof loader>();
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -75,6 +81,7 @@ const ProfilePage = () => {
           <ProfileTabs
             userCars={userCars}
             dealers={dealers}
+            reviews={reviews}
             isLoggedIn={!!user} // boolean
           />
           {/* INVENTORY SECTION ENDS */}
@@ -91,6 +98,57 @@ export default ProfilePage;
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const dealerId = params.userId;
+
+  try {
+    const formData = await request.formData();
+
+    const token = getAuthToken(request);
+    if (!token) {
+      return json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const payload = verifyJwtToken(token);
+    console.log("JWT PAYLOAD");
+    console.log(payload);
+
+    if (!payload) {
+      return json(
+        { success: false, message: "Invalid or expired token" },
+        { status: 401 },
+      );
+    }
+
+    const authorId = payload.userId;
+    console.log(authorId);
+
+    const data = {
+      dealerId: dealerId,
+      userId: authorId,
+      comment: formData.get("comment"),
+      buyingProcess: Number(formData.get("buyingProcess")),
+      customerService: Number(formData.get("customerService")),
+      overallExperience: Number(formData.get("overallExperience")),
+    };
+
+    // Create review
+    const response = await createReview(data, token);
+
+    if (response.success) {
+      return redirect(`/profile/${dealerId}?review=success`);
+    }
+
+    return json({ success: false, message: response.message }, { status: 400 });
+  } catch (error) {
+    console.error("❌ ERROR FROM createReview action:", error);
+    return json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+};
 
 // Passing data to the profile cars component because remix does not fetch data on client components instead on routes.
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -119,11 +177,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   return {
     user: result.data,
     userCars: result.data.cars,
+    reviews: result.data.dealerReviews,
     dealers: result.data,
     queryString: { carMake, carModel, condition },
   };
 }
 
+// Route Components
 function ProfileInfo({
   phoneDesc,
   icon,
@@ -167,6 +227,7 @@ function ProfileInfo({
   );
 }
 
+// Route Components
 function ProfileForm({}) {
   return (
     <Form className="relative bg-primary p-5 shadow-lg">

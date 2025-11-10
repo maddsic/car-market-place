@@ -1,6 +1,6 @@
 import { json } from "@remix-run/react";
 import { SignInSchema, SignUpSchema } from "~/schemas/authSchema";
-import { LoginUser, RegisterUser } from "./user.server";
+import { LoginUser, RegisterUser } from "./auth.server";
 
 // HANDLE SIGN UP LOGIC
 export const handleSignUp = async (formData: FormData) => {

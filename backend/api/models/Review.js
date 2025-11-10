@@ -48,9 +48,16 @@ module.exports = (sequelize) => {
   );
 
   Review.associate = function (models) {
+    // User who wrote the review
     Review.belongsTo(models.User, {
       foreignKey: "userId",
       as: "user",
+      onDelete: "CASCADE",
+    });
+    // Dealer being reviewed
+    Review.belongsTo(models.User, {
+      foreignKey: "dealerId",
+      as: "dealer",
       onDelete: "CASCADE",
     });
   };

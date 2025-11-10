@@ -1,50 +1,10 @@
 import { FaStar } from "react-icons/fa";
-import SubHeading from "~/components/Heading/subheading";
 
-const reviews = [
-  {
-    id: 1,
-    overall: 5.0,
-    customerService: 5.0,
-    buyingProcess: 5.0,
-    overallExperience: 5.0,
-    title: "Best Quality!!!",
-    comment:
-      "The staff was friendly, honest, straightforward, and offered a fair deal. They even went out of their way to help with my pickup/delivery request. No high-pressure nonsense—just great service!",
-    recommend: true,
-    author: "Abdou Jammeh",
-    date: "October 10, 2025",
-  },
+interface ReviewTabProps {
+  reviews: any[];
+}
 
-  {
-    id: 1,
-    overall: 4.0,
-    customerService: 5.0,
-    buyingProcess: 5.0,
-    overallExperience: 5.0,
-    title: "Best Quality!!!",
-    comment:
-      "The staff was friendly, honest, straightforward, and offered a fair deal. They even went out of their way to help with my pickup/delivery request. No high-pressure nonsense—just great service!",
-    recommend: true,
-    author: "Saihou Jammeh",
-    date: "October 10, 2025",
-  },
-  {
-    id: 1,
-    overall: 3.0,
-    customerService: 4.0,
-    buyingProcess: 4.0,
-    overallExperience: 5.0,
-    title: "Best Customer Service!!!",
-    comment:
-      "The staff was friendly, honest, straightforward, and offered a fair deal. They even went out of their way to help with my pickup/delivery request. No high-pressure nonsense—just great service!",
-    recommend: true,
-    author: "Amadou Baysic Jallow",
-    date: "October 10, 2025",
-  },
-];
-
-export default function Reviews() {
+export default function Reviews({ reviews }: ReviewTabProps) {
   return (
     <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
       <h2 className="mb-4 text-2xl font-bold text-gray-800">
@@ -54,12 +14,12 @@ export default function Reviews() {
       <hr className="mb-6" />
 
       {reviews.map((review) => (
-        <div key={review.id} className="mb-8 border-b pb-6">
+        <div key={review.reviewId} className="mb-8 border-b pb-6">
           {/* Overall Rating */}
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex w-fit items-center gap-3 rounded-lg bg-primary px-4 py-2 text-white">
               <span className="text-2xl font-bold">
-                {review.overall.toFixed(1)}
+                {review.overallExperience.toFixed(1)}
               </span>
               <div className="flex gap-1">
                 {Array(5)
@@ -69,7 +29,7 @@ export default function Reviews() {
                       key={i}
                       size={18}
                       className={
-                        i < Math.round(review.overall)
+                        i < Math.round(review.overallExperience)
                           ? "text-yellow"
                           : "text-gray-400"
                       }
@@ -150,22 +110,25 @@ export default function Reviews() {
 
           {/* Review Content */}
           <div className="mt-5">
-            <h3 className="mb-2 font-bold text-gray-800">{review.title}</h3>
+            <h3 className="mb-2 font-bold text-gray-800">Comment</h3>
             <p className="mb-3 leading-relaxed text-gray-600">
               {review.comment}
             </p>
 
             <div className="flex items-center justify-between text-sm text-gray-500">
               <p>
-                By <span className="font-medium">{review.author}</span> | Would
-                I recommend this Dealer:{" "}
+                By{" "}
+                <span className="font-medium capitalize">
+                  {review.user.username}
+                </span>{" "}
+                | Would I recommend this Dealer:{" "}
                 <span className="font-semibold text-emerald-700">
-                  {review.recommend ? "Yes 👍" : "No 👎"}
+                  {review.overallExperience ? "Yes 👍" : "No 👎"}
                 </span>
               </p>
-              <button className="text-xs underline hover:text-gray-700">
-                Report
-              </button>
+              <span className="text-xs underline hover:text-gray-700">
+                Posted: {new Date(review.createdAt).toLocaleDateString()}
+              </span>
             </div>
           </div>
         </div>
