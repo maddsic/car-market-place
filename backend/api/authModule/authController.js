@@ -5,7 +5,7 @@ const {
   generateJwtToken,
 } = require("../helpers/hashData");
 const { registerSchema, loginSchema } = require("./authService");
-const isProduction = process.env.NODE_ENV === "production";
+const isDevelopment = process.env.NODE_ENV === "development";
 
 // Register route
 exports.register = async (req, res, next) => {
@@ -102,8 +102,8 @@ exports.login = async (req, res, next) => {
     // ✅ Configure cookie for both localhost & production
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: isProduction, // true on Vercel, false on localhost
-      sameSite: isProduction ? "none" : "lax", // None for cross-site HTTPS, Lax for local dev
+      secure: !isDevelopment, // true on Vercel, false on localhost
+      sameSite: isDevelopment ? "lax" : "none", // None for cross-site HTTPS, Lax for local dev
       path: "/",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
