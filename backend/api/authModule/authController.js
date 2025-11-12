@@ -39,19 +39,14 @@ exports.register = async (req, res, next) => {
   try {
     //    Check if email exist
     const checkEmail = await findUser(email);
-
-    //    IF Found
     if (checkEmail?.accept) {
       return sendResponse(res, 409, false, "Email already exist.");
     }
-
     //    Hash password
     const hashedPassword = await hashPassword(formData.password);
     formData.password = hashedPassword;
-
     //    Create a new user in our database
     const newUser = await createUser(formData);
-
     if (newUser?.accept) {
       const { password, ...userData } = newUser.data;
       return sendResponse(
@@ -108,12 +103,7 @@ exports.login = async (req, res, next) => {
       maxAge: 60 * 60 * 1000, // 1 hour
     });
 
-    console.info(
-      "Login Cookie:",
-      res.getHeader("Set-Cookie"),
-      "Production:",
-      isProduction
-    );
+    console.info("Login Cookie:", res.getHeader("Set-Cookie"));
 
     // Send success response (without token in body for security)
     sendResponse(res, 200, true, "User logged in successfully!");
