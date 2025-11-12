@@ -11,6 +11,12 @@ const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./docs/swagger.yaml");
 const isProduction = process.env.NODE_ENV === "production";
 
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  "https://car-market-place-five.vercel.app", // vercel deployment
+  "https://pumped-polliwog-fast.ngrok-free.app", // ngrok tunnel
+];
+
 // ---------------------------------------------
 // INITIALIZING .ENV VARIABLES
 // ---------------------------------------------
@@ -47,9 +53,15 @@ app.use(helmet());
 // ✅ CORS setup
 app.use(
   cors({
-    origin: isProduction
-      ? "https://car-market-place-five.vercel.app"
-      : "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman or Insomnia)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
