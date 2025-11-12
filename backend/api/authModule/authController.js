@@ -108,7 +108,12 @@ exports.login = async (req, res, next) => {
       maxAge: 60 * 60 * 1000, // 1 hour
     });
 
-    console.info("Login Cookie:", res.getHeader("Set-Cookie"));
+    console.info(
+      "Login Cookie:",
+      res.getHeader("Set-Cookie"),
+      "Production:",
+      isProduction
+    );
 
     // Send success response (without token in body for security)
     sendResponse(res, 200, true, "User logged in successfully!");

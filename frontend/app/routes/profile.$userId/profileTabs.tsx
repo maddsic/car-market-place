@@ -8,7 +8,7 @@ interface DealerTabsProps {
   userCars: any[];
   dealers: any;
   reviews: any[];
-  isLoggedIn: boolean;
+  isUserLoggedIn: boolean;
 }
 // TABS DEFINITION
 const tabs = [
@@ -21,7 +21,7 @@ export default function ProfileTabs({
   userCars,
   dealers,
   reviews,
-  isLoggedIn,
+  isUserLoggedIn,
 }: DealerTabsProps) {
   const [activeTab, setActiveTab] = useState<"inventory" | "reviews" | "write">(
     "inventory",
@@ -56,7 +56,9 @@ export default function ProfileTabs({
           <Inventory userCars={userCars} dealers={dealers} />
         )}
         {activeTab === "reviews" && <Reviews reviews={reviews} />}
-        {activeTab === "write" && <WriteReview isLoggedIn={isLoggedIn} />}
+        {activeTab === "write" && (
+          <WriteReview isUserLoggedIn={isUserLoggedIn} />
+        )}
       </div>
     </section>
   );

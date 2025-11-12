@@ -1,8 +1,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { createReview } from "~/utils/user.server";
-import { parse } from "cookie";
+import { createReview } from "~/utils/user";
 import { Form, useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
@@ -13,13 +12,14 @@ import { HiOutlineMailOpen } from "react-icons/hi";
 
 import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
-
 import ProfileTabs from "./profileTabs";
-import { getAuthToken } from "~/utils/auth.server";
-import { verifyJwtToken } from "~/utils/jwt.server";
+
+import { getAuthToken } from "~/utils/authHelpers";
+import { verifyJwtToken } from "~/utils/jwt";
 
 const ProfilePage = () => {
-  const { user, userCars, dealers, reviews } = useLoaderData<typeof loader>();
+  const { user, userCars, dealers, reviews, isUserLoggedIn } =
+    useLoaderData<typeof loader>();
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -82,7 +82,7 @@ const ProfilePage = () => {
             userCars={userCars}
             dealers={dealers}
             reviews={reviews}
-            isLoggedIn={!!user} // boolean
+            isUserLoggedIn={isUserLoggedIn} // boolean
           />
           {/* INVENTORY SECTION ENDS */}
         </aside>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -104,7 +104,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   try {
     const formData = await request.formData();
-
     const token = getAuthToken(request);
     if (!token) {
       return json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -155,6 +154,19 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const { userId } = params;
   const url = new URL(request.url);
 
+  // Check for token to determine if user is logged in
+  const token = getAuthToken(request);
+  let isUserLoggedIn = false;
+
+  // Token exists
+  if (token) {
+    // Verify token validity
+    const payload = verifyJwtToken(token);
+    if (payload) {
+      isUserLoggedIn = true;
+    }
+  }
+
   // Get search params
   const condition = url.searchParams.get("condition");
   const carMake = url.searchParams.get("make");
@@ -168,6 +180,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const queryString = searchParams.toString();
 
+  // Define endpoint based on presence of query params
   const endPoints = queryString
     ? `${apiBaseUrl}${apiVersion}/dealers/filtered-cars/${userId}?${searchParams.toString()}`
     : `${apiBaseUrl}${apiVersion}/users/${userId}`;
@@ -180,6 +193,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     reviews: result.data.dealerReviews,
     dealers: result.data,
     queryString: { carMake, carModel, condition },
+    isUserLoggedIn,
   };
 }
 

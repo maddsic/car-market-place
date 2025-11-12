@@ -45,8 +45,9 @@ export const LoginUser = async (data: loginData) => {
   }
 
   const user = await response.json();
-  console.log("USER FROM LOGIN HELPER:", user);
-  return user;
+  const setCookie = response.headers.get("Set-Cookie");
+  // console.log("USER FROM LOGIN HELPER:", user, setCookie);
+  return { user, setCookie };
 };
 
 export function getAuthToken(request: Request): string | null {
@@ -54,5 +55,6 @@ export function getAuthToken(request: Request): string | null {
   if (!cookieHeader) return null;
 
   const cookies = parse(cookieHeader);
-  return cookies.authToken || null; // read the token stored in HTTP-only cookie
+  // read and return the token stored in HTTP-only cookie
+  return cookies.authToken || null;
 }

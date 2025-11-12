@@ -85,10 +85,10 @@ const SignIn = ({ actionData }: { actionData: any }) => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <span className="font-semibold">Email:</span> demo@dealerhub.com
+                <span className="font-semibold">Email:</span> alpha@email.com
               </li>
               <li>
-                <span className="font-semibold">Password:</span> Demo@1234
+                <span className="font-semibold">Password:</span> Password1234$
               </li>
             </ul>
             <p className="mt-4 text-xs text-gray-500">
