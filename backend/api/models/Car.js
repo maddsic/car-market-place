@@ -56,6 +56,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "carType",
       as: "bodyType",
     });
+
+    //
+    Car.hasMany(models.CarImage, {
+      foreignKey: "carId",
+      as: "images",
+      onDelete: "CASCADE",
+    });
   };
 
   // Generate stockNumber before creating a Car
