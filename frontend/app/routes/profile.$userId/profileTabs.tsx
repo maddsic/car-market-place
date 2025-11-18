@@ -7,7 +7,8 @@ import { FaCarSide, FaPenAlt, FaStar } from "react-icons/fa";
 interface DealerTabsProps {
   userCars: any[];
   dealers: any;
-  isLoggedIn: boolean;
+  reviews: any[];
+  isUserLoggedIn: boolean;
 }
 // TABS DEFINITION
 const tabs = [
@@ -19,7 +20,8 @@ const tabs = [
 export default function ProfileTabs({
   userCars,
   dealers,
-  isLoggedIn,
+  reviews,
+  isUserLoggedIn,
 }: DealerTabsProps) {
   const [activeTab, setActiveTab] = useState<"inventory" | "reviews" | "write">(
     "inventory",
@@ -53,8 +55,10 @@ export default function ProfileTabs({
         {activeTab === "inventory" && (
           <Inventory userCars={userCars} dealers={dealers} />
         )}
-        {activeTab === "reviews" && <Reviews />}
-        {activeTab === "write" && <WriteReview isLoggedIn={isLoggedIn} />}
+        {activeTab === "reviews" && <Reviews reviews={reviews} />}
+        {activeTab === "write" && (
+          <WriteReview isUserLoggedIn={isUserLoggedIn} />
+        )}
       </div>
     </section>
   );

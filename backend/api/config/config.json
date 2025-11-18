@@ -20,5 +20,27 @@
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
+    "username": "admin",
+    "password": "Password@123",
+    "database": "carDB",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": true
+  },
+  "test": {
+    "username": "admin",
+    "password": "Password@123",
+    "database": "carDB",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": true
+  },
+  "production": {
+    "username": "admin",
+    "password": "Password@123",
+    "database": "carDB",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": true
   }
 }

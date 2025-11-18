@@ -11,7 +11,7 @@ const Team = () => {
         <div className="flex flex-col items-center justify-center gap-2">
           <Heading
             title="our team"
-            classNames="text-center uppercase lg:text-[28px]"
+            classNames="text-center uppercase lg:text-[36px]"
           />
           <StyledUndeline />
         </div>

@@ -7,7 +7,7 @@ import { handleSignIn, handleSignUp } from "~/utils/authHandler";
 const AuthRoute = () => {
   const { authRoute } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  console.log("auth route", authRoute);
+  // console.log("auth route", authRoute);
 
   return authRoute === "login" ? (
     <SignIn actionData={actionData} />
@@ -24,7 +24,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { authRoute } = params;
 
   if (authRoute !== "signup" && authRoute !== "login") {
-    throw new Response("Not Found", { status: 404 });
+    throw new Response("Page Not Found", { status: 404 });
   }
   return { authRoute };
 };

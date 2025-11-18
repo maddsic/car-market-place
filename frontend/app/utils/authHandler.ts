@@ -1,6 +1,6 @@
 import { json } from "@remix-run/react";
 import { SignInSchema, SignUpSchema } from "~/schemas/authSchema";
-import { LoginUser, RegisterUser } from "./user.server";
+import { LoginUser, RegisterUser } from "./authHelpers";
 
 // HANDLE SIGN UP LOGIC
 export const handleSignUp = async (formData: FormData) => {
@@ -49,20 +49,23 @@ export const handleSignIn = async (formData: FormData) => {
     email: formData.get("email"),
     password: formData.get("password"),
   };
-  const validateResult = SignInSchema.safeParse(data);
-  // IF VALIDATION FAILS, RETURN ERROR
-  if (!validateResult.success) {
-    const fieldErrors = validateResult.error.flatten().fieldErrors;
 
-    return json({ errors: fieldErrors, values: data }, { status: 400 });
+  const validateResult = SignInSchema.safeParse(data);
+  if (!validateResult.success) {
+    return json(
+      { errors: validateResult.error.flatten().fieldErrors, values: data },
+      { status: 400 },
+    );
   }
-  // IF VALIDATION SUCCEEDS, HANDLE SIGNIN LOGIC HERE
+
   try {
-    const user = await LoginUser(validateResult.data);
-    console.log(user);
-    return json({ success: true, data: data }, { status: 200 });
+    const { user, setCookie } = await LoginUser(validateResult.data);
+
+    return json(
+      { success: true, data: data },
+      { headers: setCookie ? { "Set-Cookie": setCookie } : {} },
+    );
   } catch (error) {
-    // HANDLE ERROR FROM REGISTER USER FUNCTION
     if (error instanceof Error) {
       return json(
         { errors: { formError: error.message }, values: data },
@@ -70,10 +73,7 @@ export const handleSignIn = async (formData: FormData) => {
       );
     }
     return json(
-      {
-        errors: { formError: "An unexpected error occurred" },
-        values: data,
-      },
+      { errors: { formError: "An unexpected error occurred" }, values: data },
       { status: 500 },
     );
   }

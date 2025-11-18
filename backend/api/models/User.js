@@ -1,8 +1,5 @@
 "use strict";
 
-// For UUID types
-const Sequelize = require("sequelize");
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
@@ -38,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       freezeTableName: true,
+      timestamps: true,
       paranoid: true, // implement soft delete
     }
   );
@@ -47,6 +45,19 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Car, {
       foreignKey: "userId",
       as: "cars",
+    });
+
+    User.hasMany(models.Review, {
+      foreignKey: "userId",
+      as: "reviews",
+      onDelete: "CASCADE",
+    });
+
+    // Reviews written *about* this user (as a dealer)
+    User.hasMany(models.Review, {
+      foreignKey: "dealerId",
+      as: "dealerReviews",
+      onDelete: "CASCADE",
     });
   };
 

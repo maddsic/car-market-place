@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { FaStar } from "react-icons/fa";
 import SubHeading from "~/components/Heading/subheading";
 
 interface DealerWriteReviewTabProps {
-  isLoggedIn: boolean;
+  isUserLoggedIn: boolean;
 }
 
 const ratingData = [
@@ -13,7 +13,9 @@ const ratingData = [
   { key: "overallExperience", label: "Overall Experience" },
 ];
 
-export default function WriteReview({ isLoggedIn }: DealerWriteReviewTabProps) {
+export default function WriteReview({
+  isUserLoggedIn,
+}: DealerWriteReviewTabProps) {
   // Track rating for each category
   const [ratings, setRatings] = useState({
     buyingProcess: 0,
@@ -45,13 +47,16 @@ export default function WriteReview({ isLoggedIn }: DealerWriteReviewTabProps) {
         title="Write a Review"
       />
 
-      {!isLoggedIn ? (
+      {!isUserLoggedIn ? (
         <div className="mt-5 text-center text-gray-600">
           <p>
             Please{" "}
-            <span className="cursor-pointer font-semibold text-blue-600 hover:underline">
+            <Link
+              to={"/auth/login"}
+              className="cursor-pointer font-semibold text-blue-600 hover:underline"
+            >
               login
-            </span>{" "}
+            </Link>{" "}
             to write a review.
           </p>
         </div>

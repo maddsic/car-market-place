@@ -1,4 +1,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { createReview } from "~/utils/user";
 import { Form, useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
@@ -9,11 +12,14 @@ import { HiOutlineMailOpen } from "react-icons/hi";
 
 import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
-
 import ProfileTabs from "./profileTabs";
 
+import { getAuthToken } from "~/utils/authHelpers";
+import { verifyJwtToken } from "~/utils/jwt";
+
 const ProfilePage = () => {
-  const { user, userCars, dealers } = useLoaderData<typeof loader>();
+  const { user, userCars, dealers, reviews, isUserLoggedIn } =
+    useLoaderData<typeof loader>();
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -75,7 +81,8 @@ const ProfilePage = () => {
           <ProfileTabs
             userCars={userCars}
             dealers={dealers}
-            isLoggedIn={!!user} // boolean
+            reviews={reviews}
+            isUserLoggedIn={isUserLoggedIn} // boolean
           />
           {/* INVENTORY SECTION ENDS */}
         </aside>
@@ -89,13 +96,76 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const dealerId = params.userId;
+
+  try {
+    const formData = await request.formData();
+    const token = getAuthToken(request);
+    if (!token) {
+      return json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const payload = verifyJwtToken(token);
+    console.log("JWT PAYLOAD");
+    console.log(payload);
+
+    if (!payload) {
+      return json(
+        { success: false, message: "Invalid or expired token" },
+        { status: 401 },
+      );
+    }
+
+    const authorId = payload.userId;
+    console.log(authorId);
+
+    const data = {
+      dealerId: dealerId,
+      userId: authorId,
+      comment: formData.get("comment"),
+      buyingProcess: Number(formData.get("buyingProcess")),
+      customerService: Number(formData.get("customerService")),
+      overallExperience: Number(formData.get("overallExperience")),
+    };
+
+    // Create review
+    const response = await createReview(data, token);
+
+    if (response.success) {
+      return redirect(`/profile/${dealerId}?review=success`);
+    }
+
+    return json({ success: false, message: response.message }, { status: 400 });
+  } catch (error) {
+    console.error("❌ ERROR FROM createReview action:", error);
+    return json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+};
 
 // Passing data to the profile cars component because remix does not fetch data on client components instead on routes.
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { userId } = params;
   const url = new URL(request.url);
+
+  // Check for token to determine if user is logged in
+  const token = getAuthToken(request);
+  let isUserLoggedIn = false;
+
+  // Token exists
+  if (token) {
+    // Verify token validity
+    const payload = verifyJwtToken(token);
+    if (payload) {
+      isUserLoggedIn = true;
+    }
+  }
 
   // Get search params
   const condition = url.searchParams.get("condition");
@@ -110,6 +180,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const queryString = searchParams.toString();
 
+  // Define endpoint based on presence of query params
   const endPoints = queryString
     ? `${apiBaseUrl}${apiVersion}/dealers/filtered-cars/${userId}?${searchParams.toString()}`
     : `${apiBaseUrl}${apiVersion}/users/${userId}`;
@@ -119,11 +190,14 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   return {
     user: result.data,
     userCars: result.data.cars,
+    reviews: result.data.dealerReviews,
     dealers: result.data,
     queryString: { carMake, carModel, condition },
+    isUserLoggedIn,
   };
 }
 
+// Route Components
 function ProfileInfo({
   phoneDesc,
   icon,
@@ -167,6 +241,7 @@ function ProfileInfo({
   );
 }
 
+// Route Components
 function ProfileForm({}) {
   return (
     <Form className="relative bg-primary p-5 shadow-lg">

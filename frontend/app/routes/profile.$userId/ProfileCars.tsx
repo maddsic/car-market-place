@@ -18,6 +18,9 @@ export const ProfileCars = ({
   const navigation = useNavigate();
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(9);
+  const isUserCarsAvailable = userCars && userCars.length > 0;
+  const isDealerFilteredCarsAvailable =
+    dealerFilteredCars && dealerFilteredCars.length > 0;
 
   // PAGINATE RIGHT
   const handleNext = () => {
@@ -36,7 +39,7 @@ export const ProfileCars = ({
   return (
     <>
       <div className="mt-2 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-10">
-        {userCars && userCars.length > 0
+        {isUserCarsAvailable
           ? userCars
               .slice(startIndex, startIndex + carsPerPage)
               .map((car: Car) => (
@@ -58,7 +61,7 @@ export const ProfileCars = ({
                   <hr className="mt-3 border-gray-300" />
                 </div>
               ))
-          : dealerFilteredCars && dealerFilteredCars.length > 0
+          : isDealerFilteredCarsAvailable
             ? dealerFilteredCars
                 .slice(startIndex, startIndex + carsPerPage)
                 .map((car: Car) => (
@@ -83,7 +86,7 @@ export const ProfileCars = ({
             : null}
         <hr />
       </div>
-      {userCars && userCars.length > 0 && (
+      {isUserCarsAvailable && (
         <div className="mt-10 flex items-center justify-between">
           <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
           {/* PAGINATION PAGE NUMBERS */}
