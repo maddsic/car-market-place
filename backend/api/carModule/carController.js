@@ -7,13 +7,20 @@ const { sendResponse, hasLength } = require("../helpers/response");
 const { processCarImages } = require("../helpers/processCarImage");
 
 // MODELS
-const Car = require("../models").Car;
-const User = require("../models").User;
-const CarBodyType = require("../models/").CarBodyType;
-const CarMake = require("../models/").CarMake;
-const CarModel = require("../models/").CarModel;
-
-// CREATE NEW CAR
+// const Car = require("../models").Car;
+// const User = require("../models").User;
+// const CarBodyType = require("../models/").CarBodyType;
+// const CarMake = require("../models/").CarMake;
+// const CarModel = require("../models/").CarModel;
+const {
+  CarImage,
+  CarModel,
+  CarMake,
+  CarBodyType,
+  User,
+  Car,
+} = require("../models");
+// console.log(typeof CarImage);
 exports.createCar = async (req, res, next) => {
   // VALIDATE INCOMING FORM
   const { error } = carSchema.validate(req.body);
@@ -24,7 +31,7 @@ exports.createCar = async (req, res, next) => {
   const userId = req.user && req.user.userId;
 
   // GETTING IMAGE URL FROM INCOMING req
-  const imageUrl = req.file ? req.file.filename : null;
+  // const imageUrl = req.file ? req.file.filename : null;
 
   // CHECK IF BODY EXIST
   const carBodyType = await CarBodyType.findOne({
@@ -35,17 +42,29 @@ exports.createCar = async (req, res, next) => {
     return sendResponse(res, 400, false, "Car body type not found");
   }
 
+  // if (!req.files || req.files.length === 0) {
+  //   return sendResponse(res, 400, false, "No files uploaded");
+  // }
+
   // PREPARING OUR FORM
   const form = {
     ...req.body,
     userId: userId,
-    imageUrl: imageUrl,
+    imageUrl: req?.files[0]?.filename || "",
     year: "2023",
     carTypeId: carBodyType.typeId,
   };
 
   try {
     const newCar = await Car.create(form);
+
+    const images = req.files.map((image, index) => ({
+      carId: newCar.id,
+      imageUrl: image.filename,
+      isPrimary: index == 0,
+    }));
+
+    await CarImage.bulkCreate(images);
 
     return newCar
       ? sendResponse(res, 201, true, "Car created successfully", newCar)
