@@ -110,9 +110,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     const payload = verifyJwtToken(token);
-    console.log("JWT PAYLOAD");
-    console.log(payload);
-
     if (!payload) {
       return json(
         { success: false, message: "Invalid or expired token" },

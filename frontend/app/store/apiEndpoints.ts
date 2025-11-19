@@ -5,6 +5,7 @@ const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 export const apiEndpoints = {
   login: `${apiBaseUrl}${apiVersion}/auth/login`,
   register: `${apiBaseUrl}${apiVersion}/auth/register`,
+  createCar: `${apiBaseUrl}${apiVersion}/cars`,
   carMakes: `${apiBaseUrl}${apiVersion}/cars/carmakes`,
   carBodyTypes: `${apiBaseUrl}${apiVersion}/cars/bodyType`,
   premiumCars: `${apiBaseUrl}${apiVersion}/cars/premium-cars`,

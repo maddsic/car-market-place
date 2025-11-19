@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 export const createListingValidateor = z.object({
-  // userId: z.string().
-  condition: z.string().nonempty("Please select listing condition"),
+  userId: z.string().nonempty("User ID is required"),
+  condition: z.string().nonempty("Please select condition"),
   make: z.string().nonempty("Please select make"),
   model: z.string().nonempty("Please select model"),
   year: z.string().optional(),
-  carType: z.string().nonempty("Please select mileage"),
+  carType: z.string().nonempty("Please select czr type"),
   mileage: z.string().nonempty("Please select mileage"),
   fuelType: z.string().nonempty("Please select fuel type"),
   engineType: z.string().nonempty("Please select engine type"),
   transmission: z.string().nonempty("Please select transmssion type"),
   price: z.string().nonempty("Please enter listing price"),
   drive: z.string().optional(),
-  ext_color: z.string().nonempty("Please enter listing Exterior color"),
+  ext_color: z.string().optional(),
   int_color: z.string().optional(),
   vin: z.string().optional(),
   location: z.string().nonempty("Please enter location"),
@@ -35,7 +35,7 @@ export const createListingValidateor = z.object({
   power_seats: z.string().optional(),
   bucket_seat: z.string().optional(),
   leater_seat: z.string().optional(),
-  imageUrl: z.string().optional(),
+  imageUrl: z.array(z.any()).min(1, "Please upload at least 1 image"),
   seller_note: z.string().optional(),
 });
 

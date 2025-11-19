@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActionFunctionArgs,
   LinksFunction,
@@ -9,6 +9,7 @@ import {
   json,
   useActionData,
   useLoaderData,
+  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 
@@ -33,18 +34,33 @@ import Loader from "~/components/Loader/loader";
 import { createListingValidateor } from "~/validations/validateForm";
 import CreateListingSearchFilter from "~/components/listing/listingSearchFilter";
 import { PlusCircle } from "lucide-react";
+import { apiEndpoints } from "~/store/apiEndpoints";
+import { getAuthToken } from "~/utils/authHelpers";
+import { verifyJwtToken } from "~/utils/jwt";
+import { toast } from "react-toastify";
 
 const AddListingPage = () => {
   const { carMakes, carBodyTypes } = useLoaderData<typeof loader>() || null;
   const actionData = useActionData<typeof loader>() || null;
-
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
   if (actionData) {
     console.log("FORM DATA ERROR FROM ADD LISTING PAGE");
     console.log(actionData);
   }
+
+  useEffect(() => {
+    if (actionData?.success) {
+      toast.success(
+        "Listing created successfully! Redirecting to inventory...",
+      );
+      setTimeout(() => {
+        navigate("/inventory");
+      }, 2000);
+    }
+  }, [actionData, navigate]);
 
   if (isSubmitting) {
     return <Loader />;
@@ -66,7 +82,11 @@ const AddListingPage = () => {
             classNames="uppercase  mb-5 md:mb-10 lg:text-md"
           />
           {/* FORM */}
-          <Form action="/addListing" method="post">
+          <Form
+            action="/addListing"
+            method="post"
+            encType="multipart/form-data"
+          >
             <CreateListingSearchFilter
               carMakes={carMakes}
               formData={actionData}
@@ -106,7 +126,7 @@ const AddListingPage = () => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              title={isSubmitting ? <Loader /> : "Add Listing"}
+              title={"Add Listing"}
               className="mt-10 w-full border py-4 font-extrabold text-white shadow lg:w-1/4"
               icon={<PlusCircle />}
             />
@@ -124,21 +144,16 @@ export const lisks: LinksFunction = () => [
   { rel: "stylesheet", href: "react-quill/dist/quill.snow.css" },
 ];
 
-// BASE URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
-
 // LOADER -GETTING LOADER DATA
 export const loader: LoaderFunction = async () => {
   const endPoints = [
     {
       key: "carMakes",
-      url: `${API_BASE_URL}${API_VERSION}/cars/carmakes`,
+      url: `${apiEndpoints.carMakes}`,
     },
     {
       key: "carBodyTypes",
-      url: `${API_BASE_URL}${API_VERSION}/cars/bodyType`,
+      url: `${apiEndpoints.carBodyTypes}`,
     },
   ];
 
@@ -151,30 +166,66 @@ export const loader: LoaderFunction = async () => {
 
 // ACTION - HANDLING FORM SUBMISSION
 export async function action({ request }: ActionFunctionArgs) {
-  let form = await request.formData();
-  let formData = Object.fromEntries(form);
+  let formData = await request.formData();
+
+  const formDataCarImages = formData.getAll("imageUrl") as File[];
+  console.log("Form Data Car Images", formDataCarImages);
+
+  // Removing images from form data for validation
+  const formDataWithOutImages = Object.fromEntries(
+    [...formData].filter(([key, value]) => typeof value === "string"),
+  );
 
   try {
+    // Authenticate User
+    const token = getAuthToken(request);
+    if (!token) {
+      return json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    // Verify JWT Token
+    const payload = verifyJwtToken(token);
+    if (!payload) {
+      return json(
+        { success: false, message: "Invalid or expired token" },
+        { status: 401 },
+      );
+    }
+
+    // Get User ID from payload
+    const userId = payload.userId;
+    console.log("User ID from AddListing Action", userId);
+
     // Pass form for validation
-    let validatedForm = createListingValidateor.parse(formData);
+    let validatedForm = createListingValidateor.parse({
+      ...formDataWithOutImages,
+      userId: userId,
+      year: "2023",
+      imageUrl: formDataCarImages,
+    });
     console.log("Validated Data");
     console.info(validatedForm);
 
-    // Append additional data to the validated form data
-    const validatedFormData = {
-      ...validatedForm,
-      userId: "53389659-64c4-45eb-9490-bf4a3aaca599",
-      year: "2023",
-    };
+    const newValidatedFormData = new FormData();
+    // Append non-file fields
+    for (const [key, value] of Object.entries(validatedForm)) {
+      if (key !== "imageUrl") {
+        newValidatedFormData.append(key, value as string);
+      }
+    }
+
+    // Re-append files
+    validatedForm.imageUrl.forEach((file: File) => {
+      newValidatedFormData.append("imageUrl", file);
+    });
 
     // Post the validated data to the API
-    const response = await fetch(`${API_BASE_URL}/api/v1/cars`, {
+    const response = await fetch(`${apiEndpoints.createCar}`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(validatedFormData),
+      body: newValidatedFormData,
     });
 
     // Handle non-2xx responses
@@ -191,12 +242,10 @@ export async function action({ request }: ActionFunctionArgs) {
         },
       );
     }
-
     // Getting the response data
     const responseData = await response.json();
-
     // Return data.
-    return json({ message: "success", data: responseData });
+    return json({ success: true, data: responseData });
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors = error.flatten().fieldErrors;

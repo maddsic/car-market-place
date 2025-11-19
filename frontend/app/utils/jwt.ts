@@ -14,7 +14,7 @@ export const verifyJwtToken = (token: string) => {
       token,
       process.env.JWT_SECRET_KEY as string,
     ) as JwtPayload;
-    return decoded as { userId: string; role?: string }; // shape of your payload
+    return decoded as { userId: string; role?: string };
   } catch (error) {
     console.error("❌ Invalid or expired token:", error);
     return null;

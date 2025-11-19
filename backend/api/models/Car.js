@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       year: { type: DataTypes.INTEGER, allowNull: false },
       price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
       mileage: { type: DataTypes.INTEGER, allowNull: false },
-      fuelType: { type: DataTypes.STRING, allownull: false },
+      fuelType: { type: DataTypes.STRING, allowNull: false },
       imageUrl: { type: DataTypes.STRING, allowNull: false },
       engineType: { type: DataTypes.STRING, allowNull: false },
       isPremium: {
