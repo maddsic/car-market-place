@@ -30,9 +30,6 @@ exports.createCar = async (req, res, next) => {
   // Get the user id form the middleware.
   const userId = req.user && req.user.userId;
 
-  // GETTING IMAGE URL FROM INCOMING req
-  // const imageUrl = req.file ? req.file.filename : null;
-
   // CHECK IF BODY EXIST
   const carBodyType = await CarBodyType.findOne({
     where: { typeName: req.body.carType },
@@ -41,10 +38,6 @@ exports.createCar = async (req, res, next) => {
   if (!carBodyType) {
     return sendResponse(res, 400, false, "Car body type not found");
   }
-
-  // if (!req.files || req.files.length === 0) {
-  //   return sendResponse(res, 400, false, "No files uploaded");
-  // }
 
   // PREPARING OUR FORM
   const form = {
@@ -59,7 +52,7 @@ exports.createCar = async (req, res, next) => {
     const newCar = await Car.create(form);
 
     const images = req.files.map((image, index) => ({
-      carId: newCar.id,
+      carId: newCar.carId,
       imageUrl: image.filename,
       isPrimary: index == 0,
     }));

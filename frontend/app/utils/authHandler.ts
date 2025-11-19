@@ -18,7 +18,6 @@ export const handleSignUp = async (formData: FormData) => {
 
   if (!validateResult.success) {
     const fieldErrors = validateResult.error.flatten().fieldErrors;
-
     return json({ errors: fieldErrors, values: data }, { status: 400 });
   }
 
@@ -60,9 +59,8 @@ export const handleSignIn = async (formData: FormData) => {
 
   try {
     const { user, setCookie } = await LoginUser(validateResult.data);
-
     return json(
-      { success: true, data: data },
+      { success: true, data: user },
       { headers: setCookie ? { "Set-Cookie": setCookie } : {} },
     );
   } catch (error) {

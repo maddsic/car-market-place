@@ -6,6 +6,7 @@ import { parse } from "cookie";
 type registerData = z.infer<typeof SignUpSchema>;
 type loginData = z.infer<typeof SignInSchema>;
 
+// REGISTER USER HELPER FUNCTION
 export const RegisterUser = async (data: registerData) => {
   try {
     const response = await fetch(`${apiEndpoints.register}`, {
@@ -29,6 +30,7 @@ export const RegisterUser = async (data: registerData) => {
   }
 };
 
+// LOGIN USER HELPER FUNCTION
 export const LoginUser = async (data: loginData) => {
   const response = await fetch(`${apiEndpoints.login}`, {
     method: "POST",
@@ -50,6 +52,7 @@ export const LoginUser = async (data: loginData) => {
   return { user, setCookie };
 };
 
+// FUNCTION TO EXTRACT AUTH TOKEN FROM REQUEST COOKIES
 export function getAuthToken(request: Request): string | null {
   const cookieHeader = request.headers.get("cookie");
   if (!cookieHeader) return null;
