@@ -17,7 +17,7 @@ const Price = ({
   return (
     <span
       className={twMerge(
-        `clip-path font-montserrat relative flex items-center bg-yellow px-5 py-2 text-[18px] font-extrabold text-white ${className}`,
+        `clip-path font-montserrat relative flex items-center border-b-2 border-b-primary bg-yellow px-5 py-2 text-[18px] font-extrabold text-white ${className}`,
       )}
     >
       <p>{formattedPrice}</p>

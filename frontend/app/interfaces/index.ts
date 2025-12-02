@@ -22,6 +22,12 @@ export interface Owner {
   cars: Car;
 }
 
+interface carImage {
+  imageId: string;
+  imageUrl: string;
+  isPrimary: boolean;
+}
+
 export interface Car {
   carId: string;
   stockNumber: string;
@@ -38,6 +44,8 @@ export interface Car {
   carType: string;
   description: string;
   imageUrl: string;
+  image: string;
+  images?: carImage[];
   engineType: string;
   status: string;
   transmission: string;

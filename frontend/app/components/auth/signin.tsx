@@ -8,15 +8,13 @@ import { Card } from "~/components/ui/card";
 import Button from "~/components/Button/button";
 import DisplayError from "../DisplayError/displayError";
 
-const SignIn = ({ actionData }: { actionData: any }) => {
+const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (actionData?.success) {
-      toast.success(
-        `Welcome back! You are now signed in as ${actionData.data.first_name} ${actionData.data.last_name}.`,
-      );
+      toast.success(`Welcome back! You are now signed in...`);
 
       setTimeout(() => {
         navigate("/dashboard");
@@ -111,16 +109,16 @@ const SignIn = ({ actionData }: { actionData: any }) => {
 
 export default SignIn;
 
-type SignInActionData = {
+interface SignInActionDataProps {
   errors?: {
     formError?: string;
-    username?: string;
+    email?: string;
     password?: string;
   };
   values?: {
-    username?: string;
+    email?: string;
     password?: string;
   };
   success?: boolean;
   role?: "admin" | "dealer" | "user";
-};
+}

@@ -12,9 +12,10 @@ const swaggerDocument = YAML.load("./docs/swagger.yaml");
 const isProduction = process.env.NODE_ENV === "production";
 
 const allowedOrigins = [
-  "http://localhost:5173", // local dev
+  "http://localhost:5173", // local dev (frontend)
   "https://car-market-place-five.vercel.app", // vercel deployment
   "https://pumped-polliwog-fast.ngrok-free.app", // ngrok tunnel
+  "http://localhost:3000", // local dev (backend)
 ];
 
 // ---------------------------------------------
@@ -42,6 +43,18 @@ const reviewRouter = require("./api/reviewModule/reviewRoute");
 const accessLogSream = fs.createWriteStream(
   path.join(__dirname, "access.logs"),
   { flags: "a" }
+);
+
+// ---------------------------------------------
+// SERVE STATIC FILES - IMAGE UPLOADS
+// ---------------------------------------------
+app.use(
+  "/image_uploads",
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+  },
+  express.static(path.join(__dirname, "image_uploads"))
 );
 
 // ---------------------------------------------
@@ -85,24 +98,27 @@ app.use((req, res, next) => {
 // ---------------------------------------------
 authenticateDBConnection();
 
+// ---------------------------------------------
+// API ROUTES
+// ---------------------------------------------
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/cars", carRouter);
 app.use("/api/v1/dealers", dealerRouter);
 app.use("/api/v1/reviews", reviewRouter);
 
-// ---------------------------------------------
-// GLOBAL ERROR HANDLER
-// ---------------------------------------------
-app.use((err, req, res, next) => {
-  console.log("ERROR FROM GLOBAL ERROR HANDLER");
-  console.log(err.stack.message);
+// // ---------------------------------------------
+// // GLOBAL ERROR HANDLER
+// // ---------------------------------------------
+// app.use((err, req, res, next) => {
+//   console.log("ERROR FROM GLOBAL ERROR HANDLER");
+//   console.log(err.stack.message);
 
-  return res.status(500).json({
-    success: false,
-    message: "Internal server error",
-    error: err.message || "Internal server error",
-  });
-});
+//   return res.status(500).json({
+//     success: false,
+//     message: "Internal server error",
+//     error: err.message || "Internal server error",
+//   });
+// });
 
 module.exports = app;
