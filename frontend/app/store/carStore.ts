@@ -43,7 +43,7 @@ export const useCarStore = create<CarStore>((set) => ({
         endPoints.map((endpoint) => apiFetch(endpoint)),
       );
       console.log('"fetched car data from store"');
-      console.log(res);
+      console.log(res[0]);
 
       const results = {
         carMakes: res[0]?.data || [],

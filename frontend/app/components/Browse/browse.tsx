@@ -77,11 +77,7 @@ const BrowseBymake = () => {
                 className="flex transform cursor-pointer flex-col items-center justify-center p-4 transition duration-1000 ease-linear animate-out hover:border"
                 onClick={() => handleNavigate("make", make.name)}
               >
-                <img
-                  src={make?.imageUrl}
-                  alt={make.name}
-                  className="mb-4 w-20"
-                />
+                <img src={make?.image} alt={make.name} className="mb-4 w-20" />
                 <p className="text-lg font-medium text-gray-600">{make.name}</p>
               </div>
             ))}

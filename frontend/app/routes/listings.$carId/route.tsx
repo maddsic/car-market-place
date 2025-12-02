@@ -26,10 +26,14 @@ interface loaderData {
 
 const ViewListing = () => {
   const { car } = useLoaderData<loaderData>();
-  const [index, setIndex] = useState<number>(0); // FOR IMAGE GALLERY NOT USED YET
+  const [index, setIndex] = useState<number>(
+    car?.images?.findIndex((img) => img.isPrimary) || 0,
+  );
   const [showNumber, setShowNumber] = useState<Boolean>(false);
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
+
+  console.log("car images", index);
 
   const handleShowNumber = (): void => {
     setShowNumber(!showNumber);
@@ -51,14 +55,24 @@ const ViewListing = () => {
             <SubHeader car={car!} />
 
             {/* BIG IMAGE */}
-            <BigImage imageUrl={car?.imageUrl!} price={car?.price!} />
+            <BigImage
+              imageUrl={
+                (car?.images && car?.images[index]?.imageUrl!) || car?.image!
+              }
+              price={car?.price!}
+            />
 
-            {/* SMALL IMAGE */}
+            {/* THUMBNAILS */}
             <div className="relative flex flex-row justify-between gap-4">
-              <ListingSmallImg imageUrl={car?.imageUrl!} />
-              <ListingSmallImg imageUrl={car?.imageUrl!} />
-              <ListingSmallImg imageUrl={car?.imageUrl!} />
-              <ListingSmallImg imageUrl={car?.imageUrl!} />
+              {car?.images &&
+                car?.images?.map((img, i) => (
+                  <ListingSmallImg
+                    key={i}
+                    imageUrl={img.imageUrl!}
+                    onClick={() => setIndex(i)}
+                    className={i === index ? "border-4 border-yellow" : ""}
+                  />
+                ))}
             </div>
 
             {/* CAR INFO */}
@@ -142,7 +156,7 @@ function SellerNote({}) {
   );
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 export async function loader({ params }: LoaderFunctionArgs) {

@@ -14,7 +14,7 @@ import PasswordRequirements from "../PasswordRequirement/passwordRequirement";
 // Third party libraries
 import { toast } from "react-toastify";
 
-const SignUp = ({ actionData }: { actionData?: ActionData }) => {
+const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
@@ -158,7 +158,7 @@ const SignUp = ({ actionData }: { actionData?: ActionData }) => {
 
 export default SignUp;
 
-type ActionData = {
+interface SignUpActionDataProps {
   // Errors object to hold validation errors
   // This can be used to display errors in the form fields
   errors?: {
@@ -170,7 +170,7 @@ type ActionData = {
     password?: string;
     phone?: string;
     role?: boolean;
-    hasWhatsapp?: boolean; // Indicates if the user has a hasWhatsapp account with the provided phone number
+    hasWhatsapp?: boolean;
   };
   // Values object to hold the form values
   // This can be used to pre-fill the form fields in case of errors
@@ -185,8 +185,8 @@ type ActionData = {
     hasWhatsapp?: boolean;
   };
   success?: boolean;
-  role?: "admin" | "agent" | "user"; // Indicates if the form submission was successful
-};
+  role?: "admin" | "agent" | "user";
+}
 
 function CustomCheckBox({
   classNames,

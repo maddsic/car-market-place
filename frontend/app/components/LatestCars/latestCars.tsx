@@ -36,7 +36,7 @@ const LatestCars = () => {
               key={car.carId}
             >
               <img
-                src={car.imageUrl}
+                src={car.image}
                 alt={car.model + " " + car.model}
                 className="onject-cover col-span-1 h-auto w-full bg-gray-200 md:col-span-5 lg:h-full lg:max-w-full"
                 onClick={() => handleNavigateToListings(car?.carId)}

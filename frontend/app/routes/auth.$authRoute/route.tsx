@@ -7,10 +7,9 @@ import { handleSignIn, handleSignUp } from "~/utils/authHandler";
 const AuthRoute = () => {
   const { authRoute } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  // console.log("auth route", authRoute);
 
   return authRoute === "login" ? (
-    <SignIn actionData={actionData} />
+    <SignIn actionData={actionData ?? {}} />
   ) : (
     <SignUp actionData={actionData} />
   );
@@ -36,10 +35,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   if (authRoute === "signup") {
-    return await handleSignUp(formData);
+    return (await handleSignUp(formData)) ?? {};
   } else if (authRoute === "login") {
-    return await handleSignIn(formData);
+    return (await handleSignIn(formData)) ?? {};
   }
 
-  return null;
+  return {};
 };
