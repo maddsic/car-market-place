@@ -17,7 +17,7 @@ export const ProfileCars = ({
 }) => {
   const navigation = useNavigate();
   const [startIndex, setStartIndex] = useState<number>(0);
-  const [carsPerPage, setCarsPerPage] = useState<number>(9);
+  const carsPerPage = 9;
   const isUserCarsAvailable = userCars && userCars.length > 0;
   const isDealerFilteredCarsAvailable =
     dealerFilteredCars && dealerFilteredCars.length > 0;

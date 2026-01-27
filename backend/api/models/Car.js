@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
       },
       transmission: { type: DataTypes.STRING, allowNull: false },
+      status: {
+        type: DataTypes.ENUM("available", "sold", "inactive"),
+        allowNull: false,
+        defaultValue: "available",
+      },
     },
     {
       freezeTableName: true,
