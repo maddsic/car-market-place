@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "bun --watch server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Gambtech",
   "license": "ISC",
@@ -30,5 +30,8 @@
     "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
   }
 }

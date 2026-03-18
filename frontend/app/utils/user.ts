@@ -1,8 +1,8 @@
 import { apiEndpoints } from "~/store/apiEndpoints";
 
-export const createReview = async (data: any, token: string) => {
+export const createReview = async (dealerId: string, data: any, token: string) => {
   try {
-    const response = await fetch(`${apiEndpoints.createReview}`, {
+    const response = await fetch(`${apiEndpoints.createReview}/${dealerId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

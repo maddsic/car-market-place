@@ -2,9 +2,10 @@ import { cn } from "~/lib/utils";
 
 interface SelectProps {
   name: string;
-  value?: string | undefined;
-  key?: string | undefined;
-  options: { label: string; value: string }[];
+  value?: string | number | undefined;
+  defaultValue?: string | number | undefined;
+  key?: string | number;
+  options: { label: string; value: string | number }[];
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void | undefined;
   placeholder?: string;
   className?: string;
@@ -13,7 +14,7 @@ interface SelectProps {
 const Select: React.FC<SelectProps> = ({
   name,
   value,
-  key,
+  defaultValue,
   options,
   onChange,
   placeholder,
@@ -23,6 +24,7 @@ const Select: React.FC<SelectProps> = ({
     <select
       name={name}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
       className={cn(`font-body h-12 border bg-inherit pl-3 ${className}`)}
     >

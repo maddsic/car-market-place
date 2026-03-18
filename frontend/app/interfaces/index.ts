@@ -1,6 +1,13 @@
 export interface CarModel {
   id: string;
   name: string;
+  years: CarModelYear[]
+}
+
+interface CarModelYear {
+  id: string,
+  year: number,
+  model_id: string
 }
 
 export interface CarMake {
@@ -34,10 +41,10 @@ export interface Car {
   condition: string;
   make: string;
   model: string;
-  year: string;
-  price: string;
+  year: number;
+  price: number;
   drive: string;
-  mileage: string;
+  mileage: number;
   ext_color: string;
   int_color: string;
   fuelType: string;

@@ -30,7 +30,7 @@ export const RegisterUser = async (data: registerData) => {
   }
 };
 
-// LOGIN USER HELPER FUNCTION
+// LOGIN USER HELPER FUNCTION THAT RETURNS USER DATA AND SET-COOKIE HEADER TO AuthHandler
 export const LoginUser = async (data: loginData) => {
   const response = await fetch(`${apiEndpoints.login}`, {
     method: "POST",

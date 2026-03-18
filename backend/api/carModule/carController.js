@@ -1,320 +1,191 @@
-const path = require("path");
-const fs = require("fs").promises;
+const { hasLength, sendResponse } = require("../helpers/response");
 
-// SCHEMAS & HELPERS
-const { carSchema } = require("./carService");
-const { sendResponse, hasLength } = require("../helpers/response");
-const { processCarImages } = require("../helpers/processCarImage");
-const {
-  CarImage,
-  CarModel,
-  CarMake,
-  CarBodyType,
-  User,
-  Car,
-} = require("../models");
-exports.createCar = async (req, res, next) => {
-  // VALIDATE INCOMING FORM
-  const { error } = carSchema.validate(req.body);
-
-  if (error) return sendResponse(res, 400, false, error.details[0].message);
-  // Get the user id form the middleware.
-  const userId = req.user && req.user.userId;
-
-  // CHECK IF BODY EXIST
-  const carBodyType = await CarBodyType.findOne({
-    where: { typeName: req.body.carType },
-  });
-
-  if (!carBodyType) {
-    return sendResponse(res, 400, false, "Car body type not found");
+class CarController {
+  constructor(carService) {
+    this.carService = carService;
   }
 
-  // PREPARING OUR FORM
-  const form = {
-    ...req.body,
-    userId: userId,
-    imageUrl: req?.files[0]?.filename || "",
-    year: "2023",
-    carTypeId: carBodyType.typeId,
-  };
+  // 1. CREATE CAR
+  createCar = async (req, res) => {
+    try {
+      const userId = req.user?.userId;
+      const { body, files } = req;
 
-  try {
-    const newCar = await Car.create(form);
-    // Map throguh files and create CarImage records and use the first image as primary
-    const images = req.files.map((image, index) => ({
-      carId: newCar.carId,
-      imageUrl: image.filename,
-      isPrimary: index == 0,
-    }));
+      console.log("--- BACKEND CREATE HIT ---");
+      console.log("Body:", req.body);
+      console.log("Files:", req.files);
 
-    await CarImage.bulkCreate(images);
-    return newCar
-      ? sendResponse(res, 201, true, "Car created successfully", newCar)
-      : sendResponse(res, 404, false, "Create Fail");
-  } catch (error) {
-    console.log("ERROR FROM CREATE CAR CONTROLLER: " + error.message);
-    next(error);
-  }
-};
+      const car = await this.carService.createCar(userId, body, files);
 
-// GET ALL CARS BASE ON SECTION AND VALUE
-exports.getCars = async (req, res, next) => {
-  const { section, value } = req.query;
-
-  try {
-    let cars;
-    switch (section) {
-      case "inventory":
-        // Fetch all cars
-        cars = await Car.findAll();
-        break;
-      case "make":
-        // Fetch cars by make ID
-        cars = await Car.findAll({ where: { make: value } });
-        break;
-      case "premium":
-        // Fetch premium cars based on some premium condition
-        cars = await Car.findAll({ where: { isPremium: true } });
-        break;
-      case "latest":
-        // Fetch the latest cars
-        cars = await Car.findAll({
-          include: [
-            {
-              model: User,
-              as: "owner",
-              attributes: ["first_name", "last_name", "phone"],
-            },
-          ],
-          order: [["createdAt", "DESC"]],
-        });
-        console.log("latest car with user data in it");
-        break;
-      case "category":
-        cars = await Car.findAll({ where: { carType: value } });
-        break;
-      default:
-        cars = await Car.findAll();
-        break;
+      return sendResponse(res, 201, true, "Car created successfully", car);
+    } catch (error) {
+      console.error("ERROR CREATING CAR FROM CreateCar Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
+  }
 
-    if (!hasLength(cars)) {
-      return sendResponse(res, 404, false, "No Record Found");
+  // GET CARS BASED ON SECTION AND VALUE
+  getCars = async (req, res) => {
+    const { section, value } = req.query;
+    try {
+      const cars = await this.carService.getCars(section, value);
+      return hasLength(cars) ? sendResponse(res, 200, true, "Cars retrieved successfully", cars) : sendResponse(res, 404, false, "No REcord Found");
+    } catch (error) {
+      console.error("ERROR GETTING CARS FROM GetCars Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    const carImages = await processCarImages(cars);
-    return sendResponse(res, 200, true, "Car(s) Found", carImages);
-  } catch (error) {
-    console.log("ERROR FROM GET ALL cars CONTROLLER: " + error.message);
-    next(error);
   }
-};
 
-// PREMIUM CARS for HOMEPAGE
-exports.getPremiumCars = async (req, res, next) => {
-  try {
-    const premiumCars = await Car.findAll({
-      where: { isPremium: true },
-      limit: 3,
-    });
-
-    if (!hasLength(premiumCars)) {
-      return sendResponse(res, 404, false, "No Record Found");
+  // GET PREMIUM CARS
+  getPremiumCars = async (req, res) => {
+    try {
+      const premiumCars = await this.carService.getPremiumCars();
+      return hasLength(premiumCars) ? sendResponse(res, 200, true, "Premium cars retrieved successfully", premiumCars) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING PREMIUM CARS FROM GetPremiumCars Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    const premiumCarImages = await processCarImages(premiumCars);
-    return sendResponse(res, 200, true, "Car(s) Found", premiumCarImages);
-  } catch (error) {
-    console.log("ERROR FROM GET PREMIUM CARS CONTROLLER: " + error.message);
-    next(error);
   }
-};
 
-//  LATEST CARS for HOMEPAGE
-exports.getLatestCars = async (req, res, next) => {
-  const latestCars = await Car.findAll({
-    include: [
-      {
-        model: User,
-        as: "owner",
-        attributes: ["first_name", "last_name", "phone", "role"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-    limit: 8,
-  });
-
-  if (!hasLength(latestCars)) {
-    return sendResponse(res, 404, false, "No Record Found");
-  }
-  const latestCarImages = await processCarImages(latestCars);
-  return sendResponse(res, 200, true, "Car(s) Found", latestCarImages);
-};
-
-// GET CAR BY ID for DETAILS PAGE
-exports.getCarById = async (req, res, next) => {
-  const { carId } = req.params;
-
-  try {
-    const carData = await Car.findOne({
-      where: { carId },
-      include: [
-        {
-          model: CarImage,
-          as: "images",
-          attributes: ["imageId", "imageUrl", "isPrimary"],
-        },
-        { model: User, as: "owner" },
-      ],
-    });
-
-    if (!hasLength(carData)) {
-      return sendResponse(res, 404, false, "No Record Found");
+  // GET LATEST CARS
+  getLatestCars = async (req, res) => {
+    try {
+      const latestCars = await this.carService.getLatestCars();
+      return hasLength(latestCars) ? sendResponse(res, 200, true, "Latest cars retrieved successfully", latestCars) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING LATEST CARS FROM GetLatestCars Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    const processedCarData = await processCarImages([carData]);
-    const finalData = processedCarData[0];
-    return sendResponse(res, 200, true, "Record Found", finalData);
-  } catch (error) {
-    console.log("ERROR FROM GET ALL premiumCars CONTROLLER: " + error.message);
-    next(error);
   }
-};
 
-// UPDATE CAR BY ID
-exports.updateCar = async (req, res, next) => {
-  const { carId } = req.params;
-  const updateForm = req.body;
+  // 5. GET CAR BY CAR ID
+  getCarById = async (req, res) => {
+    try {
+      const car = await this.carService.getCarById(req.params.carId);
 
-  // TODO: VALIDATE INCOMING DATA
-
-  try {
-    const [numberOfAffectedRows] = await Car.update(updateForm, {
-      where: { carId },
-    });
-
-    if (hasLength(numberOfAffectedRows)) {
-      const updatedCar = await Car.findOne({ where: { carId } });
-
-      return sendResponse(
-        res,
-        200,
-        true,
-        "Car updated successfully",
-        updatedCar
-      );
+      return hasLength(car) ? sendResponse(res, 200, true, "Car retrieved successfully", car) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING CAR BY ID FROM GetCarById Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    return sendResponse(res, 409, false, "Car update fail");
-  } catch (error) {
-    console.log("ERROR FROM CAR CONTROLLER - update: " + error.message);
-    next(error);
   }
-};
 
-// DELETE CAR BY ID
-exports.deleteCar = async (req, res, next) => {
-  const { carId } = req.params;
+  // UPDATE CAR BY CAR ID
+  updateCar = async (req, res) => {
+    const userId = req.user.userId;
+    const { carId } = req.params;
 
-  try {
-    const affectedRows = await Car.destroy({ where: { carId } });
-    console.log("AFFECTED ROWS");
-    console.log(affectedRows);
+    console.log("--- BACKEND UPDATE HIT ---");
+    // console.log("Body:", req.body);
+    // console.log("Files:", req.files);
+    console.log("carID:", carId)
 
-    return hasLength(affectedRows)
-      ? sendResponse(res, 200, true, "Car deleted successfully", {})
-      : sendResponse(res, 200, false, "Car delete fail", {});
-  } catch (error) {
-    console.log("ERROR FROM USER CONTROLLER: " + error.message);
-    next(error);
-  }
-};
-
-// CREATE CAR MAKES
-exports.createCarMakes = async (req, res, next) => {
-  const { name } = req.body;
-
-  const imageUrl = req.file ? req.file.filename : null;
-  const data = {
-    name,
-    imageUrl: imageUrl,
-  };
-
-  try {
-    const new_make = await CarMake.create(data);
-    return new_make
-      ? sendResponse(res, 201, true, "Car make created successfully", new_make)
-      : sendResponse(res, 404, false, "Cannot create car makes");
-  } catch (error) {
-    console.log("ERROR FROM CREATE CAR MAKES: " + error.message);
-    next(error);
-  }
-};
-
-// GET CAR MAKES (refactored)
-exports.getCarMakes = async (req, res, next) => {
-  try {
-    const carMakes = await CarMake.findAll({ include: { model: CarModel } });
-
-    if (!hasLength(carMakes)) {
-      return sendResponse(res, 404, false, "No Record Found");
+    try {
+      const updated = await this.carService.updateCar(carId, userId, req.body, req.files);
+      return updated ? sendResponse(res, 200, true, "Car updated successfully", updated) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR UPDATING CAR FROM UpdateCar Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    const carMakeImages = await processCarImages(carMakes);
-    return sendResponse(res, 200, true, "Result(s) found...", carMakeImages);
-  } catch (error) {
-    console.log("ERROR FROM GET CAR MAKES CONTROLLER: " + error.message);
-    next(error);
   }
-};
 
-//
-exports.getCarModel = async (req, res, next) => {
-  const { make_id } = req.body;
-  try {
-    const carModels = await CarModel.findAll({ where: { make_id } });
+  // UPDATE CAR STATUS
+  updateCarStatus = async (req, res) => {
+    try {
+      const carId = req.params.carId;
+      const { status } = req.body;
+      const userId = req.user?.userId;
 
-    return hasLength(carModels)
-      ? sendResponse(res, 200, true, "Result(s) found...", carModels)
-      : sendResponse(res, 404, false, "No result found.");
-  } catch (error) {
-    console.log("ERROR FROM GET CAR MODELS CONTROLLER: " + error.message);
-    next(error);
-  }
-};
+      console.log("DEBUG: Body:", req.body);
+      console.log("DEBUG: Params:", req.params);
+      console.log("DEBUG: User:", req.user?.userId);
 
-// GET CAR BODY TYPES
-exports.getCarBodyTypes = async (req, res, next) => {
-  try {
-    const bodyType = await CarBodyType.findAll();
+      const updated = await this.carService.updateCarStatus(carId, userId, status);
 
-    return hasLength(bodyType)
-      ? sendResponse(res, 200, true, "Result(s) found...", bodyType)
-      : sendResponse(res, 404, false, "No result found.");
-  } catch (error) {
-    console.log("ERROR FROM GET CAR BODY TYPES CONTROLLER: " + error.message);
-    next(error);
-  }
-};
-
-// SEARCH CAR INVENTORY
-exports.searchCarInventory = async (req, res, next) => {
-  const { condition, carType, make, model } = req.query;
-
-  const whereClause = {};
-
-  if (condition) whereClause.condition = condition;
-  if (carType) whereClause.carType = carType;
-  if (make) whereClause.make = make;
-  if (model) whereClause.model = model;
-
-  console.log("Filtering with:", whereClause);
-
-  try {
-    const cars = await Car.findAll({ where: whereClause });
-    if (!hasLength(cars)) {
-      return sendResponse(res, 404, false, "No result found.");
+      if (updated[0] > 0) {
+        return sendResponse(res, 200, true, "Car status updated successfully");
+      } else {
+        return sendResponse(res, 404, false, "Car not found or status not updated");
+      }
+    } catch (error) {
+      console.error("ERROR UPDATING CAR STATUS FROM updateCarStatus Controller:", error);
+      return sendResponse(res, 500, false, error.message);
     }
-    const carImages = await processCarImages(cars);
-    return sendResponse(res, 200, true, "Result(s) found...", carImages);
-  } catch (error) {
-    console.log("ERROR FROM SEARCH CAR INVENTORY CONTROLLER: " + error.message);
-    next(error);
   }
-};
+
+  // DELETE CAR BY CAR ID
+  deleteCar = async (req, res) => {
+    try {
+      const carId = req.params.carId;
+      const userId = req.user?.userId;
+
+      console.log("DEBUG: Params:", req.params);
+      console.log("DEBUG: User:", req.user?.userId);
+
+      const deleted = await this.carService.deleteCar(carId, userId);
+      return deleted ? sendResponse(res, 200, true, "Car deleted successfully", {}) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR DELETING CAR FROM DeleteCar Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+  // CREATE CAR MAKES
+  createCarMake = async (req, res) => {
+    try {
+      const make = await this.carService.createCarMake(req.body.name, req.file);
+      return make ? sendResponse(res, 201, true, "Car make created successfully", make) : sendResponse(res, 400, false, "Failed to create car make");
+    } catch (error) {
+      console.error("ERROR CREATING CAR MAKE FROM CreateCarMake Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+  // GET CAR MAKES
+  getCarMakes = async (req, res) => {
+    try {
+      const makes = await this.carService.getCarMakes();
+      return hasLength(makes) ? sendResponse(res, 200, true, "Car makes retrieved successfully", makes) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING CAR MAKES FROM GetCarMakes Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+  // GET CAR MODELS
+  getCarModels = async (req, res) => {
+    try {
+      const models = await this.carService.getCarModels(req.params.make_id);
+      return hasLength(models) ? sendResponse(res, 200, true, "Car models retrieved successfully", models) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING CAR MODELS FROM GetCarModels Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+  // GET CAR BODY TYPES
+  getCarBodyTypes = async (req, res) => {
+    try {
+      const bodyTypes = await this.carService.getBodyTypes();
+      return hasLength(bodyTypes) ? sendResponse(res, 200, true, "Car body types retrieved successfully", bodyTypes) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR GETTING CAR BODY TYPES FROM GetCarBodyTypes Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+  // SEARCH CAR INVENTORY
+  searchCarInventory = async (req, res) => {
+    try {
+      const cars = await this.carService.searchCarInventory(req.query);
+      console.log(cars)
+      return hasLength(cars) ? sendResponse(res, 200, true, "Search results retrieved successfully", cars) : sendResponse(res, 404, false, "No Record Found");
+    } catch (error) {
+      console.error("ERROR SEARCHING CAR INVENTORY FROM SearchCarInventory Controller:", error);
+      return sendResponse(res, 500, false, error.message);
+    }
+  }
+
+}
+
+module.exports = CarController;

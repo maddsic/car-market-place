@@ -7,6 +7,7 @@ import {
 } from "~/components/ui/card";
 import { FaStar, FaCheckCircle, FaUserEdit } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { Link } from "@remix-run/react";
 
 export default function DealerProfileCard() {
   const dealer = {
@@ -26,11 +27,13 @@ export default function DealerProfileCard() {
     >
       <Card className="border border-gray-200 shadow-md">
         <CardHeader className="flex flex-col items-center justify-center text-center">
-          <img
-            src="/sain.jpeg"
-            alt="Dealer"
-            className="h-20 w-20 rounded-full border-4 border-primary shadow-md"
-          />
+          <Link to="/dealer/profile">
+            <img
+              src="/sain.jpeg"
+              alt="Dealer"
+              className="h-20 w-20 rounded-full border-4 border-primary shadow-md"
+            />
+          </Link>
           <CardTitle className="mt-3 text-xl font-semibold text-gray-900">
             {dealer.name}
           </CardTitle>
@@ -52,11 +55,10 @@ export default function DealerProfileCard() {
               .map((_, i) => (
                 <FaStar
                   key={i}
-                  className={`${
-                    i < Math.round(dealer.rating)
+                  className={`${i < Math.round(dealer.rating)
                       ? "text-yellow-400"
                       : "text-gray-300"
-                  }`}
+                    }`}
                 />
               ))}
           </div>

@@ -79,13 +79,12 @@ export default function WriteReview({
                         <FaStar
                           key={i}
                           size={26}
-                          className={`cursor-pointer transition ${
-                            index <=
-                            (hover[key as keyof typeof hover] ||
-                              ratings[key as keyof typeof ratings])
+                          className={`cursor-pointer transition ${index <=
+                              (hover[key as keyof typeof hover] ||
+                                ratings[key as keyof typeof ratings])
                               ? "text-yellow"
                               : "text-gray-300"
-                          }`}
+                            }`}
                           onClick={() =>
                             handleRating(key as keyof typeof ratings, index)
                           }
@@ -111,6 +110,7 @@ export default function WriteReview({
             <textarea
               rows={5}
               name="comment"
+              required
               placeholder="Share your detailed experience with this dealer..."
               className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
             ></textarea>

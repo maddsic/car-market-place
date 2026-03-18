@@ -11,7 +11,6 @@ import { useCarStore } from "~/store/carStore";
 const LatestCars = () => {
   const { latestCars } = useCarStore();
   const navigate = useNavigate();
-  // console.log("latest", latestCars);
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
@@ -98,7 +97,7 @@ const LatestCars = () => {
                     />
                   </div>
                   <div className="w-full text-sm">
-                    {/* <span className="text-gray-500">Personal Seller:</span> */}
+                    <span className="text-gray-500">Personal Seller:</span>
                     <span className="text-sm text-yellow">
                       {car.owner.first_name + " " + car.owner.last_name}
                     </span>

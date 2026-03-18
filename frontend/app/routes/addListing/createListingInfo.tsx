@@ -10,26 +10,36 @@ import { Input } from "~/components/ui/input";
 import { SiTransmission } from "react-icons/si";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import CreateListingLocation from "./createListingLocation";
-import { useCarStore } from "~/store/carStore";
 
 type CreateListingInfoProps = {
   carBodyTypes: { id: string; typeName: string }[];
   formData: {
     errors: {
-      bodyType: string;
-      mileage: string;
+      carType: string;
+      mileage: number;
       fuelType: string;
       engineType: string;
       transmission: string;
     };
+  };
+  initialData: {
+    carType?: string;
+    mileage?: number;
+    fuelType?: string;
+    engineType?: string;
+    transmission?: string;
+    drive?: string;
+    ext_color?: string;
+    int_color?: string;
+    vin?: string;
   };
 };
 
 const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
   carBodyTypes,
   formData,
+  initialData
 }) => {
-  // const { carBodyTypes } = useCarStore();
   return (
     <>
       <div className="relative grid gap-5 pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-5">
@@ -46,11 +56,12 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
           <Select
             name="carType"
             placeholder="Select Body"
+            defaultValue={initialData?.carType}
             className="font-body gray__text-light w-full appearance-none border-none pl-5 text-xs outline-none"
-            options={carBodyTypes.map((bodyType: any) => ({
-              label: bodyType.typeName,
-              value: bodyType.typeName,
-              key: bodyType.typeId,
+            options={carBodyTypes.map((carType: any) => ({
+              label: carType.typeName,
+              value: carType.typeName,
+              key: carType.typeId,
             }))}
           />
           <DropDownIcon />
@@ -67,8 +78,9 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Input
             name="mileage"
+            defaultValue={initialData?.mileage}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
-            type="text"
+            type="number"
             placeholder="Enter Mileage (mi)"
           />
         </IconField>
@@ -84,6 +96,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Select
             name="fuelType"
+            defaultValue={initialData?.fuelType}
             className="font-body gray__text-light w-full appearance-none border-none pl-5 text-xs outline-none"
             options={[
               { label: "Fuel Type", value: "" },
@@ -112,6 +125,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Input
             name="engineType"
+            defaultValue={initialData?.engineType}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             placeholder="eg v4"
@@ -129,6 +143,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Select
             name="transmission"
+            defaultValue={initialData?.transmission}
             className="font-body gray__text-light w-full appearance-none border-none text-xs outline-none"
             options={[
               { label: "Select Transmission", value: "" },
@@ -153,6 +168,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Select
             name="drive"
+            defaultValue={initialData?.drive}
             className="font-body gray__text-light w-full appearance-none border-none pl-5 text-xs outline-none"
             options={[
               { label: "Select Drive", value: "" },
@@ -178,6 +194,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Input
             name="ext_color"
+            defaultValue={initialData?.ext_color}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             placeholder="Exterior Color"
@@ -195,6 +212,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Input
             name="int_color"
+            defaultValue={initialData?.int_color}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             placeholder="Interior Color"
@@ -212,6 +230,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         >
           <Input
             name="vin"
+            defaultValue={initialData?.vin}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             placeholder="Enter Vin Number"
@@ -219,7 +238,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
         </IconField>
       </div>
       {/* LOCATION */}
-      <CreateListingLocation />
+      <CreateListingLocation initailData={initialData} />
     </>
   );
 };
