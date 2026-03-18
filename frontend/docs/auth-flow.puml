@@ -1,0 +1,24 @@
+@startuml auth-flow
+skinparam packageStyle rectangle
+
+actor User
+
+User -> Remix: Visit /auth/:authRoute
+Remix -> Loader: load(params)
+Loader -> Remix: return authRoute
+
+User -> Remix: Submit Form (POST)
+Remix -> Action: action(request, params)
+
+Action -> Zod: validate(formData)
+Zod --> Action: valid/invalid
+
+Action -> Helpers: handleSignIn/handleSignUp
+Helpers -> Backend: fetch(login/register)
+Backend --> Helpers: user + Set-Cookie or error
+
+Helpers --> Action: result
+Action --> Remix UI: {success|errors} (+ cookie header)
+
+Remix UI -> Browser: Redirect on success
+@enduml

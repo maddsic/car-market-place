@@ -140,7 +140,7 @@ const InventoryPage = () => {
 export default InventoryPage;
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // LOADER - FETCHING CAR MAKES

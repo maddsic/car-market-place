@@ -1,7 +1,10 @@
 import { NavLink, Outlet } from "@remix-run/react";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { FaChartBar, FaCarSide, FaUserCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { DashboardTopNav } from "./dashboardTopNav";
+import { getAuthToken } from "~/utils/authHelpers";
+import jwt from "jsonwebtoken";
 
 const navItems = [
   { to: "/dashboard", label: "Overview", icon: <FaChartBar size={18} /> },
@@ -28,10 +31,9 @@ export default function DashboardLayout() {
               to={item.to}
               end={item.to === "/dashboard"}
               className={({ isActive }) =>
-                `relative flex items-center gap-3 rounded-md p-2 font-medium transition-all duration-300 ease-in-out ${
-                  isActive
-                    ? "bg-white text-primary shadow-md"
-                    : "text-white hover:bg-gray-100/10 hover:text-yellow"
+                `relative flex items-center gap-3 rounded-md p-2 font-medium transition-all duration-300 ease-in-out ${isActive
+                  ? "bg-white text-primary shadow-md"
+                  : "text-white hover:bg-gray-100/10 hover:text-yellow"
                 }`
               }
             >
@@ -66,3 +68,40 @@ export default function DashboardLayout() {
     </div>
   );
 }
+
+// DEFINE INTERFACE FOR DECODED TOKEN
+interface AuthTokenPayload extends jwt.JwtPayload {
+  userId: string;
+  email: string;
+  role: "admin" | "agent" | "user";
+}
+
+
+// LOADER FUNCTION TO PROTECT DASHBOARD ROUTES
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const token = getAuthToken(request);
+  if (!token) return redirect("/auth/login");
+
+  const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
+
+  if (decodedToken?.role !== "agent") {
+    return redirect(`/profile/${decodedToken?.userId}`);
+  }
+  return null;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

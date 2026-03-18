@@ -1,13 +1,9 @@
 import Heading from "~/components/Heading/heading";
 import { Input } from "~/components/ui/input";
 
-const CreateListingPrice = () => {
+const CreateListingPrice = ({ initialData }: { initialData?: { price?: number } }) => {
   return (
     <div className="relative mb-10 pt-5 md:py-10">
-      {/* <Heading
-        title="set your Asking price"
-        classNames="lg:text-md uppercase pb-5"
-      /> */}
       <Heading
         title="SET YOUR ASKING PRICE"
         classNames="uppercase lg:text-md"
@@ -23,7 +19,8 @@ const CreateListingPrice = () => {
           </label>
           <Input
             name="price"
-            type="string"
+            type="number"
+            defaultValue={initialData?.price || ""}
             id="price"
             placeholder="Enter price"
             className="font-body"

@@ -1,4 +1,4 @@
-import { Form, Link, useNavigate } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -9,18 +9,13 @@ import Button from "~/components/Button/button";
 import DisplayError from "../DisplayError/displayError";
 
 const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (actionData?.success) {
       toast.success(`Welcome back! You are now signed in...`);
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
     }
-  }, [actionData, navigate]);
+  }, [actionData]);
 
   return (
     <div className="input__bg screen__height flex items-center justify-center px-4">

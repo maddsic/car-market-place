@@ -1,11 +1,10 @@
-import React from "react";
-import { FaBell, FaEnvelope } from "react-icons/fa";
+import { FaBell, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
 
 export const DashboardTopNav = () => {
   return (
     <div className="mb-5 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
       <h1 className="text-2xl font-semibold text-primary">
-        Welcome Back, Kunta
+        Kunta Motors
       </h1>
       <div className="flex items-center gap-5">
         <button className="relative text-gray-500 transition hover:text-primary">
@@ -20,9 +19,9 @@ export const DashboardTopNav = () => {
             5
           </span>
         </button>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white">
-          D
-        </div>
+        <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white">
+          <FaSignOutAlt size={22} />
+        </button>
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { createReview } from "~/utils/user";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
 import Divider from "~/components/Divider/divider";
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { HiOutlineMailOpen } from "react-icons/hi";
 
 import { Input } from "~/components/ui/input";
@@ -20,6 +20,7 @@ import { verifyJwtToken } from "~/utils/jwt";
 const ProfilePage = () => {
   const { user, userCars, dealers, reviews, isUserLoggedIn } =
     useLoaderData<typeof loader>();
+
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -117,23 +118,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       );
     }
 
-    const authorId = payload.userId;
-    console.log(authorId);
-
+    // Construct review data from form inputs
     const data = {
-      dealerId: dealerId,
-      userId: authorId,
-      comment: formData.get("comment"),
-      buyingProcess: Number(formData.get("buyingProcess")),
-      customerService: Number(formData.get("customerService")),
-      overallExperience: Number(formData.get("overallExperience")),
+      comment: String(formData.get("comment") || ""),
+      buyingProcess: Number(formData.get("buyingProcess") || 1),
+      customerService: Number(formData.get("customerService") || 1),
+      overallExperience: Number(formData.get("overallExperience") || 1),
     };
 
     // Create review
-    const response = await createReview(data, token);
+    const response = await createReview(dealerId!, data, token);
 
     if (response.success) {
-      return redirect(`/profile/${dealerId}?review=success`);
+      return redirect(`/profile/${dealerId}`);
     }
 
     return json({ success: false, message: response.message }, { status: 400 });
@@ -239,7 +236,7 @@ function ProfileInfo({
 }
 
 // Route Components
-function ProfileForm({}) {
+function ProfileForm({ }) {
   return (
     <Form className="relative bg-primary p-5 shadow-lg">
       <h3 className="font-montserrat mb-3 text-[14px] font-extrabold capitalize text-white lg:text-[18px]">

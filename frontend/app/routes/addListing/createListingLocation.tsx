@@ -3,7 +3,7 @@ import Heading from "~/components/Heading/heading";
 import IconField from "~/components/IconField/icon";
 import { Input } from "~/components/ui/input";
 
-const CreateListingLocation = () => {
+const CreateListingLocation = ({ initailData }) => {
   return (
     <div className="location pt-10">
       <Heading
@@ -23,6 +23,7 @@ const CreateListingLocation = () => {
         >
           <Input
             name="location"
+            defaultValue={initailData?.location}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             placeholder="Enter ZIP or Address"
@@ -40,6 +41,7 @@ const CreateListingLocation = () => {
         >
           <Input
             name="lat"
+            defaultValue={initailData?.lat}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             disabled
@@ -58,6 +60,7 @@ const CreateListingLocation = () => {
         >
           <Input
             name="lng"
+            defaultValue={initailData?.lng}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="text"
             disabled

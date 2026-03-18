@@ -5,10 +5,16 @@ import { LinksFunction } from "@remix-run/node";
 
 let ReactQuill: any = null;
 
-const CreateListingSellerNote = () => {
+const CreateListingSellerNote = ({ initialData }) => {
   const [editorLoaded, setEditorLoaded] = useState<Boolean>(false);
-  const [content, setContent] = useState<any>("");
+  const [content, setContent] = useState<string>(initialData?.sellet_note || "");
   const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (initialData?.seller_note) {
+      setContent(initialData?.seller_note)
+    }
+  }, [initialData])
 
   useEffect(() => {
     (async () => {
@@ -74,10 +80,11 @@ const CreateListingSellerNote = () => {
             ref={quillRef}
             name="seller_note"
             theme="snow"
-            value={quillRef.current}
+            value={content}
+            defaultValue={initialData?.seller_note}
             modules={modules}
             formats={formats}
-            // onChange={() => setContent(content)}
+            onChange={setContent}
             className="h-48 border-gray-300 md:h-60"
           />
         )}

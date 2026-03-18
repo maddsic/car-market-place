@@ -1,0 +1,40 @@
+@startuml Authentication Flow with Role-Based Redirect
+title Authentication Flow with Role-Based Redirect
+
+actor User as U
+participant "Frontend (React/Remix)" as FE
+participant "Backend (API)" as BE
+participant "Auth Service" as Auth
+participant "Browser Cookie Store" as Cookie
+
+== User Sign-In ==
+U -> FE: Enter email & password
+FE -> BE: POST /login { email, password }
+
+== Backend Validation ==
+BE -> Auth: validateCredentials(email, password)
+Auth --> BE: user object (userId, email, role)
+
+== JWT Creation ==
+BE -> Auth: generateJwtToken({ userId, email, role })
+Auth --> BE: JWT token
+
+== Set HttpOnly Cookie ==
+BE -> Cookie: Set-Cookie: authToken=JWT (HttpOnly, SameSite, Secure)
+BE --> FE: 200 OK { success: true, role }
+
+== Frontend Role Handling ==
+FE -> FE: decode JWT from cookie
+FE -> FE: check token.role
+
+alt role == "agent" or "admin"
+    FE -> FE: navigate("/dashboard")
+else role == "user"
+    FE -> FE: navigate(`/profile/${userId}`)
+end
+
+== Post-Login State ==
+FE -> Cookie: browser sends authToken automatically on requests
+FE -> BE: authenticated requests with cookie
+
+@enduml

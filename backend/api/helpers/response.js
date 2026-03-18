@@ -4,18 +4,18 @@ const { User } = require("../models");
 exports.hasRecords = async (user) => {
   return user
     ? {
-        accept: true,
-        data: user,
-        status: 201,
-      }
+      accept: true,
+      data: user,
+      status: 201,
+    }
     : {
-        accept: false,
-        data: {
-          success: false,
-          message: "No record(s) found.",
-        },
-        status: 404,
-      };
+      accept: false,
+      data: {
+        success: false,
+        message: "No record(s) found.",
+      },
+      status: 404,
+    };
 };
 
 exports.hasLength = (data) => {
@@ -45,17 +45,7 @@ exports.findUser = async (email) => {
   }
 };
 
-// Custom create function
-exports.createUser = async (form) => {
-  try {
-    const newUser = await User.create(form);
-    return this.hasRecords(newUser);
-  } catch (error) {
-    console.log("ERROR FROM CREATE USER HELPER");
-    console.log(error.message);
-    throw error;
-  }
-};
+
 
 // Custom response
 exports.sendResponse = async (res, statusCode, success, message, data = []) => {
