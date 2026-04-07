@@ -1,22 +1,27 @@
-"use strict";
+'use strict';
 
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   const CarBodyType = sequelize.define(
-    "CarBodyType",
+    'CarBodyType',
     {
-      typeId: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true, allowNull: false },
+      typeId: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
       typeName: { type: DataTypes.STRING, allowNull: false },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("NOW"),
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("NOW"),
+        defaultValue: Sequelize.fn('NOW'),
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -35,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     const { Car } = models;
 
     CarBodyType.hasMany(Car, {
-      foreignKey: "carType",
-      as: "cars",
+      foreignKey: 'carType',
+      as: 'cars',
     });
   };
 

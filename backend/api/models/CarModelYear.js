@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = (sequelize, DataTypes) => {
   const CarModelYear = sequelize.define(
-    "CarModelYear",
+    'CarModelYear',
     {
       id: {
         type: DataTypes.UUID,
@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "CarModel",
-          key: "id",
+          model: 'CarModel',
+          key: 'id',
         },
       },
     },
@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  CarModelYear.associate = (models) => {
+  CarModelYear.associate = models => {
     CarModelYear.belongsTo(models.CarModel, {
-      foreignKey: "model_id",
-      as: "model",
+      foreignKey: 'model_id',
+      as: 'model',
     });
   };
 

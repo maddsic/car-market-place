@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    "User",
+    'User',
     {
       userId: {
         type: DataTypes.UUID,
@@ -17,15 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       phone: { type: DataTypes.STRING, allowNull: false },
       address: { type: DataTypes.STRING, allowNull: true },
       username: { type: DataTypes.STRING, allowNull: false, unique: true },
+      avatarUrl: { type: DataTypes.STRING, allowNull: true },
       isVerified: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },
       role: {
-        type: DataTypes.ENUM("admin", "agent", "user"),
+        type: DataTypes.ENUM('admin', 'agent', 'user'),
         allowNull: false,
-        defaultValue: "user",
+        defaultValue: 'user',
       },
       hasWhatsapp: {
         type: DataTypes.BOOLEAN,
@@ -43,21 +44,21 @@ module.exports = (sequelize, DataTypes) => {
   // Associations
   User.associate = function (models) {
     User.hasMany(models.Car, {
-      foreignKey: "userId",
-      as: "cars",
+      foreignKey: 'userId',
+      as: 'cars',
     });
 
     User.hasMany(models.Review, {
-      foreignKey: "userId",
-      as: "reviews",
-      onDelete: "CASCADE",
+      foreignKey: 'userId',
+      as: 'reviews',
+      onDelete: 'CASCADE',
     });
 
     // Reviews written *about* this user (as a dealer)
     User.hasMany(models.Review, {
-      foreignKey: "dealerId",
-      as: "dealerReviews",
-      onDelete: "CASCADE",
+      foreignKey: 'dealerId',
+      as: 'dealerReviews',
+      onDelete: 'CASCADE',
     });
   };
 

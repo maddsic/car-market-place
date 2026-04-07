@@ -1,20 +1,25 @@
-"use strict";
+'use strict';
 
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   const CarModel = sequelize.define(
-    "CarModel",
+    'CarModel',
     {
-      id: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true, allowNull: false },
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
       name: { type: DataTypes.STRING, allowNull: false },
       make_id: {
         type: DataTypes.UUID,
         references: {
-          model: "CarMake",
-          key: "id",
+          model: 'CarMake',
+          key: 'id',
         },
-        onDelete: "SET NULL",
+        onDelete: 'SET NULL',
       },
     },
     {
@@ -26,17 +31,17 @@ module.exports = (sequelize, DataTypes) => {
     const { CarMake, CarModelYear } = models;
 
     CarMake.hasMany(CarModel, {
-      foreignKey: "make_id",
-      onDelete: "SET NULL",
+      foreignKey: 'make_id',
+      onDelete: 'SET NULL',
     });
     CarModel.belongsTo(CarMake, {
-      foreignKey: "make_id",
+      foreignKey: 'make_id',
     });
     // ADD THIS:
     CarModel.hasMany(CarModelYear, {
-      foreignKey: "model_id",
-      as: "years",
-      onDelete: "CASCADE",
+      foreignKey: 'model_id',
+      as: 'years',
+      onDelete: 'CASCADE',
     });
   };
 

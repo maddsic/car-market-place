@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("CarImage", {
+    await queryInterface.createTable('CarImage', {
       imageId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "Car",
-          key: "carId",
+          model: 'Car',
+          key: 'carId',
         },
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
       },
       imageUrl: {
         type: Sequelize.STRING,
@@ -29,12 +29,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("CarImage");
+    await queryInterface.dropTable('CarImage');
   },
 };

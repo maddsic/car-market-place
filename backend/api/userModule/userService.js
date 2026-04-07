@@ -1,4 +1,4 @@
-const { processCarImages } = require("../helpers/processCarImage");
+const { processCarImages } = require('../helpers/processCarImage');
 
 class UserService {
   constructor(userRepository) {
@@ -15,9 +15,9 @@ class UserService {
     const user = await this.userRepository.getUserById(userId);
 
     if (!user) {
-      throw new Error("User ID is required");
+      throw new Error('User ID is required');
     }
-    const userCars = await processCarImages(user.cars)
+    const userCars = await processCarImages(user.cars);
     return { ...user.toJSON(), cars: userCars };
   }
 

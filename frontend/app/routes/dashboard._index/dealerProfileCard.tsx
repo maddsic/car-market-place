@@ -9,15 +9,19 @@ import { FaStar, FaCheckCircle, FaUserEdit } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Link } from "@remix-run/react";
 
-export default function DealerProfileCard() {
-  const dealer = {
-    name: "Kunta Motors",
-    verified: true,
-    rating: 4.8,
-    totalReviews: 132,
-    location: "Atlanta GA, USA",
-    joined: "Jan 2023",
+interface DealerProfileCardProps {
+  profileData?: {
+    fullName: string;
+    verified: boolean;
+    rating: number;
+    totalReviews: number;
+    location: string;
+    joined: string;
   };
+}
+
+export default function DealerProfileCard({ profileData }: DealerProfileCardProps) {
+  const dealer = profileData
 
   return (
     <motion.div
@@ -27,7 +31,7 @@ export default function DealerProfileCard() {
     >
       <Card className="border border-gray-200 shadow-md">
         <CardHeader className="flex flex-col items-center justify-center text-center">
-          <Link to="/dealer/profile">
+          <Link to="/dashboard/profile">
             <img
               src="/sain.jpeg"
               alt="Dealer"
@@ -35,11 +39,11 @@ export default function DealerProfileCard() {
             />
           </Link>
           <CardTitle className="mt-3 text-xl font-semibold text-gray-900">
-            {dealer.name}
+            {dealer?.fullName}
           </CardTitle>
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>{dealer.location}</span>
-            {dealer.verified && (
+            <span>{dealer?.location} {",The Gambia"}</span>
+            {dealer?.verified && (
               <FaCheckCircle
                 className="text-green-500"
                 title="Verified Dealer"
@@ -55,23 +59,23 @@ export default function DealerProfileCard() {
               .map((_, i) => (
                 <FaStar
                   key={i}
-                  className={`${i < Math.round(dealer.rating)
-                      ? "text-yellow-400"
-                      : "text-gray-300"
+                  className={`${i < Math.round(dealer?.rating ?? 0)
+                    ? "text-yellow"
+                    : "text-gray-300"
                     }`}
                 />
               ))}
           </div>
           <p className="text-sm text-gray-500">
-            {dealer.rating} / 5.0 ({dealer.totalReviews} reviews)
+            {dealer?.rating} / 5.0 ({dealer?.totalReviews} reviews)
           </p>
-          <p className="mt-1 text-xs text-gray-400">Joined {dealer.joined}</p>
+          <p className="mt-1 text-xs text-gray-400">Joined {dealer?.joined}</p>
         </CardContent>
 
         <CardFooter className="flex justify-center">
-          <button className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90">
+          <Link to={'/dashboard/profile'} className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90">
             <FaUserEdit size={14} /> Edit Profile
-          </button>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>

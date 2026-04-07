@@ -1,11 +1,10 @@
-const { User, Car, Review } = require("../models");
+const { User, Car, Review } = require('../models');
 
 class UserRepository {
-
   // Get all users with their associated cars and reviews
   async getAllUsers() {
     return User.findAll({
-      include: { model: Car, as: "cars" },
+      include: { model: Car, as: 'cars' },
     });
   }
 
@@ -14,10 +13,14 @@ class UserRepository {
     return User.findOne({
       where: { userId },
       include: [
-        { model: Car, as: "cars" },
-        { model: Review, as: "dealerReviews", include: [{ model: User, as: "user", attributes: ["username"] }] }
-      ]
-    })
+        { model: Car, as: 'cars' },
+        {
+          model: Review,
+          as: 'dealerReviews',
+          include: [{ model: User, as: 'user', attributes: ['username'] }],
+        },
+      ],
+    });
   }
 
   // Update user information
@@ -26,7 +29,7 @@ class UserRepository {
     if (affectedRows > 0) {
       return this.getUserById(userId);
     }
-    throw new Error("User not found or no changes made");
+    throw new Error('User not found or no changes made');
   }
 
   // Delete a user by ID
@@ -34,6 +37,5 @@ class UserRepository {
     return User.destroy({ where: { userId } });
   }
 }
-
 
 module.exports = UserRepository;

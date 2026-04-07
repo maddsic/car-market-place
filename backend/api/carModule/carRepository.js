@@ -1,4 +1,4 @@
-const db = require("../models")
+const db = require('../models');
 
 class CarRepository {
   constructor() {
@@ -30,18 +30,20 @@ class CarRepository {
       where: { carId },
       include: [
         {
-          model: this.models.CarImage, as: "images",
-          attributes: ["imageId", "imageUrl", "isPrimary"]
+          model: this.models.CarImage,
+          as: 'images',
+          attributes: ['imageId', 'imageUrl', 'isPrimary'],
         },
         {
-          model: this.models.User, as: "owner",
+          model: this.models.User,
+          as: 'owner',
         },
-      ]
+      ],
     });
   }
 
   async findCarByIdAndUser(carId, userId) {
-    return await this.models.Car.findOne({ where: { carId, userId } })
+    return await this.models.Car.findOne({ where: { carId, userId } });
   }
 
   // FIND CAR MAKES
@@ -51,10 +53,10 @@ class CarRepository {
         model: this.models.CarModel,
         include: {
           model: this.models.CarModelYear,
-          as: "years"
+          as: 'years',
         },
-        order: ["year", "ASC"]
-      }
+        order: ['year', 'ASC'],
+      },
     });
   }
 
@@ -81,9 +83,9 @@ class CarRepository {
   // UPDATE CAR STATUS
   async updateCarStatus(carId, userId, status) {
     return await this.models.Car.update(
-      { status: status },
+      { status },
       { where: { carId, userId } }
-    )
+    );
   }
 
   //  DELETE CAR
@@ -91,25 +93,20 @@ class CarRepository {
     return await this.models.Car.destroy({ where: { carId, userId } });
   }
 
-
   // ---------------------------------------- RECENT ACTIVITY ---------------------------------------
   // Create recent activities
   async createActivity(activityData) {
-    return await this.models.Activity.create(activityData)
+    return await this.models.Activity.create(activityData);
   }
 
   // Find REcent activities
   async findRecentActivities(userId, limit = 5) {
     return await this.models.Activity.findAll({
-      where: { userId: userId },
-      order: [["createdAt", "DESC"]],
-      limit: limit
-    })
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+      limit,
+    });
   }
-
-
-
-
 }
 
 module.exports = CarRepository;

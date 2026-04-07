@@ -3,7 +3,7 @@ import StatsCard from "./statsCard";
 import DashboardChart from "./dashboardCharts";
 import DealerProfileCard from "./dealerProfileCard";
 import RecentActivities from "./recentActivities";
-import { getDashboardActivities, getDealerDashboardStats } from "~/service/dealer.server";
+import { getDashboardActivities, getDealerDashboardStats, getDealerProfileCardData } from "~/service/dealer.server";
 import { json, redirect, useLoaderData } from "@remix-run/react";
 import { getAuthToken } from "~/utils/authHelpers";
 
@@ -23,7 +23,7 @@ export default function DashboardIndex() {
     return <div className="text-red-500">Error: {data.error}</div>;
   }
   // Get stats from loader data
-  const { stats, activities } = data
+  const { stats, activities, profileData } = data
 
   const statsCardData = [
     {
@@ -72,7 +72,7 @@ export default function DashboardIndex() {
         <div className="col-span-2">
           <DashboardChart />
         </div>
-        <DealerProfileCard />
+        <DealerProfileCard profileData={profileData} />
       </div>
 
       {/* Bottom: Recent Activities */}
@@ -88,13 +88,14 @@ export const loader = async ({ request }: { request: Request }) => {
   }
 
   try {
-    const [stats, activitiesData] = await Promise.all([
+    const [stats, activitiesData, profileData] = await Promise.all([
       getDealerDashboardStats(request),
-      getDashboardActivities(request)
+      getDashboardActivities(request),
+      getDealerProfileCardData(request)
     ])
 
     console.log(activitiesData)
-    return json({ stats: stats as DashboardStats, activities: activitiesData.data || [] });
+    return json({ stats: stats as DashboardStats, activities: activitiesData.data || [], profileData: profileData.data || {} });
   } catch (error) {
     console.error("Dashboard loader error", error)
     return json({ error: "Failed to load dashboard data" }, { status: 500 });

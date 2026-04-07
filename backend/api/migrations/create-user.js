@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("User", {
+    await queryInterface.createTable('User', {
       userId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -21,20 +21,20 @@ module.exports = {
         defaultValue: false,
       },
       role: {
-        type: Sequelize.ENUM("admin", "agent", "user"),
+        type: Sequelize.ENUM('admin', 'agent', 'user'),
         allowNull: false,
-        defaultValue: "user",
+        defaultValue: 'user',
       },
 
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -43,6 +43,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("User");
+    await queryInterface.dropTable('User');
   },
 };

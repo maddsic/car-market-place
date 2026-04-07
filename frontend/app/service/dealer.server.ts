@@ -62,3 +62,43 @@ export async function getDashboardActivities(request: Request) {
   }
   return await response.json();
 }
+
+export async function getDealerProfileCardData(request: Request) {
+  const token = getAuthToken(request);
+  if (!token) {
+    throw new Error("Unauthorized: No auth token found");
+  }
+
+  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-card`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch dealer dashboard Profile Card Data");
+  }
+  return await response.json();
+}
+
+export async function updateDealerProfile(request: Request, formData: FormData) {
+  const token = getAuthToken(request);
+  if (!token) {
+    throw new Error("Unauthorized: No auth token found");
+  }
+
+  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-update`, {
+    method: "PUT",
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+    body: formData
+  });
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Failed to update dealer profile");
+  }
+  return result
+}

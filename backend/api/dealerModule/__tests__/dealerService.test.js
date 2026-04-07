@@ -11,10 +11,10 @@ describe('DealerService', () => {
     // we create a mock repository object with the methods that our service will call.
     mockRepository = {
       getAllDealersWithCarCount: jest.fn(),
-    }
+    };
     // we pass the mocked repository to the service when we create an instance of it
     dealerService = new DealerService(mockRepository);
-  })
+  });
 
   test('getAllDealersWithCarCount should return a list of dealers with car count', async () => {
     // 4. arrange - set up the mock to return a specific value
@@ -34,5 +34,4 @@ describe('DealerService', () => {
     // this ensures that our service actually used the repository.
     expect(mockRepository.getAllDealersWithCarCount).toHaveBeenCalledTimes(1);
   });
-
-})
+});

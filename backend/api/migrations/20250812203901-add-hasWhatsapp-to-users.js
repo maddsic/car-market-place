@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn("User", "hasWhatsapp", {
+    await queryInterface.addColumn('User', 'hasWhatsapp', {
       type: Sequelize.BOOLEAN,
       allowNull: true,
       defaultValue: false, // Default to false if not specified
@@ -11,6 +11,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("User", "hasWhatsapp");
+    await queryInterface.removeColumn('User', 'hasWhatsapp');
   },
 };
