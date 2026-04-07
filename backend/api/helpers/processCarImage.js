@@ -1,8 +1,7 @@
-
-const processCarImages = (cars) => {
+const processCarImages = cars => {
   return Promise.all(
-    cars.map(async (car) => {
-      const data = typeof car.toJSON === "function" ? car.toJSON() : car;
+    cars.map(async car => {
+      const data = typeof car.toJSON === 'function' ? car.toJSON() : car;
       return {
         ...data,
         image: data.imageUrl
@@ -10,7 +9,7 @@ const processCarImages = (cars) => {
           : null,
 
         images: data.images
-          ? data.images.map((img) => ({
+          ? data.images.map(img => ({
             ...img,
             imageUrl: `${process.env.BASE_URL}/image_uploads/${img.imageUrl}`,
           }))
@@ -20,4 +19,17 @@ const processCarImages = (cars) => {
   );
 };
 
-module.exports = { processCarImages };
+
+const processProfileImage = user => {
+  if (!user) return null;
+
+  const data = typeof user.toJSON === 'function' ? user.toJSON() : user;
+  return {
+    ...data,
+    avatarUrl: data.avatarUrl
+      ? `${process.env.BASE_URL}/image_uploads/profiles/${data.avatarUrl}`
+      : null,
+  };
+}
+
+module.exports = { processCarImages, processProfileImage };

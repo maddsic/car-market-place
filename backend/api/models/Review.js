@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 // models/Review.js
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize) => {
+module.exports = sequelize => {
   const Review = sequelize.define(
-    "Review",
+    'Review',
     {
       reviewId: {
         type: DataTypes.UUID,
@@ -50,15 +50,15 @@ module.exports = (sequelize) => {
   Review.associate = function (models) {
     // User who wrote the review
     Review.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "user",
-      onDelete: "CASCADE",
+      foreignKey: 'userId',
+      as: 'user',
+      onDelete: 'CASCADE',
     });
     // Dealer being reviewed
     Review.belongsTo(models.User, {
-      foreignKey: "dealerId",
-      as: "dealer",
-      onDelete: "CASCADE",
+      foreignKey: 'dealerId',
+      as: 'dealer',
+      onDelete: 'CASCADE',
     });
   };
 

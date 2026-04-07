@@ -19,6 +19,7 @@ const allowedOrigins = [
   'http://localhost:3000', // local dev (backend)
 ];
 
+
 // ---------------------------------------------
 // INITIALIZING .ENV VARIABLES
 // ---------------------------------------------
@@ -42,7 +43,10 @@ const dashboardRouter = require('./api/dashboardModule/dealerModule/dealerRoutes
 // ---------------------------------------------
 // LOGGING SETUP
 // ---------------------------------------------
-const accessLogSream = fs.createWriteStream(path.join(__dirname, 'access.logs'), { flags: 'a' });
+const accessLogSream = fs.createWriteStream(
+  path.join(__dirname, 'access.logs'),
+  { flags: 'a' }
+);
 
 // ---------------------------------------------
 // SERVE STATIC FILES - IMAGE UPLOADS
@@ -53,7 +57,7 @@ app.use(
     res.header('Access-Control-Allow-Origin', '*');
     next();
   },
-  express.static(path.join(__dirname, 'image_uploads')),
+  express.static(path.join(__dirname, 'image_uploads'))
 );
 
 // ---------------------------------------------
@@ -65,7 +69,7 @@ app.use(helmet());
 // ✅ CORS setup
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin(origin, callback) {
       // Allow requests with no origin (like Postman or Insomnia)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
@@ -75,7 +79,7 @@ app.use(
       }
     },
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -86,7 +90,9 @@ app.use(morgan('combined', { stream: accessLogSream }));
 // LOGGING EACH REQUEST (HELPS WITH DEBUGGING)
 // ---------------------------------------------
 app.use((req, res, next) => {
-  console.info(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  console.info(
+    `[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`
+  );
   next();
 });
 

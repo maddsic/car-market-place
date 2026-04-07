@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   const CarImage = sequelize.define(
-    "CarImage",
+    'CarImage',
     {
       imageId: {
         type: Sequelize.UUID,
@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "Car",
-          key: "carId",
+          model: 'Car',
+          key: 'carId',
         },
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
       },
       imageUrl: {
         type: DataTypes.STRING,
@@ -38,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
 
   CarImage.associate = function (models) {
     CarImage.belongsTo(models.Car, {
-      foreignKey: "carId",
-      as: "car",
+      foreignKey: 'carId',
+      as: 'car',
     });
   };
 

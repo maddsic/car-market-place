@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("CarModelYear", {
+    await queryInterface.createTable('CarModelYear', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -17,26 +17,26 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "CarModel",
-          key: "id",
+          model: 'CarModel',
+          key: 'id',
         },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("NOW()"),
+        defaultValue: Sequelize.literal('NOW()'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("NOW()"),
+        defaultValue: Sequelize.literal('NOW()'),
       },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("CarModelYear");
+    await queryInterface.dropTable('CarModelYear');
   },
 };

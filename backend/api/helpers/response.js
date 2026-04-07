@@ -1,28 +1,28 @@
-const { User } = require("../models");
+const { User } = require('../models');
 
 // verifies that the user has records
-exports.hasRecords = async (user) => {
+exports.hasRecords = async user => {
   return user
     ? {
-      accept: true,
-      data: user,
-      status: 201,
-    }
+        accept: true,
+        data: user,
+        status: 201,
+      }
     : {
-      accept: false,
-      data: {
-        success: false,
-        message: "No record(s) found.",
-      },
-      status: 404,
-    };
+        accept: false,
+        data: {
+          success: false,
+          message: 'No record(s) found.',
+        },
+        status: 404,
+      };
 };
 
-exports.hasLength = (data) => {
+exports.hasLength = data => {
   return (data && data.length > 0) || (data && Object.keys(data).length > 0);
 };
 
-exports.hasError = (error) => {
+exports.hasError = error => {
   return {
     error: true,
     status: 500,
@@ -34,18 +34,16 @@ exports.hasError = (error) => {
 };
 
 // Find User records by email
-exports.findUser = async (email) => {
+exports.findUser = async email => {
   try {
     const user = await User.findOne({ where: { email } });
 
     return this.hasRecords(user);
   } catch (error) {
-    console.log("ERROR FROM FIND USER HELPER");
+    console.log('ERROR FROM FIND USER HELPER');
     console.log(error.message);
   }
 };
-
-
 
 // Custom response
 exports.sendResponse = async (res, statusCode, success, message, data = []) => {

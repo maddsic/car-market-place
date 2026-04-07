@@ -145,8 +145,6 @@ const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // LOADER - FETCHING CAR MAKES
 export const loader: LoaderFunction = async ({ request }) => {
-  // const token = request.headers.get("Cookie")?.split("refreshToken=")?.[1];
-
   const url = new URL(request.url);
   //
   const section = url.searchParams.get("section");

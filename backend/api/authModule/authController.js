@@ -1,8 +1,8 @@
-const { sendResponse } = require("../helpers/response");
-const { registerSchema, loginSchema } = require("./validations");
+const { sendResponse } = require('../helpers/response');
+const { registerSchema, loginSchema } = require('./validations');
 
 //
-const isDevelopment = process.env.NODE_ENV === "development";
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 class AuthController {
   constructor(authService) {
@@ -18,61 +18,50 @@ class AuthController {
 
     try {
       const response = await this.authService.registerUser(req.body);
-      return sendResponse(res, response.status, response.status < 400, response.message, response.data);
+      return sendResponse(
+        res,
+        response.status,
+        response.status < 400,
+        response.message,
+        response.data
+      );
     } catch (error) {
-      console.error("REGISTER ERROR:", err.message);
+      console.error('REGISTER ERROR:', err.message);
       next(err);
     }
-  }
+  };
 
   // Login route
   login = async (req, res, next) => {
     const { error } = loginSchema.validate(req.body);
-    if (error)
-      return sendResponse(res, 400, false, error.details[0].message);
+    if (error) return sendResponse(res, 400, false, error.details[0].message);
 
     try {
-      const result = await this.authService.loginUser(req.body.email, req.body.password);
+      const result = await this.authService.loginUser(
+        req.body.email,
+        req.body.password
+      );
 
       if (result.status !== 200)
         return sendResponse(res, result.status, false, result.message);
 
-      res.cookie("authToken", result.token, {
+      res.cookie('authToken', result.token, {
         httpOnly: true,
         secure: !isDevelopment,
-        sameSite: isDevelopment ? "lax" : "none",
-        path: "/",
+        sameSite: isDevelopment ? 'lax' : 'none',
+        path: '/',
         maxAge: 60 * 60 * 1000,
       });
 
-      return sendResponse(res, 200, true, "User logged in successfully!");
+      return sendResponse(res, 200, true, 'User logged in successfully!');
     } catch (err) {
-      console.error("LOGIN ERROR:", err.message);
+      console.error('LOGIN ERROR:', err.message);
       next(err);
     }
   };
 }
 
 module.exports = AuthController;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Register route
 // exports.register = async (req, res, next) => {

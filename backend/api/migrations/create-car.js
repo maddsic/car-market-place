@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Car", {
+    await queryInterface.createTable('Car', {
       carId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -13,8 +13,8 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "User", // table name
-          key: "userId",
+          model: 'User', // table name
+          key: 'userId',
         },
         // onDelete: "SET NULL",
       },
@@ -24,7 +24,7 @@ module.exports = {
       year: { type: Sequelize.INTEGER, allowNull: false },
       price: { type: Sequelize.DECIMAL(10, 2), allowNull: false },
       mileage: { type: Sequelize.INTEGER, allowNull: false },
-      fuelType: { type: Sequelize.ENUM("petrol", "gas"), allowNull: false },
+      fuelType: { type: Sequelize.ENUM('petrol', 'gas'), allowNull: false },
       description: { type: Sequelize.STRING, allowNull: true },
       imageUrl: { type: Sequelize.STRING, allowNull: false },
       engineType: { type: Sequelize.STRING, allowNull: false },
@@ -32,7 +32,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue: "available",
+        defaultValue: 'available',
       },
       isPremium: {
         type: Sequelize.BOOLEAN,
@@ -43,12 +43,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -58,8 +58,8 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("carBodyType", null, {});
+    await queryInterface.bulkDelete('carBodyType', null, {});
 
-    await queryInterface.dropTable("Car");
+    await queryInterface.dropTable('Car');
   },
 };

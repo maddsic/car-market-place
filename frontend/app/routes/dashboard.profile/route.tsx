@@ -1,11 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaUser, FaCamera, FaSave, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-import { Form } from "@remix-run/react";
+import { Form, json, useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { getDealerProfileCardData, updateDealerProfile } from "~/service/dealer.server";
+import { toast } from "react-toastify";
 
 export default function ProfileSettings() {
   // Temporary state for image preview
-  const [preview, setPreview] = useState("/sain.jpeg");
+  const [preview, setPreview] = useState<string | null>(null);
+  const actionData = useActionData<typeof action>();
+  const { profile } = useLoaderData<typeof loader>();
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  const user = profile.data;
+  const ProfileDisplayImage = preview || user.avatarUrl || "/sain.png";
+  console.log("Action Data", actionData)
+  console.log("Action Data", actionData?.success)
+
+
+  useEffect(() => {
+    if (actionData?.success) {
+      toast.success("Profile Updated Successfully!")
+    }
+  }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -25,18 +45,18 @@ export default function ProfileSettings() {
         <p className="text-gray-500 text-sm">Update your profile information and public branding.</p>
       </div>
 
-      <Form method="post" encType="multipart/form-data" className="space-y-8">
+      <Form method="put" encType="multipart/form-data" className="space-y-8">
         {/* --- SECTION 1: AVATAR & LOGO --- */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8">
           <div className="relative group">
             <img
-              src={preview}
-              alt="Profile"
+              src={ProfileDisplayImage}
+              alt="Profile image"
               className="h-32 w-32 rounded-full object-cover border-4 border-gray-50 shadow-inner"
             />
             <label className="absolute bottom-0 right-0 bg-primary p-2 rounded-full text-white cursor-pointer hover:scale-110 transition shadow-lg">
               <FaCamera size={16} />
-              <input type="file" name="avatar" className="hidden" onChange={handleImageChange} accept="image/*" />
+              <input type="file" name="avatarUrl" className="hidden" onChange={handleImageChange} accept="image/*" />
             </label>
           </div>
           <div className="text-center md:text-left">
@@ -62,7 +82,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   name="first_name"
-                  defaultValue="Sain"
+                  defaultValue={user?.first_name}
                   className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
                 />
               </div>
@@ -74,7 +94,7 @@ export default function ProfileSettings() {
               <input
                 type="text"
                 name="last_name"
-                defaultValue="Kunta"
+                defaultValue={user?.last_name}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
               />
             </div>
@@ -89,7 +109,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   name="username"
-                  defaultValue="kuntamotors"
+                  defaultValue={user?.username}
                   className="w-full px-4 py-2 border border-gray-200 rounded-r-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
                 />
               </div>
@@ -104,7 +124,7 @@ export default function ProfileSettings() {
                 </span>
                 <input
                   type="email"
-                  value="kunta@motors.com"
+                  value={user?.email}
                   disabled
                   className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed"
                 />
@@ -121,7 +141,8 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   name="phone"
-                  defaultValue="+1 404-000-0000"
+                  defaultValue={user?.phone}
+
                   className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
                 />
               </div>
@@ -137,7 +158,8 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   name="address"
-                  defaultValue="Atlanta, GA"
+                  defaultValue={user?.address}
+
                   className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
                 />
               </div>
@@ -151,7 +173,7 @@ export default function ProfileSettings() {
           <button type="button" className="px-6 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
             Cancel
           </button>
-          <button type="submit" className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 shadow-md transition">
+          <button type="submit" disabled={isSubmitting} className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 shadow-md transition">
             <FaSave size={14} /> Save Changes
           </button>
         </div>
@@ -159,3 +181,33 @@ export default function ProfileSettings() {
     </motion.div>
   );
 }
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // 1. Fetch the user data from your API
+  const profile = await getDealerProfileCardData(request);
+
+  // 2. Return it to the frontend
+  return json({ profile });
+};
+
+// Form submission handler for updating profile
+export const action = async ({ request }: ActionFunctionArgs) => {
+  try {
+    // 1. Extract the multipart data from the incoming Remix request
+    const formData = await request.formData();
+
+    // 2. Call your updated service function
+    const result = await updateDealerProfile(request, formData);
+
+    // 3. Return success to the UI
+    return json({ success: true, user: result.data });
+  } catch (error: any) {
+    // 4. Catch errors and send back to useActionData
+    return json({ success: false, error: error.message }, { status: 400 });
+  }
+};
+
+
+
+
+

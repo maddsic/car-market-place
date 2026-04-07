@@ -1,4 +1,4 @@
-const { processCarImages } = require("../helpers/processCarImage");
+const { processCarImages } = require('../helpers/processCarImage');
 
 // Service for handling business logic related to dealers
 class DealerService {
@@ -32,7 +32,10 @@ class DealerService {
   async getDealerByIdWithFilteredCars(userId, query) {
     const filters = this.searchFilters(query);
 
-    const dealer = await this.dealerRepository.getDealerWithFilteredCars(userId, filters);
+    const dealer = await this.dealerRepository.getDealerWithFilteredCars(
+      userId,
+      filters
+    );
 
     if (!dealer) return null;
 
@@ -41,7 +44,6 @@ class DealerService {
 
     return data;
   }
-
 }
 
 module.exports = DealerService;

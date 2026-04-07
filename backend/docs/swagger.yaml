@@ -49,11 +49,11 @@ paths:
                 hasWhatsapp:
                   type: boolean
       responses:
-        "201":
+        '201':
           description: User created successfully
-        "400":
+        '400':
           description: Invalid input data
-        "409":
+        '409':
           description: Email already exists
 
   /auth/login:
@@ -73,11 +73,11 @@ paths:
                 password:
                   type: string
       responses:
-        "200":
+        '200':
           description: Login successful
-        "400":
+        '400':
           description: Authentication failed
-        "401":
+        '401':
           description: Invalid credentials
 
   /cars:
@@ -97,9 +97,9 @@ paths:
             type: string
           description: The value to filter the section by
       responses:
-        "200":
+        '200':
           description: Cars fetched successfully
-        "404":
+        '404':
           description: No records found
     post:
       tags: [Cars]
@@ -127,9 +127,9 @@ paths:
                   type: string
                   format: binary
       responses:
-        "201":
+        '201':
           description: Car created successfully
-        "400":
+        '400':
           description: Validation error
 
   /cars/{carId}:
@@ -144,9 +144,9 @@ paths:
             type: string
           description: Car UUID
       responses:
-        "200":
+        '200':
           description: Car details fetched successfully
-        "404":
+        '404':
           description: Car not found
     put:
       tags: [Cars]
@@ -166,9 +166,9 @@ paths:
             schema:
               type: object
       responses:
-        "200":
+        '200':
           description: Car updated successfully
-        "409":
+        '409':
           description: Update failed
     delete:
       tags: [Cars]
@@ -182,9 +182,9 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Car deleted successfully
-        "404":
+        '404':
           description: Car not found
 
   /cars/latest-cars:
@@ -192,9 +192,9 @@ paths:
       tags: [Cars]
       summary: Get the latest 8 cars
       responses:
-        "200":
+        '200':
           description: Latest cars fetched successfully
-        "404":
+        '404':
           description: No cars found
 
   /cars/premium-cars:
@@ -202,9 +202,9 @@ paths:
       tags: [Cars]
       summary: Get premium cars (limit 3)
       responses:
-        "200":
+        '200':
           description: Premium cars fetched successfully
-        "404":
+        '404':
           description: No premium cars found
 
   /cars/carmakes:
@@ -212,7 +212,7 @@ paths:
       tags: [Cars]
       summary: Get all car makes
       responses:
-        "200":
+        '200':
           description: Car makes fetched successfully
     post:
       tags: [Cars]
@@ -230,9 +230,9 @@ paths:
                   type: string
                   format: binary
       responses:
-        "201":
+        '201':
           description: Car make created successfully
-        "400":
+        '400':
           description: Error creating car make
 
   /cars/carmodels:
@@ -249,9 +249,9 @@ paths:
                 make_id:
                   type: string
       responses:
-        "200":
+        '200':
           description: Car models fetched successfully
-        "404":
+        '404':
           description: No models found
 
   /cars/bodyType:
@@ -259,9 +259,9 @@ paths:
       tags: [Cars]
       summary: Get all car body types
       responses:
-        "200":
+        '200':
           description: Car body types fetched successfully
-        "404":
+        '404':
           description: No records found
 
   /cars/search:
@@ -286,9 +286,9 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Cars found
-        "404":
+        '404':
           description: No cars found
 
   /dealers:
@@ -296,9 +296,9 @@ paths:
       tags: [Dealers]
       summary: Get all car dealers
       responses:
-        "200":
+        '200':
           description: Dealers fetched successfully
-        "404":
+        '404':
           description: No dealers found
 
   /dealers/search-dealers:
@@ -319,9 +319,9 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Dealers found
-        "404":
+        '404':
           description: No dealers found
 
   /dealers/filtered-cars/{userId}:
@@ -347,9 +347,9 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Dealer and cars fetched successfully
-        "404":
+        '404':
           description: Dealer not found
 
 components:
