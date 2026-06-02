@@ -24,13 +24,25 @@ const PremiumCars = () => {
   };
 
   const handleNavigateToListings = (carId: string) => {
-    // Navigate to the listing page for the selected car
     navigate(`/listings/${carId}`);
+  };
+
+  // Helper to determine badge color
+  const getStatusStyles = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case "sold":
+        return "bg-red-600 text-white";
+      case "reserved":
+        return "bg-blue-500 text-white";
+      case "pending":
+        return "bg-orange-500 text-white";
+      default: // available
+        return "bg-green-500 text-white";
+    }
   };
 
   return (
     <div className="max__container relative">
-      {/* SECTION TITLE */}
       <Heading
         title="Latest Premium"
         colouredText="Cars"
@@ -38,25 +50,38 @@ const PremiumCars = () => {
       />
 
       <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
-        {premiumCars.map((car: Car, i: number) => (
+        {premiumCars.map((car: Car) => (
           <div
-            className="relative cursor-pointer overflow-clip"
+            className="group relative cursor-pointer overflow-clip rounded-lg border border-transparent hover:border-gray-200 transition-all duration-300"
             key={car.carId}
             onClick={() => handleNavigateToListings(car.carId)}
           >
-            <Image car={car} />
-            <div className="mt-3 flex justify-between">
+            {/* --- STATUS BADGE --- */}
+            <div className={`absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg ${getStatusStyles(car.status)}`}>
+              {car.status || "Available"}
+            </div>
+
+            <div className="relative overflow-hidden">
+              <Image car={car} />
+              {/* Hover overlay effect */}
+              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+
+            <div className="mt-3 flex justify-between px-1">
               <CarMakeAndModel car={car} />
               <Price price={car.price} className="text-[14px]" />
             </div>
-            <CarDescription car={car} />
-            <Special />
-            <hr className="mt-3 border-gray-300" />
+
+            <div className="px-1">
+              <CarDescription car={car} />
+              <Special />
+            </div>
+
+            <hr className="mt-3 border-gray-100" />
           </div>
         ))}
       </div>
 
-      {/* BUTTON */}
       <div
         className="relative mt-5 flex w-full items-center justify-center shadow-sm lg:mt-10"
         onClick={() => handleNavigate("premium", "all")}
@@ -73,5 +98,4 @@ const PremiumCars = () => {
 };
 
 export default PremiumCars;
-
 export const links: LinksFunction = () => [...loaderLinks()];

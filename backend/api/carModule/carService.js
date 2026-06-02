@@ -104,6 +104,7 @@ class CarService {
   async getPremiumCars() {
     const cars = await this.carRepository.findAllCars({
       where: { isPremium: true },
+      attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType'],
       limit: 3,
     });
     return processCarImages(cars);
@@ -112,11 +113,12 @@ class CarService {
   // 4. GET LATEST CARS FOR HOMEPAGE
   async getLatestCars() {
     const cars = await this.carRepository.findAllCars({
+      attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType', 'stockNumber'],
       include: [
         {
           model: User,
           as: 'owner',
-          attributes: ['first_name', 'last_name', 'phone', 'role'],
+          attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
         },
       ],
       // order: ["createdAt", "ASC"],

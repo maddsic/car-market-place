@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
-const isProduction = process.env.NODE_ENV === 'production';
+// const isProduction = process.env.NODE_ENV === 'production';
 
 const allowedOrigins = [
   'http://localhost:5173', // local dev (frontend)
@@ -39,6 +39,7 @@ const carRouter = require('./api/carModule/carRoute');
 const dealerRouter = require('./api/dealerModule/dealerRoute');
 const reviewRouter = require('./api/reviewModule/reviewRoute');
 const dashboardRouter = require('./api/dashboardModule/dealerModule/dealerRoutes');
+const messageRouter = require('./api/messageModule/messageRoute');
 
 // ---------------------------------------------
 // LOGGING SETUP
@@ -110,5 +111,6 @@ app.use('/api/v1/cars', carRouter);
 app.use('/api/v1/dealers', dealerRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/dealer-dashboard', dashboardRouter);
+app.use('/api/v1/messages', messageRouter);
 
 module.exports = app;

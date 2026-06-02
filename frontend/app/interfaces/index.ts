@@ -17,6 +17,7 @@ export interface CarMake {
 }
 
 export interface Owner {
+  avatarUrl: string;
   userId: string;
   first_name: string;
   last_name: string;

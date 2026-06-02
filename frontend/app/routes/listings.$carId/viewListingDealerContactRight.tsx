@@ -10,6 +10,10 @@ import { Link } from "@remix-run/react";
 
 export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
   const fullname = `${car?.owner?.first_name} ${car?.owner?.last_name}`;
+  const profileImage = car?.owner?.avatarUrl ? `http://localhost:3000/image_uploads/profiles/${car?.owner?.avatarUrl}` : '/sain.jpeg';
+
+
+
   return (
     <aside className="relative col-span-3 hidden flex-col gap-3 lg:flex">
       <Price
@@ -19,7 +23,7 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
       {/* SELLER PIC */}
       <Link to={`/profile/${car?.owner?.userId}`} className="mt-5">
         <ListingSellerImage
-          imgUrl="/sain.jpeg"
+          imgUrl={profileImage || "/sain.jpeg"}
           name={fullname}
           className="h-22 w-22 border-b"
         />

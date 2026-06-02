@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'cars',
     });
 
+    // Reviews written *by* this user (as a customer)
     User.hasMany(models.Review, {
       foreignKey: 'userId',
       as: 'reviews',
@@ -58,6 +59,12 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Review, {
       foreignKey: 'dealerId',
       as: 'dealerReviews',
+      onDelete: 'CASCADE',
+    });
+    // Messages sent to this user (as a dealer)
+    User.hasMany(models.Message, {
+      foreignKey: 'dealerId',
+      as: 'receivedMessages',
       onDelete: 'CASCADE',
     });
   };

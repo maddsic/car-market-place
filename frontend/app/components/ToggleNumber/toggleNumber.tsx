@@ -1,15 +1,17 @@
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
 import { Car } from "~/interfaces";
 
+interface ToggleShowNumberProps {
+  showNumber: Boolean;
+  handleShowNumber: () => void;
+  car: Car;
+}
+
 export const ToggleShowNumber = ({
   showNumber,
   handleShowNumber,
   car,
-}: {
-  showNumber: Boolean;
-  handleShowNumber: () => void;
-  car: Car;
-}) => {
+}: ToggleShowNumberProps) => {
   return (
     <div className="mt-5 flex cursor-pointer items-center gap-3 px-2 py-4">
       <BsFillTelephoneOutboundFill className="text-yellow" size={10} />

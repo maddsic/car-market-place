@@ -59,7 +59,7 @@ const ContactPage = () => {
                 <Subscribe classNames="md:hidden" />
                 <Button
                   title={"Submit"}
-                  classNames="mt-10 text-white shadow w-full p-3"
+                  className="mt-10 text-white shadow w-full p-3"
                 />
               </div>
             </div>

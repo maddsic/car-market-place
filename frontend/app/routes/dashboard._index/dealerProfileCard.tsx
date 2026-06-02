@@ -9,6 +9,7 @@ import { FaStar, FaCheckCircle, FaUserEdit } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Link } from "@remix-run/react";
 
+
 interface DealerProfileCardProps {
   profileData?: {
     fullName: string;
@@ -17,11 +18,13 @@ interface DealerProfileCardProps {
     totalReviews: number;
     location: string;
     joined: string;
+    avatarUrl: string;
   };
 }
 
 export default function DealerProfileCard({ profileData }: DealerProfileCardProps) {
   const dealer = profileData
+
 
   return (
     <motion.div
@@ -33,7 +36,7 @@ export default function DealerProfileCard({ profileData }: DealerProfileCardProp
         <CardHeader className="flex flex-col items-center justify-center text-center">
           <Link to="/dashboard/profile">
             <img
-              src="/sain.jpeg"
+              src={dealer?.avatarUrl}
               alt="Dealer"
               className="h-20 w-20 rounded-full border-4 border-primary shadow-md"
             />

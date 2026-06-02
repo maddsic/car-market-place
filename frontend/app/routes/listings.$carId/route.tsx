@@ -1,24 +1,29 @@
-import React from "react";
-import { useLoaderData, useNavigation } from "@remix-run/react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { json, useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@remix-run/node";
+// icons
 import { GrSchedule } from "react-icons/gr";
 import { MdAccessTime, MdShare } from "react-icons/md";
+import { toast } from "react-toastify";
+// interfaces
+import { Car } from "~/interfaces";
+// Helper functions
+import { apiFetch } from "~/utils/apiFetch";
+// components
 import Divider from "~/components/Divider/divider";
 import Heading from "~/components/Heading/heading";
-import { Car } from "~/interfaces";
-
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { apiFetch } from "~/utils/apiFetch";
+import LoadingIndicator from "~/components/Loader/loadingIndicator";
+import SellerNote from "./sellerNote";
 import { BigImage } from "./bigImage";
 import { ListingSmallImg } from "./listingImg";
 import { ViewListingCarInfo } from "./viewListingCarInfo";
 import { ViewListingCarFeatures } from "./carFeatures";
 import { ViewListingDealerContactInfoRight } from "./viewListingDealerContactRight";
-import { ListingContactInfo } from "./contactInfoRight";
+import { ListingContactInfoBottom } from "./contactInfoRight";
 import { MessageDealerForm } from "./messageDealerForm";
 import { ListingSubHeader } from "./submenu";
-import SubHeading from "~/components/Heading/subheading";
-import LoadingIndicator from "~/components/Loader/loadingIndicator";
+import { sendMessageToDealer } from "~/service/dealer.server";
+import { messageDealerSchema } from "~/validations/validateForm";
 
 interface loaderData {
   car: Car | null;
@@ -26,18 +31,37 @@ interface loaderData {
 
 const ViewListing = () => {
   const { car } = useLoaderData<loaderData>();
+  const messageActionData = useActionData<typeof action>();
+
   const [index, setIndex] = useState<number>(
     car?.images?.findIndex((img) => img.isPrimary) || 0,
   );
   const [showNumber, setShowNumber] = useState<Boolean>(false);
+
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
-
-  console.log("car images", index);
+  const isSubmitting = navigation.state === "submitting" && navigation.formData?.get("content") !== undefined;
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   const handleShowNumber = (): void => {
     setShowNumber(!showNumber);
   };
+
+  useEffect(() => {
+    if (!messageActionData) return;
+
+    if ("success" in messageActionData && messageActionData.success === true) {
+      toast.success(messageActionData.message || "Message sent to dealer successfully");
+      // Reset the form after successful submission
+      if (formRef.current) {
+        formRef.current.reset()
+      }
+    }
+    else if ("success" in messageActionData && messageActionData.success === false) {
+      toast.error(messageActionData.message || messageActionData?.error || "Failed to send message to dealer");
+    }
+
+  }, [messageActionData])
 
   return (
     <React.Fragment>
@@ -93,13 +117,13 @@ const ViewListing = () => {
         <div className="max__container">
           <aside className="mt-10 grid grid-cols-1 md:grid-cols-12 md:gap-5">
             {/*BOTTOM: ASIDE LEFT - DEALER CONTACT INFO */}
-            <ListingContactInfo
+            <ListingContactInfoBottom
               car={car!}
               showNumber={showNumber}
               handleShowNumber={handleShowNumber}
             />
             {/*BOTTOM: ASIDE RIGHT - FORM */}
-            <MessageDealerForm />
+            <MessageDealerForm formRef={formRef} isSubmitting={isSubmitting} messageActionData={messageActionData} />
           </aside>
         </div>
       </section>
@@ -138,32 +162,65 @@ function SubHeader({ car }: { car: Car }) {
   );
 }
 
-function SellerNote({}) {
-  return (
-    <div className="mt-4">
-      <SubHeading title="seller's notes" />
-      <p className="gray__text-light mt-4 font-sans text-[14px] md:text-[12px]">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat optio,
-        incidunt eligendi itaque, impedit, nemo velit voluptatibus ratione amet
-        commodi minus neque repellat sequi explicabo? Animi voluptatem autem
-        ipsam temporibus. Lorem ipsum dolor sit amet consectetur adipisicing
-        elit. Quo temporibus similique deserunt labore unde, esse alias culpa,
-        eos quia id ex quidem debitis odit numquam perspiciatis saepe quae
-        nostrum necessitatibus. numquam perspiciatis saepe quae nostrum
-        necessitatibus.
-      </p>
-    </div>
-  );
-}
+
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
 
+// Loader function to fetch car details based on carId from the URL params
 export async function loader({ params }: LoaderFunctionArgs) {
   const { carId } = params;
 
   const car = await apiFetch(`${apiBaseUrl}${apiVersion}/cars/${carId}`);
-  // console.log(car);
-
-  return { car: car.data };
+  if (!car || !car.data) {
+    return json({ car: null }, { status: 404 })
+  }
+  return json({ car: car.data });
 }
+
+// Action function to handle the form submission from MessageDealerForm
+export async function action({ request, params }: LoaderFunctionArgs) {
+  // 1. extract carId from params
+  const { carId } = params
+
+  if (!carId) {
+    return json({ error: "Car ID is required" }, { status: 400 });
+  }
+
+  try {
+    // 2. Read the incoming formdata
+    const formData = await request.formData();
+    const values = {
+      content: formData.get("content")?.toString().trim(),
+      senderName: formData.get("senderName")?.toString().trim(),
+      senderEmail: formData.get("senderEmail")?.toString().trim(),
+      senderPhone: formData.get("senderPhone")?.toString().trim(),
+    };
+
+    // 3. Validate the form data using the messageDealerSchema
+    const validatedResult = messageDealerSchema.safeParse(values);
+    if (!validatedResult.success) {
+      const errors: Record<string, string> = {};
+      for (const issue of validatedResult.error.issues) {
+        const fieldName = issue.path[0] as string;
+        errors[fieldName] = issue.message;
+      }
+      return json({ success: false, message: "Validation failed", error: "Validation failed!", errors, values }, { status: 400 });
+    }
+
+    // 4. Append the carId to the formData so that the backend knows which car the message is about
+    formData.append("carId", carId);
+    // 5. Call the service function to send the message to the dealer
+    const result = await sendMessageToDealer(request, formData);
+    // 6. Return a success response
+    return json({ success: true, message: "Message sent to dealer successfully", result, error: null });
+  } catch (error: any) {
+    return json({ success: false, message: error.message || "Failed to send message to dealer", error: error.message || "Failed to send message to dealer" }, { status: 500 });
+  }
+}
+
+
+
+
+
+

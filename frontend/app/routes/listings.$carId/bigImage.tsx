@@ -5,7 +5,7 @@ export const BigImage = ({
   price,
 }: {
   imageUrl: string;
-  price: string;
+  price: number;
 }) => {
   return (
     <div className="relative mb-5 mt-2 max-h-[500px] overflow-clip bg-gray-200">
