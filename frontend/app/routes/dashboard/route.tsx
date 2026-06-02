@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "@remix-run/react";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { FaChartBar, FaCarSide, FaUserCircle } from "react-icons/fa";
+import { FaChartBar, FaCarSide, FaUserCircle, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { DashboardTopNav } from "./dashboardTopNav";
 import { getAuthToken } from "~/utils/authHelpers";
@@ -12,6 +12,11 @@ const navItems = [
     to: "/dashboard/inventory",
     label: "Inventory",
     icon: <FaCarSide size={18} />,
+  },
+  {
+    to: "/dashboard/messages",
+    label: "Messages",
+    icon: <FaEnvelope size={18} />,
   },
   {
     to: "/dashboard/profile",

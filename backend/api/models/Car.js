@@ -133,21 +133,29 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Car.associate = function (models) {
+    // A car belongs to a user (dealer)
     Car.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'owner',
       onDelete: 'CASCADE',
     });
+    // A car belongs to a body type
     Car.belongsTo(models.CarBodyType, {
       foreignKey: 'carType',
       targetKey: 'typeName',
       as: 'bodyType',
     });
+    // A car has many images
     Car.hasMany(models.CarImage, {
       foreignKey: 'carId',
       as: 'images',
       onDelete: 'CASCADE',
     });
+    // A car has many messages
+    Car.hasMany(models.Message, {
+      foreignKey: 'carId',
+      as: 'inquiries',
+    })
   };
 
   Car.beforeCreate(car => {

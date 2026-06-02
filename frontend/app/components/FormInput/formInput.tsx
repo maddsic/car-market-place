@@ -1,6 +1,8 @@
 import { Input } from "~/components/ui/input";
 
 interface FormInputProps {
+  className?: string;
+  error?: string;
   label: string;
   type?: string;
   name: string;
@@ -13,6 +15,8 @@ interface FormInputProps {
 }
 
 export function FormInput({
+  className,
+  error,
   label,
   type = "text",
   name,
@@ -38,7 +42,8 @@ export function FormInput({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="input__bg font-body gray__text-light h-12 w-full rounded-none pl-5 text-xs outline-none"
+        className={`border-slate-200 focus:border-blue-500 focus:ring-blue-500 ${className}`}
+        error={error}
       />
     </div>
   );

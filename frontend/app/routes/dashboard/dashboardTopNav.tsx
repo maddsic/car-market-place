@@ -1,13 +1,18 @@
 import { FaBell, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardTopNav = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="mb-5 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
       <h1 className="text-2xl font-semibold text-primary">
-        Kunta Motors
+        Alpha Motors
       </h1>
       <div className="flex items-center gap-5">
-        <button className="relative text-gray-500 transition hover:text-primary">
+        <button onClick={() => navigate('/dashboard/messages')} className="relative text-gray-500 transition hover:text-primary"
+
+        >
           <FaEnvelope size={22} />
           <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
             3

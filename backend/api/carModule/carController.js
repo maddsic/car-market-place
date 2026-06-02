@@ -11,10 +11,6 @@ class CarController {
       const userId = req.user?.userId;
       const { body, files } = req;
 
-      // console.log('--- BACKEND CREATE HIT ---');
-      // console.log('Body:', req.body);
-      // console.log('Files:', req.files);
-
       const car = await this.carService.createCar(userId, body, files);
 
       return sendResponse(res, 201, true, 'Car created successfully', car);

@@ -32,7 +32,7 @@ class DealerService {
 
   async getDealerProfileCardData(userId) {
     const user = await this.dealerRepo.getDealerProfileCardData(userId);
-    // console.log("User review count", user)
+    console.log("User review count", user)
     if (!user) {
       throw new Error('User not found');
     }

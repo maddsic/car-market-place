@@ -44,3 +44,11 @@ export const createListingValidateor = z.object({
   seller_note: z.string().optional(),
 });
 
+// 1. Keep the schema simple and clear
+export const messageDealerSchema = z.object({
+  content: z.string().min(10, "Message must be at least 10 characters."),
+  senderName: z.string().min(1, "Name is required."),
+  senderEmail: z.string().email("A valid email is required."),
+  senderPhone: z.string().min(7, "Phone number must be at least 7 characters.").optional(),
+});
+

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6382741d-6bbc-4c87-b9b3-b207a5bb9fb1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/backend/access.logs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/access.logs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/carModule/carController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/carModule/carController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/carModule/carService.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/carModule/carService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/dashboardModule/dealerModule/dealerService.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/dashboardModule/dealerModule/dealerService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/middlewares/authMiddleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/middlewares/authMiddleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/models/Car.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/models/Car.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/models/User.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/Button/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/Button/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/FormInput/formInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/FormInput/formInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/LatestCars/latestCars.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/LatestCars/latestCars.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/Navbar/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/Navbar/navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/PremiumCars/premium.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/PremiumCars/premium.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/Price/price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/Price/price.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ToggleNumber/toggleNumber.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ToggleNumber/toggleNumber.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/auth/signin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/auth/signin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/auth/signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/auth/signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/interfaces/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/interfaces/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/_index/route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/_index/route.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/dashboard._index/dealerProfileCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/dashboard._index/dealerProfileCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/dashboard/dashboardTopNav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/dashboard/dashboardTopNav.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/dashboard/route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/dashboard/route.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/inventory/route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/inventory/route.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/bigImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/bigImage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/contactInfoRight.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/contactInfoRight.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/route.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/viewListingDealerContactRight.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/listings.$carId/viewListingDealerContactRight.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/routes/profile.$userId/route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/profile.$userId/route.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/service/dealer.server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/service/dealer.server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/store/carStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/store/carStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/store/carStoreInterfaces.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/store/carStoreInterfaces.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/logo_01.png" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/api/authModule/authController.js" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3DgRimGG8oDHsJiHh8zDZxpsXOf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "message-dealer",
+    "javascript.preferred.runtime.type.id": "node",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/shadowboss/workspace/projects/car-market-place",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.javascript.linters.eslint",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/home/shadowboss/workspace/projects/car-market-place/frontend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-WS-261.23567.141" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6382741d-6bbc-4c87-b9b3-b207a5bb9fb1" name="Changes" comment="" />
+      <created>1778701858832</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778701858832</updated>
+      <workItem from="1778701860966" duration="1430000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

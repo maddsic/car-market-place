@@ -6,12 +6,14 @@ const Button = ({
   disabled,
   type,
   icon,
+  onClick,
 }: {
   title: string | any;
   className?: string;
   disabled?: boolean;
   type?: "submit" | "reset" | "button";
   icon?: React.ReactNode;
+  onClick?: () => void;
 }) => {
   const baseStyles = `rounded-sm bg-yellow px-6 py-2 font-bold uppercase shadow-2xl transition-colors duration-200 ease-in-out text-white ${icon ? "flex items-center gap-2 justify-center" : ""}`;
 
@@ -26,7 +28,7 @@ const Button = ({
     className,
   );
   return (
-    <button type={type} disabled={disabled} className={finalStyles}>
+    <button type={type} disabled={disabled} className={finalStyles} onClick={onClick}>
       {icon && <span className="text-white">{icon}</span>}
       {title}
     </button>

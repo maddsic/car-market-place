@@ -87,7 +87,10 @@ const InventoryPage = () => {
                       key={car.carId}
                       onClick={() => handleNavigateToListings(car.carId!)}
                     >
-                      <Image car={car} className="max-h-[70%] lg:h-full" />
+                      <Image
+                        car={car}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
                       <div className="mt-3 flex justify-between">
                         <CarMakeAndModel car={car} />
                         <Price price={car.price} className="text-[14px]" />

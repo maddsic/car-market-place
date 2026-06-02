@@ -5,22 +5,27 @@ import { Car } from "~/interfaces";
 import { ListingSellerImage } from "./listingSeller";
 import { Contact } from "~/components/listing";
 
-export const ListingContactInfo = ({
-  showNumber,
-  handleShowNumber,
-  car,
-}: {
+interface ListingContactInfoBottomProps {
   showNumber: Boolean;
   handleShowNumber: () => void;
   car: Car;
-}) => {
+}
+
+export const ListingContactInfoBottom = ({
+  showNumber,
+  handleShowNumber,
+  car,
+}: ListingContactInfoBottomProps) => {
+
+  const profileImage = car?.owner?.avatarUrl ? `http://localhost:3000/image_uploads/profiles/${car?.owner?.avatarUrl}` : '/sain.jpeg';
+
   return (
     <aside className="col-span-12 box-border md:col-span-5 lg:col-span-4">
       <div className="mt-5 border-t-4 border-t-gray-900 bg-white p-4 shadow md:my-10">
         {/* SELLER BIO */}
         <Link to={`/profile/${car?.owner?.userId}`}>
           <ListingSellerImage
-            imgUrl="/sain.jpeg"
+            imgUrl={profileImage ? profileImage : "/sain.jpeg"}
             name={`${car?.owner?.first_name} ${car?.owner?.last_name} `}
             className="h-22 w-22 border-b"
           />
@@ -43,7 +48,6 @@ export const ListingContactInfo = ({
               />
             }
           />
-
           <Contact
             className="py-4 text-[13px] font-semibold shadow"
             text="message us"

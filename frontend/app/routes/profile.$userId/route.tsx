@@ -2,12 +2,12 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { createReview } from "~/utils/user";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
 import Divider from "~/components/Divider/divider";
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { HiOutlineMailOpen } from "react-icons/hi";
 
 import { Input } from "~/components/ui/input";
