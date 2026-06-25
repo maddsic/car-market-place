@@ -11,6 +11,9 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
 // const isProduction = process.env.NODE_ENV === 'production';
 
+
+app.set('trust proxy', 1); // Trust first proxy (needed for secure cookies behind proxies/load balancers)
+
 const allowedOrigins = [
   'http://localhost:5173', // local dev (frontend)
   'http://localhost:5174', // local dev (frontend)
