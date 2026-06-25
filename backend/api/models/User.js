@@ -33,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: false, // Default to false if not specified
       },
+      resetCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      resetCodeExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       freezeTableName: true,

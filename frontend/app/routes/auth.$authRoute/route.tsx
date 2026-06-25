@@ -41,8 +41,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const token = getAuthToken(request);
 
   // Check if token exists
-  if (token) {
-    const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
+  if (token) {   const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
     if (decodedToken?.role === "agent" || decodedToken?.role === "admin") return redirect("/dashboard");
     return redirect(`/profile/${decodedToken?.userId}`);
   }

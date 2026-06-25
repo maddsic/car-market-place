@@ -95,6 +95,15 @@ const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
                 {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </button>
               {actionData?.errors?.password && <DisplayError error={actionData.errors.password} />}
+              {/* 🔑 Forgot Password Link */}
+              <div className="flex justify-end pt-1">
+                <Link
+                  to="/auth/resetPassword"
+                  className="text-xs font-bold text-slate-800 hover:text-blue-700 hover:underline underline-offset-2 transition-colors"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
 
             <Button

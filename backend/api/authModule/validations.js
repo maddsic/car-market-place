@@ -37,3 +37,15 @@ exports.loginSchema = Joi.object({
     .required()
     .messages({ 'any.required': 'Password is requiree.' }),
 });
+
+exports.resetPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+  code: Joi.string().length(6).required(),
+  password: Joi.string().min(6).required(),
+  // 🔒 Enforces that confirmPassword must match the password field exactly
+  confirmPassword: Joi.any()
+    .equal(Joi.ref('password'))
+    .required()
+    .messages({ 'any.only': 'Confirm password must match the new password' })
+});
+
