@@ -62,15 +62,33 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 // ACTION FUNCTION TO HANDLE FORM SUBMISSIONS
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  // GET ROUTE TYPE FROM PARAMS
   const { authRoute } = params;
-  // GET FORM DATA FROM REQUEST
   const formData = await request.formData();
 
   if (authRoute === "signup") {
     return (await handleSignUp(formData)) ?? {};
-  } else if (authRoute === "login") {
-    return (await handleSignIn(formData)) ?? {};
+  }
+
+  if (authRoute === "login") {
+    const loginResult = await handleSignIn(formData);
+    if (loginResult.status === 200) {
+      const setCookie = loginResult.headers.get("Set-Cookie");
+      const tokenMatch = setCookie?.match(/authToken=([^;]+)/);
+      const decoded = tokenMatch
+        ? (jwt.decode(tokenMatch[1]) as AuthTokenPayload | null)
+        : null;
+      const redirectTo =
+        decoded?.role === "agent" || decoded?.role === "admin"
+          ? "/dashboard"
+          : decoded?.userId
+            ? `/profile/${decoded.userId}`
+            : "/";
+
+      return redirect(redirectTo, {
+        headers: setCookie ? { "Set-Cookie": setCookie } : {},
+      });
+    }
+    return loginResult;
   }
 
   return {};

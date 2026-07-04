@@ -46,8 +46,8 @@ Open http://localhost:5173 (Vite default).
 | Role | Email | Password |
 |------|-------|----------|
 | Admin (Inertia only) | admin@example.com | password |
-| Dealer | dana@dealer.test | password |
-| Customer | customer@example.com | password |
+| Dealer | dana@dealer.test | Password1234$ |
+| Customer | customer@example.com | Password1234$ |
 
 Admin UI: http://localhost:3000/admin/login — not part of this Remix app.
 
