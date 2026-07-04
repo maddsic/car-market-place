@@ -12,15 +12,23 @@ This branch (`integrate/car-management-v2`) points the Remix frontend at the
    npm run watch
    ```
 
-2. **MySQL** seeded (`npm run db:seed` in car-management-v2).
+2. **MySQL** seeded in car-management-v2:
+   ```bash
+   cd ../car-management-v2
+   bun artisanNode db:seed
+   # or only demo accounts:
+   bun artisanNode db:seed class=DemoIntegrationSeeder
+   ```
 
-3. **JWT alignment**: `JWT_SECRET` in car-management-v2 `.env` must match
-   `JWT_SECRET_KEY` used when the Remix app verifies tokens (if applicable).
+3. **JWT alignment** (required for dashboard/profile loaders):
+   - `JWT_SECRET` in `car-management-v2/.env`
+   - `JWT_SECRET_KEY` in `frontend/.env` — **same value**
 
 4. Copy env:
    ```bash
    cd frontend
    cp .env.example .env
+   # Set JWT_SECRET_KEY to match car-management-v2 JWT_SECRET
    ```
 
 ## Run Remix against v2
@@ -39,7 +47,7 @@ Open http://localhost:5173 (Vite default).
 |------|-------|----------|
 | Admin (Inertia only) | admin@example.com | password |
 | Dealer | dana@dealer.test | password |
-| Customer | (see UserSeeder) | password |
+| Customer | customer@example.com | password |
 
 Admin UI: http://localhost:3000/admin/login — not part of this Remix app.
 
@@ -56,7 +64,18 @@ See `../car-management-v2/docs/rebuild-plan.md` for the full API contract.
 Run smoke checks from car-management-v2:
 
 ```bash
+cd ../car-management-v2
+./scripts/api-parity-check.sh
+```
+
+Or manually:
+
+```bash
 curl http://localhost:3000/api/v1/health
 curl http://localhost:3000/api/v1/cars/carmakes
 curl http://localhost:3000/api/v1/dealers
+curl -c /tmp/cookies.txt -X POST http://localhost:3000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"dana@dealer.test","password":"password"}'
+curl -b /tmp/cookies.txt http://localhost:3000/api/v1/dealer-dashboard/stats
 ```
