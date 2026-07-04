@@ -1,16 +1,25 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
+import { apiBaseUrl, apiVersion, apiUrl } from "~/config/api";
+
+export { apiBaseUrl, apiVersion, apiUrl };
 
 export const apiEndpoints = {
-  login: `${apiBaseUrl}${apiVersion}/auth/login`,
-  register: `${apiBaseUrl}${apiVersion}/auth/register`,
-  createCar: `${apiBaseUrl}${apiVersion}/cars`,
-  updateCar: `${apiBaseUrl}${apiVersion}/cars/update`,
-  carMakes: `${apiBaseUrl}${apiVersion}/cars/carmakes`,
-  carBodyTypes: `${apiBaseUrl}${apiVersion}/cars/bodyType`,
-  premiumCars: `${apiBaseUrl}${apiVersion}/cars/premium-cars`,
-  latestCars: `${apiBaseUrl}${apiVersion}/cars/latest-cars`,
-  allDealers: `${apiBaseUrl}${apiVersion}/dealers`,
-  createReview: `${apiBaseUrl}${apiVersion}/reviews`,
-  getCarById: `${apiBaseUrl}${apiVersion}/cars`,
+  login: apiUrl("/auth/login"),
+  register: apiUrl("/auth/register"),
+  createCar: apiUrl("/cars"),
+  updateCar: apiUrl("/cars/update"),
+  carMakes: apiUrl("/cars/carmakes"),
+  carModels: apiUrl("/cars/carmodels"),
+  carBodyTypes: apiUrl("/cars/bodyType"),
+  premiumCars: apiUrl("/cars/premium-cars"),
+  latestCars: apiUrl("/cars/latest-cars"),
+  searchCars: apiUrl("/cars/search"),
+  allDealers: apiUrl("/dealers"),
+  searchDealers: apiUrl("/dealers/search-dealers"),
+  createReview: apiUrl("/reviews"),
+  getCarById: apiUrl("/cars"),
+  dealerStats: apiUrl("/dealer-dashboard/stats"),
+  dealerInventory: apiUrl("/dealer-dashboard/inventory"),
+  dealerActivities: apiUrl("/dealer-dashboard/activities"),
+  dealerProfileCard: apiUrl("/dealer-dashboard/profile-card"),
+  dealerProfileUpdate: apiUrl("/dealer-dashboard/profile-update"),
 };

@@ -1,17 +1,13 @@
 import { getAuthToken } from "~/utils/authHelpers";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
-
+import { apiEndpoints } from "~/store/apiEndpoints";
 
 export async function getDealerDashboardStats(request: Request) {
   const token = getAuthToken(request);
-  // console.log(token)
   if (!token) {
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/stats`, {
+  const response = await fetch(apiEndpoints.dealerStats, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +27,7 @@ export async function getDealerDashboardInventory(request: Request) {
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/inventory`, {
+  const response = await fetch(apiEndpoints.dealerInventory, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -50,7 +46,7 @@ export async function getDashboardActivities(request: Request) {
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/activities`, {
+  const response = await fetch(apiEndpoints.dealerActivities, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -69,7 +65,7 @@ export async function getDealerProfileCardData(request: Request) {
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-card`, {
+  const response = await fetch(apiEndpoints.dealerProfileCard, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -88,7 +84,7 @@ export async function updateDealerProfile(request: Request, formData: FormData) 
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-update`, {
+  const response = await fetch(apiEndpoints.dealerProfileUpdate, {
     method: "PUT",
     headers: {
       authorization: `Bearer ${token}`,

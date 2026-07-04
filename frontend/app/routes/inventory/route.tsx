@@ -13,6 +13,7 @@ import { IoCarSportOutline } from "react-icons/io5";
 
 import Special from "~/components/Special/special";
 import { apiFetch } from "~/utils/apiFetch";
+import { apiUrl } from "~/config/api";
 import Price from "~/components/Price/price";
 import CarMakeAndModel from "~/components/CarMakeAndModel/CarMakeAndModel";
 import CarDescription from "~/components/CarDescription/CarDescription";
@@ -139,10 +140,6 @@ const InventoryPage = () => {
 
 export default InventoryPage;
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
-
 // LOADER - FETCHING CAR MAKES
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -168,12 +165,12 @@ export const loader: LoaderFunction = async ({ request }) => {
       if (model) queryParams.append("model", model);
 
       const results = await apiFetch(
-        `${API_BASE_URL}${API_VERSION}/cars/search?${queryParams.toString()}`,
+        `${apiUrl("/cars/search")}?${queryParams.toString()}`,
       );
       cars = results.data;
     } else {
       const result = await apiFetch(
-        `${API_BASE_URL}${API_VERSION}/cars?section=${section}&value=${value}`,
+        `${apiUrl("/cars")}?section=${section}&value=${value}`,
       );
       cars = result.data;
     }

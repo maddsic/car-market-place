@@ -16,6 +16,7 @@ import ProfileTabs from "./profileTabs";
 
 import { getAuthToken } from "~/utils/authHelpers";
 import { verifyJwtToken } from "~/utils/jwt";
+import { apiUrl } from "~/config/api";
 
 const ProfilePage = () => {
   const { user, userCars, dealers, reviews, isUserLoggedIn } =
@@ -97,9 +98,6 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
-
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const dealerId = params.userId;
 
@@ -176,8 +174,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   // Define endpoint based on presence of query params
   const endPoints = queryString
-    ? `${apiBaseUrl}${apiVersion}/dealers/filtered-cars/${userId}?${searchParams.toString()}`
-    : `${apiBaseUrl}${apiVersion}/users/${userId}`;
+    ? `${apiUrl(`/dealers/filtered-cars/${userId}`)}?${searchParams.toString()}`
+    : apiUrl(`/users/${userId}`);
 
   const result = await apiFetch(endPoints);
 

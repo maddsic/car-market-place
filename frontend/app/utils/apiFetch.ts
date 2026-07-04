@@ -1,4 +1,14 @@
-// Custom Fetch fucntion
+/** Standard envelope from car-management-v2 / legacy API (ADR 0002). */
+export type ApiEnvelope<T = unknown> = {
+  success?: boolean;
+  message?: string;
+  data?: T;
+};
+
+/**
+ * Fetch JSON from the API. Expects `{ success, message, data }` for list/detail
+ * routes. Returns the parsed envelope; callers read `.data`.
+ */
 export async function apiFetch(url: string, token?: string) {
   try {
     const response = await fetch(url, {
@@ -8,18 +18,24 @@ export async function apiFetch(url: string, token?: string) {
       },
     });
 
+    const body = (await response.json()) as ApiEnvelope;
+
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch data from ${url}: ${response.statusText}`,
+        body.message || `Failed to fetch data from ${url}: ${response.statusText}`,
       );
     }
 
-    const data = await response.json();
-    return data;
-  } catch (error: any) {
+    // Normalize missing data to [] so empty lists never crash loaders (ADR 0009).
+    if (body.data === undefined || body.data === null) {
+      body.data = [];
+    }
+
+    return body;
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch data";
     console.error("Error fetching data:", error);
-    throw new Response(error.message || "Failed to fetch data", {
-      status: 500,
-    });
+    throw new Response(message, { status: 500 });
   }
 }

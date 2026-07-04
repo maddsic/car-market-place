@@ -9,6 +9,7 @@ import { Car } from "~/interfaces";
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { apiFetch } from "~/utils/apiFetch";
+import { apiUrl } from "~/config/api";
 import { BigImage } from "./bigImage";
 import { ListingSmallImg } from "./listingImg";
 import { ViewListingCarInfo } from "./viewListingCarInfo";
@@ -156,13 +157,10 @@ function SellerNote({}) {
   );
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
-
 export async function loader({ params }: LoaderFunctionArgs) {
   const { carId } = params;
 
-  const car = await apiFetch(`${apiBaseUrl}${apiVersion}/cars/${carId}`);
+  const car = await apiFetch(apiUrl(`/cars/${carId}`));
   // console.log(car);
 
   return { car: car.data };

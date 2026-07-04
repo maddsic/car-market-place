@@ -102,11 +102,6 @@ const Dealers = () => {
 
 export default Dealers;
 
-// BASE URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
-
 // LOADER -GETTING LOADER DATA
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -148,7 +143,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       if (model) searchParams.append("model", model);
 
       const dealersResult = await apiFetch(
-        `${API_BASE_URL}${API_VERSION}/dealers/search-dealers?${searchParams.toString()}`,
+        `${apiEndpoints.searchDealers}?${searchParams.toString()}`,
       );
       dealers = dealersResult.data || [];
     }
