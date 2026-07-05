@@ -6,7 +6,7 @@ import { DashboardTopNav } from "./dashboardTopNav";
 import { getAuthToken } from "~/utils/authHelpers";
 import jwt from "jsonwebtoken";
 
-const navItems = [
+const dealerNavItems = [
   { to: "/dashboard", label: "Overview", icon: <FaChartBar size={18} /> },
   {
     to: "/dashboard/inventory",
@@ -25,12 +25,19 @@ const navItems = [
   },
 ];
 
+const adminNavItems = [
+  { to: "/dashboard", label: "Overview", icon: <FaChartBar size={18} /> },
+  { to: "/dashboard/users", label: "Users", icon: <FaUserCircle size={18} /> },
+  { to: "/dashboard/messages", label: "Messages", icon: <FaEnvelope size={18} /> },
+
+];
+
 export default function DashboardLayout() {
   return (
     <div className="flex bg-gray-50">
       <aside className="flex w-64 flex-col bg-primary p-5 shadow-lg">
         <nav className="font-montserrat mt-3 flex flex-col gap-2">
-          {navItems.map((item) => (
+          {dealerNavItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -89,9 +96,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
 
-  if (decodedToken?.role !== "agent") {
+  if (decodedToken?.role !== "admin" && decodedToken?.role !== "agent") {
     return redirect(`/profile/${decodedToken?.userId}`);
   }
+
   return null;
 }
 
