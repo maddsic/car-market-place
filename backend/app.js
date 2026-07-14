@@ -26,12 +26,12 @@ const allowedOrigins = [
 // ---------------------------------------------
 // INITIALIZING .ENV VARIABLES
 // ---------------------------------------------
-require('dotenv').config();
+// require('dotenv').config();
 
 // ---------------------------------------------
 // INITIALIZING DB AND MODELS
 // ---------------------------------------------
-const { authenticateDBConnection } = require('./db');
+// const { authenticateDBConnection } = require('./db');
 
 // ---------------------------------------------
 // IMPORTING ROUTES
@@ -103,7 +103,10 @@ app.use((req, res, next) => {
 // ---------------------------------------------
 // DATABASE CONNECTION
 // ---------------------------------------------
-authenticateDBConnection();
+// (async () => {
+
+//   await authenticateDBConnection();
+// })
 
 // ---------------------------------------------
 // API ROUTES
