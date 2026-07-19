@@ -22,7 +22,7 @@ authenticateDBConnection()
   .then(() => {
     console.log('Database connected successfully. Syncing tables...');
     // This creates missing tables automatically based on your model definitions
-    return sequelize.sync({ alter: true });
+    return sequelize.sync({ force: true }); // Set force to true if you want to drop and recreate tables (use with caution)
   })
   .then(() => {
     console.log('Database tables verified/synced successfully.');
