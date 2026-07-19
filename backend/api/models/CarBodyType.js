@@ -41,7 +41,9 @@ module.exports = (sequelize, DataTypes) => {
 
     CarBodyType.hasMany(Car, {
       foreignKey: 'carType',
+      sourceKey: 'typeName', // Use typeName as the source key for the association
       as: 'cars',
+      constraints: false, // Disable foreign key constraints for this association
     });
   };
 
