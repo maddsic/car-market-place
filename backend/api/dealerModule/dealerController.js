@@ -10,10 +10,7 @@ class DealerController {
   getDealers = async (req, res, next) => {
     try {
       const dealers = await this.dealerService.getDealers();
-      if (hasLength(dealers)) {
-        return sendResponse(res, 200, true, 'Dealers found', dealers);
-      }
-      return sendResponse(res, 404, false, 'No dealers found', {});
+      return sendResponse(res, 200, true, 'Dealers found', dealers || []);
     } catch (error) {
       console.log('ERROR FROM GET DEALERS CLASS: ' + error.message);
       next(error);
@@ -24,10 +21,7 @@ class DealerController {
   searchDealers = async (req, res, next) => {
     try {
       const dealers = await this.dealerService.searchDealers(req.query);
-      if (hasLength(dealers)) {
-        return sendResponse(res, 200, true, 'Result(s) found...', dealers);
-      }
-      return sendResponse(res, 404, false, 'No result found.', {});
+      return sendResponse(res, 200, true, 'Result(s) found...', dealers || []);
     } catch (error) {
       console.log('ERROR FROM SEARCH DEALER CAR CLASS: ' + error.message);
       next(error);
@@ -49,9 +43,8 @@ class DealerController {
       );
 
       if (dealer) {
-        return sendResponse(res, 200, true, 'Result(s) found...', dealer);
+        return sendResponse(res, 200, true, 'Result(s) found...', dealer || []);
       }
-      return sendResponse(res, 404, false, 'No result found.', {});
     } catch (error) {
       console.log('ERROR FROM GET DEALER BY ID CAR CLASS: ' + error.message);
       next(error);
