@@ -144,6 +144,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'carType',
       targetKey: 'typeName',
       as: 'bodyType',
+      constraints: false, // Disable foreign key constraints for this association
     });
     // A car has many images
     Car.hasMany(models.CarImage, {
