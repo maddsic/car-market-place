@@ -25,9 +25,7 @@ class CarController {
     const { section, value } = req.query;
     try {
       const cars = await this.carService.getCars(section, value);
-      return hasLength(cars)
-        ? sendResponse(res, 200, true, 'Cars retrieved successfully', cars)
-        : sendResponse(res, 404, false, 'No REcord Found');
+      return sendResponse(res, 200, true, 'Cars retrieved successfully', cars || [])
     } catch (error) {
       console.error('ERROR GETTING CARS FROM GetCars Controller:', error);
       return sendResponse(res, 500, false, error.message);
@@ -38,15 +36,13 @@ class CarController {
   getPremiumCars = async (req, res) => {
     try {
       const premiumCars = await this.carService.getPremiumCars();
-      return hasLength(premiumCars)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Premium cars retrieved successfully',
-          premiumCars
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(
+        res,
+        200,
+        true,
+        'Premium cars retrieved successfully',
+        premiumCars || []
+      )
     } catch (error) {
       console.error(
         'ERROR GETTING PREMIUM CARS FROM GetPremiumCars Controller:',
@@ -60,15 +56,14 @@ class CarController {
   getLatestCars = async (req, res) => {
     try {
       const latestCars = await this.carService.getLatestCars();
-      return hasLength(latestCars)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Latest cars retrieved successfully',
-          latestCars
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return
+      sendResponse(
+        res,
+        200,
+        true,
+        'Latest cars retrieved successfully',
+        latestCars || []
+      )
     } catch (error) {
       console.error(
         'ERROR GETTING LATEST CARS FROM GetLatestCars Controller:',
@@ -82,10 +77,7 @@ class CarController {
   getCarById = async (req, res) => {
     try {
       const car = await this.carService.getCarById(req.params.carId);
-
-      return hasLength(car)
-        ? sendResponse(res, 200, true, 'Car retrieved successfully', car)
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(res, 200, true, 'Car retrieved successfully', car)
     } catch (error) {
       console.error(
         'ERROR GETTING CAR BY ID FROM GetCarById Controller:',
@@ -169,9 +161,7 @@ class CarController {
   createCarMake = async (req, res) => {
     try {
       const make = await this.carService.createCarMake(req.body.name, req.file);
-      return make
-        ? sendResponse(res, 201, true, 'Car make created successfully', make)
-        : sendResponse(res, 400, false, 'Failed to create car make');
+      return sendResponse(res, 201, true, 'Car make created successfully', make)
     } catch (error) {
       console.error(
         'ERROR CREATING CAR MAKE FROM CreateCarMake Controller:',
@@ -185,15 +175,13 @@ class CarController {
   getCarMakes = async (req, res) => {
     try {
       const makes = await this.carService.getCarMakes();
-      return hasLength(makes)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Car makes retrieved successfully',
-          makes
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(
+        res,
+        200,
+        true,
+        'Car makes retrieved successfully',
+        makes || []
+      )
     } catch (error) {
       console.error(
         'ERROR GETTING CAR MAKES FROM GetCarMakes Controller:',
@@ -207,15 +195,13 @@ class CarController {
   getCarModels = async (req, res) => {
     try {
       const models = await this.carService.getCarModels(req.params.make_id);
-      return hasLength(models)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Car models retrieved successfully',
-          models
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(
+        res,
+        200,
+        true,
+        'Car models retrieved successfully',
+        models || []
+      )
     } catch (error) {
       console.error(
         'ERROR GETTING CAR MODELS FROM GetCarModels Controller:',
@@ -229,15 +215,7 @@ class CarController {
   getCarBodyTypes = async (req, res) => {
     try {
       const bodyTypes = await this.carService.getBodyTypes();
-      return hasLength(bodyTypes)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Car body types retrieved successfully',
-          bodyTypes
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(res, 200, true, 'Car body types retrieved successfully', bodyTypes || [])
     } catch (error) {
       console.error(
         'ERROR GETTING CAR BODY TYPES FROM GetCarBodyTypes Controller:',
@@ -252,15 +230,13 @@ class CarController {
     try {
       const cars = await this.carService.searchCarInventory(req.query);
       console.log(cars);
-      return hasLength(cars)
-        ? sendResponse(
-          res,
-          200,
-          true,
-          'Search results retrieved successfully',
-          cars
-        )
-        : sendResponse(res, 404, false, 'No Record Found');
+      return sendResponse(
+        res,
+        200,
+        true,
+        'Search results retrieved successfully',
+        cars || []
+      )
     } catch (error) {
       console.error(
         'ERROR SEARCHING CAR INVENTORY FROM SearchCarInventory Controller:',

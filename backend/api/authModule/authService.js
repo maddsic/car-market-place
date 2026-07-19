@@ -9,7 +9,7 @@ class AuthService {
   // REGISTER USER
   async registerUser(data) {
     const existingUser = await this.authRepository.findUserByEmail(
-      userData.email
+      data.email
     );
     if (existingUser) {
       return { status: 409, message: 'User with this email already exists' };
@@ -18,12 +18,12 @@ class AuthService {
     data.password = hashedPassword;
 
     const newUser = await this.authRepository.createUser(data);
-    const { password, ...userData } = newUser.toJSON();
+    const { password, ...formData } = newUser.toJSON();
 
     return {
       status: 201,
-      message: `User ${userData.first_name} ${userData.last_name} created successfully`,
-      data: userData,
+      message: `User ${data.first_name} ${data.last_name} created successfully`,
+      data: data,
     };
   }
 

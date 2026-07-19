@@ -26,8 +26,8 @@ class AuthController {
         response.data
       );
     } catch (error) {
-      console.error('REGISTER ERROR:', err.message);
-      next(err);
+      console.error('REGISTER ERROR:', error.message);
+      next(error);
     }
   };
 
@@ -54,9 +54,9 @@ class AuthController {
       });
 
       return sendResponse(res, 200, true, 'User logged in successfully!');
-    } catch (err) {
-      console.error('LOGIN ERROR:', err.message);
-      next(err);
+    } catch (error) {
+      console.error('LOGIN ERROR:', error.message);
+      next(error);
     }
   };
 
@@ -68,9 +68,9 @@ class AuthController {
     try {
       const result = await this.authService.sendPasswordResetCode(email);
       return sendResponse(res, result.status, result.status === 200, result.message);
-    } catch (err) {
-      console.error('RESET CODE REQ ERROR:', err.message);
-      next(err);
+    } catch (error) {
+      console.error('RESET CODE REQ ERROR:', error.message);
+      next(error);
     }
   };
 
@@ -86,9 +86,9 @@ class AuthController {
       const { email, code, password } = req.body;
       const result = await this.authService.verifyAndResetPassword(email, code, password);
       return sendResponse(res, result.status, result.status === 200, result.message);
-    } catch (err) {
-      console.error('PASSWORD RESET SUBMIT ERROR:', err.message);
-      next(err);
+    } catch (error) {
+      console.error('PASSWORD RESET SUBMIT ERROR:', error.message);
+      next(error);
     }
   };
 }

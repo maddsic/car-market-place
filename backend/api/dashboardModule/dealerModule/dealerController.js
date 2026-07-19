@@ -34,7 +34,7 @@ class DealerController {
           200,
           true,
           'Dealer cars retrieved successfully',
-          cars
+          cars || []
         )
         : sendResponse(res, 404, false, 'No Record Found');
     } catch (error) {
