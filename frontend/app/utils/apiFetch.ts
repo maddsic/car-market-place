@@ -1,4 +1,3 @@
-// Custom Fetch fucntion
 export async function apiFetch(url: string, token?: string) {
   try {
     const response = await fetch(url, {
@@ -10,7 +9,7 @@ export async function apiFetch(url: string, token?: string) {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch data from ${url}: ${response.statusText}`,
+        `Failed to fetch data from ${url}: ${response.statusText} (${response.status})`,
       );
     }
 
@@ -18,8 +17,11 @@ export async function apiFetch(url: string, token?: string) {
     return data;
   } catch (error: any) {
     console.error("Error fetching data:", error);
-    throw new Response(error.message || "Failed to fetch data", {
-      status: 500,
-    });
+
+    // CHANGE THIS: Keep it as a standard Error object so Promise.all can propagate it cleanly
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(error.message || "Failed to fetch data");
   }
 }
