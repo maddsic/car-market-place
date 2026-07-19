@@ -9,7 +9,6 @@ const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
-// const isProduction = process.env.NODE_ENV === 'production';
 
 
 app.set('trust proxy', 1); // Trust first proxy (needed for secure cookies behind proxies/load balancers)
@@ -18,22 +17,11 @@ const allowedOrigins = [
   'http://localhost:5173', // local dev (frontend)
   'http://localhost:5174', // local dev (frontend)
   'https://car-market-place-five.vercel.app', // vercel deployment
-  'https://pumped-polliwog-fast.ngrok-free.app', // ngrok tunnel
+  // 'https://pumped-polliwog-fast.ngrok-free.app', // ngrok tunnel
   'http://localhost:3000', // local dev (backend)
 ];
 
 
-// ---------------------------------------------
-// INITIALIZING .ENV VARIABLES
-// ---------------------------------------------
-// require('dotenv').config();
-
-// ---------------------------------------------
-// INITIALIZING DB AND MODELS
-// ---------------------------------------------
-// const { authenticateDBConnection } = require('./db');
-
-// ---------------------------------------------
 // IMPORTING ROUTES
 // ---------------------------------------------
 const authRouter = require('./api/authModule/authRoutes');

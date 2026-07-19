@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "db:migrate": "npx sequelize-cli db:migrate",
     "dev": "bun --watch server.js",
     "test": "jest",
     "lint": "eslint .",

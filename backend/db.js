@@ -10,6 +10,6 @@ exports.authenticateDBConnection = async () => {
     console.log('Database Connection has been established successfully');
   } catch (err) {
     console.log('Unable to connect to database: ' + err.message);
-    console.log('Full error:', err);
+    // console.log('Full error:', err);
   }
 };
