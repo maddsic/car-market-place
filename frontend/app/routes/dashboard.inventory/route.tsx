@@ -17,6 +17,7 @@ import { getAuthToken } from "~/utils/authHelpers";
 
 export default function InventoryDashboard() {
   const { cars, error } = useLoaderData<typeof loader>();
+  const navigate = useNavigate(); // Added for the action button below
 
   if (error) {
     return <div className="p-8 text-red-600 bg-red-50 rounded-lg">{error}</div>;
@@ -36,28 +37,43 @@ export default function InventoryDashboard() {
           </div>
         </header>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-separate border-spacing-0">
-              <thead>
-                <tr className="bg-slate-50/80">
-                  <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Vehicle Details</th>
-                  <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Technical Specs</th>
-                  <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Market Value</th>
-                  <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200 text-right">Status Control</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {cars.map((car: any) => (
-                  <InventoryRow key={car.carId} car={car} />
-                ))}
-              </tbody>
-            </table>
+        {/* --- CONDITION AREA: SHOW INVENTORY ELSE SHOW EMPTY CARD --- */}
+        {cars.length > 0 ? (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-separate border-spacing-0">
+                <thead>
+                  <tr className="bg-slate-50/80">
+                    <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Vehicle Details</th>
+                    <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Technical Specs</th>
+                    <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200">Market Value</th>
+                    <th className="p-5 text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200 text-right">Status Control</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {cars.map((car: any) => (
+                    <InventoryRow key={car.carId} car={car} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          {cars.length === 0 && (
-            <div className="p-20 text-center text-slate-400">No vehicles found.</div>
-          )}
-        </div>
+        ) : (
+          /* --- DESIGNED NICE WORDING EMPTY STATE --- */
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 md:p-20 text-center flex flex-col items-center max-w-xl mx-auto mt-8">
+            <div className="text-5xl mb-4">🚗✨</div>
+            <h2 className="text-xl font-bold text-slate-800">Your lot is completely empty!</h2>
+            <p className="text-slate-500 mt-2 text-sm max-w-sm leading-relaxed">
+              There are currently no active listings in your inventory. Ready to scale your fleet and attract potential buyers?
+            </p>
+            <button
+              onClick={() => navigate("/addListing")}
+              className="mt-6 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-indigo-100 active:scale-95"
+            >
+              + Create First Listing
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -187,12 +203,11 @@ function InventoryRow({ car }: { car: any }) {
   );
 }
 
-
-
+// Loader function to fetch inventory data for the dealer dashboard inventory page
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const token = getAuthToken(request)
+  const token = getAuthToken(request);
   if (!token) {
-    return redirect("/login")
+    return redirect("/login");
   }
 
   try {
@@ -201,18 +216,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       cars: result.data || [],
       error: null
     });
-  } catch (error) {
-    console.error("Inventory Loader Error:", error);
-
+  } catch (error: any) {
     if (error instanceof Error && error.message.includes("Unauthorized")) {
       return redirect("/login");
+    }
+
+    // Convert the message to lowercase so capitalization variations don't matter
+    const errorMessage = error?.message?.toLowerCase() || "";
+    if (errorMessage.includes("no record found")) {
+      return json({
+        cars: [], // Bypasses the error panel and triggers your custom empty layout
+        error: null
+      });
     }
 
     return json({ cars: [], error: "Failed to load inventory." }, { status: 500 });
   }
 };
 
-// routes/dealer.inventory.tsx
+
+// Action function to handle status updates and deletions for vehicles in the inventory
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const intent = formData.get("intent");

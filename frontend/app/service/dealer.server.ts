@@ -25,6 +25,25 @@ export async function getDealerDashboardStats(request: Request) {
 }
 
 // This function will be used to fetch inventory data for the dealer dashboard inventory page
+// export async function getDealerDashboardInventory(request: Request) {
+//   const token = getAuthToken(request);
+//   if (!token) {
+//     throw new Error("Unauthorized: No auth token found");
+//   }
+
+//   const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/inventory`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       authorization: `Bearer ${token}`,
+//     },
+//   });
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch dealer dashboard inventory");
+//   }
+//   return await response.json();
+// }
+
 export async function getDealerDashboardInventory(request: Request) {
   const token = getAuthToken(request);
   if (!token) {
@@ -38,12 +57,24 @@ export async function getDealerDashboardInventory(request: Request) {
       authorization: `Bearer ${token}`,
     },
   });
+
   if (!response.ok) {
-    throw new Error("Failed to fetch dealer dashboard inventory");
+    // Read the actual error message sent by the backend framework
+    const errorText = await response.text();
+    let errorMessage = "Failed to fetch dealer dashboard inventory";
+
+    try {
+      const errorJson = JSON.parse(errorText);
+      errorMessage = errorJson.message || errorMessage;
+    } catch {
+      errorMessage = errorText || errorMessage;
+    }
+
+    throw new Error(errorMessage);
   }
+
   return await response.json();
 }
-
 // This function will be used to fetch activities for the dealer dashboard activities page
 export async function getDashboardActivities(request: Request) {
   const token = getAuthToken(request);

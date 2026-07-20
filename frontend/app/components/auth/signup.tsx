@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Form, Link, useNavigate } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import { cn } from "~/lib/utils";
 
 // Components
 import { FormInput } from "~/components/FormInput/formInput";
@@ -134,7 +133,7 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
 
               <div className="space-y-2">
                 <PasswordRequirements value={password} onChange={(e) => setPassword(e.target.value)} />
-                <input type="hidden" name="password" value={password} />
+                {/* <input type="hidden" name="password" value={password} /> */}
               </div>
             </div>
 
