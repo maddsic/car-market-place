@@ -160,6 +160,9 @@ class CarController {
   // CREATE CAR MAKES
   createCarMake = async (req, res) => {
     try {
+      console.log('REQ.FILE:', req.file);
+      console.log('REQ.BODY:', req.body);
+
       const make = await this.carService.createCarMake(req.body.name, req.file);
       return sendResponse(res, 201, true, 'Car make created successfully', make)
     } catch (error) {
