@@ -8,10 +8,14 @@ import { useNavigate } from "@remix-run/react";
 import { useCarStore } from "~/store/carStore";
 
 const BrowseBymake = () => {
-  const { carMakes } = useCarStore();
+  const { carMakes, fetchCarData } = useCarStore();
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(8);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCarData();
+  }, [fetchCarData]);
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
@@ -72,12 +76,13 @@ const BrowseBymake = () => {
           carMakes
             .slice(startIndex, startIndex + carsPerPage)
             .map((make: any) => (
+
               <div
                 key={make.id}
                 className="flex transform cursor-pointer flex-col items-center justify-center p-4 transition duration-1000 ease-linear animate-out hover:border"
                 onClick={() => handleNavigate("make", make.name)}
               >
-                <img src={make?.image} alt={make.name} className="mb-4 w-20" />
+                <img src={make?.imageUrl} alt={make.name} className="mb-4 h-16 w-20 object-contain" />
                 <p className="text-lg font-medium text-gray-600">{make.name}</p>
               </div>
             ))}

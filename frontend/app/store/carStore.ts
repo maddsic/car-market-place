@@ -42,9 +42,10 @@ export const useCarStore = create<CarStore>((set) => ({
       const res = await Promise.all(
         endPoints.map((endpoint) => apiFetch(endpoint)),
       );
-      // console.log('"fetched car data from store"');
-      // console.log(res[0]?.data);
-      // console.log(res)
+      console.log('"fetched car data from store"');
+      console.log(res[0]?.data);
+      console.log(res)
+      console.log("Raw API Response for Makes:", res[0]);
 
       const results = {
         carMakes: res[0]?.data || [],
