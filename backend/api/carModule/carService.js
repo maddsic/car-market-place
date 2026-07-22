@@ -6,6 +6,7 @@ class CarService {
   constructor(carRepository) {
     this.carRepository = carRepository;
   }
+
   // ---- Helper function to build search filters based on query parameters ----------
   searchFilters = query => {
     const { condition, carType, make, model } = query;
@@ -42,10 +43,14 @@ class CarService {
     if (!bodyType) {
       throw new Error('Invalid Body Type Selected');
     }
+
+    // CHANGED: Use file.path for Cloudinary full URL (fallback to file.filename)
+    const primaryImageUrl = files && files.length > 0 ? (files[0].path || files[0].filename) : '';
+
     const form = {
       ...body,
       userId,
-      imageUrl: files && files.length > 0 ? files[0].filename : '',
+      imageUrl: primaryImageUrl,
       carType: bodyType.typeName,
     };
 
@@ -60,11 +65,12 @@ class CarService {
     );
     console.log('Created: RECENT ACTIVITY:-', recentActivity);
 
-    // Handle mulitple images if they exist
+    // Handle multiple images if they exist
     if (files && files.length > 0) {
+      // CHANGED: Use file.path for Cloudinary URLs
       const images = files.map((file, index) => ({
         carId: newCar.carId,
-        imageUrl: file.filename,
+        imageUrl: file.path || file.filename,
         isPrimary: index === 0,
       }));
       await this.carRepository.bulkCreateCarImages(images);
@@ -121,7 +127,6 @@ class CarService {
           attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
         },
       ],
-      // order: ["createdAt", "ASC"],
       limit: 8,
     });
 
@@ -143,7 +148,6 @@ class CarService {
     const car = await this.carRepository.findCarByIdAndUser(carId, userId);
     if (!car) return null;
 
-    // 2. If the user change the carType we must validate it again
     const finalUpdateForm = { ...updateForm };
 
     if (updateForm.carType) {
@@ -156,20 +160,18 @@ class CarService {
       finalUpdateForm.carType = bodyType.typeName;
     }
 
-    // Check if files exists
+    // Check if files exist
     if (files && files.length > 0) {
-      finalUpdateForm.imageUrl = files[0].filename;
+      // CHANGED: Use file.path for main image update
+      finalUpdateForm.imageUrl = files[0].path || files[0].filename;
 
-      // Optional: Delete old images from CarImages table if you want a full replacement
-      // await this.carRepository.deleteCarImages(carId);
-
-      // Add the new images to the carImage table
+      // CHANGED: Use file.path for gallery images update
       const images = files.map((file, index) => ({
         carId,
-        imageUrl: file.filename,
+        imageUrl: file.path || file.filename,
         isPrimary: index === 0,
       }));
-      // console.log("PREPARING TO INSERT IMAGES:", images);
+
       await this.carRepository.bulkCreateCarImages(images);
     }
 
@@ -183,7 +185,6 @@ class CarService {
     await this.logActivity(userId, 'UPDATED', description);
     console.log('updated: RECENT ACTIVITY:-', description);
 
-    // RETURN THE FRESH DATA
     return this.carRepository.findCarById(carId);
   }
 
@@ -203,9 +204,10 @@ class CarService {
 
   // 8. CREATE CAR MAKE
   async createCarMake(name, file) {
+    // CHANGED: Use file.path for car makes logo URL
     return this.carRepository.createCarMake({
       name,
-      imageUrl: file?.filename || null,
+      imageUrl: file ? (file.path || file.filename) : null,
     });
   }
 
@@ -231,8 +233,6 @@ class CarService {
     const cars = await this.carRepository.findAllCars({ where: filters });
     return processCarImages(cars);
   }
-
-  // RECENT ACTIVITY
 }
 
 module.exports = CarService;
