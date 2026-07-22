@@ -71,8 +71,8 @@ class CarRepository {
   }
 
   // CREATE CAR MAKE
-  async createCarMake(name) {
-    return await this.models.CarMake.create({ name });
+  async createCarMake({ name, imageUrl }) {
+    return await this.models.CarMake.create({ name, imageUrl });
   }
 
   //  UPDATE CAR
