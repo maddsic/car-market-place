@@ -39,23 +39,19 @@ export const useCarStore = create<CarStore>((set) => ({
         apiEndpoints.latestCars,
       ];
 
-      const results = await Promise.all(
+      const results = await Promise.allSettled(
         endPoints.map((endpoint) => apiFetch(endpoint)),
       );
-      console.log('"fetched car data from store"');
-      console.log(results[0]?.data);
-      console.log(results)
-      console.log("Raw API Response for Makes:", results[0]);
 
-      // Extract response data safely
-      const makesRes = results[0].status === 'fulfilled' ? results[0].value : null;
-      const bodyTypesRes = results[1].status === 'fulfilled' ? results[1].value : null;
-      const premiumCarsRes = results[2].status === 'fulfilled' ? results[2].value : null;
-      const latestCarsRes = results[3].status === 'fulfilled' ? results[3].value : null;
 
-      console.log("Makes Response:", makesRes);
+      // Extract values safely from Promise.allSettled
+      const makesRes = results[0].status === "fulfilled" ? results[0].value : null;
+      const bodyTypesRes = results[1].status === "fulfilled" ? results[1].value : null;
+      const premiumCarsRes = results[2].status === "fulfilled" ? results[2].value : null;
+      const latestCarsRes = results[3].status === "fulfilled" ? results[3].value : null;
 
-      // Update Zustand state individually
+      console.log("Makes Response from Store Fetch:", makesRes);
+
       set({
         carMakes: makesRes?.data || [],
         carBodyTypes: bodyTypesRes?.data || [],

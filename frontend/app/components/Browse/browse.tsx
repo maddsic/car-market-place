@@ -8,14 +8,10 @@ import { useNavigate } from "@remix-run/react";
 import { useCarStore } from "~/store/carStore";
 
 const BrowseBymake = () => {
-  const { carMakes, fetchCarData } = useCarStore();
+  const carMakes = useCarStore((state) => state.carMakes);
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(8);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchCarData();
-  }, [fetchCarData]);
 
   console.log("Car Makes from the Browse Component:", carMakes);
 
