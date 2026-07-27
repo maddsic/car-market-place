@@ -17,7 +17,7 @@ const BrowseBymake = () => {
     fetchCarData();
   }, [fetchCarData]);
 
-  console.log("Car Makes in Store:", carMakes);
+  console.log("Car Makes from the Browse Component:", carMakes);
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
