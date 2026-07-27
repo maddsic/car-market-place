@@ -1,16 +1,18 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-const apiVersion = import.meta.env.VITE_API_VERSION || "/api/v1";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://car-market-place-production.up.railway.app";
+const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
+
+export const API_URL = `${BASE_URL}${API_VERSION}`;
 
 export const apiEndpoints = {
-  login: `${apiBaseUrl}${apiVersion}/auth/login`,
-  register: `${apiBaseUrl}${apiVersion}/auth/register`,
-  createCar: `${apiBaseUrl}${apiVersion}/cars`,
-  updateCar: `${apiBaseUrl}${apiVersion}/cars/update`,
-  carMakes: `${apiBaseUrl}${apiVersion}/cars/carmakes`,
-  carBodyTypes: `${apiBaseUrl}${apiVersion}/cars/bodyType`,
-  premiumCars: `${apiBaseUrl}${apiVersion}/cars/premium-cars`,
-  latestCars: `${apiBaseUrl}${apiVersion}/cars/latest-cars`,
-  allDealers: `${apiBaseUrl}${apiVersion}/dealers`,
-  createReview: `${apiBaseUrl}${apiVersion}/reviews`,
-  getCarById: `${apiBaseUrl}${apiVersion}/cars`,
+  login: `${API_URL}/auth/login`,
+  register: `${API_URL}/auth/register`,
+  createCar: `${API_URL}/cars`,
+  updateCar: `${API_URL}/cars/update`,
+  carMakes: `${API_URL}/cars/carmakes`,
+  carBodyTypes: `${API_URL}/cars/bodyType`,
+  premiumCars: `${API_URL}/cars/premium-cars`,
+  latestCars: `${API_URL}/cars/latest-cars`,
+  allDealers: `${API_URL}/dealers`,
+  createReview: `${API_URL}/reviews`,
+  getCarById: `${API_URL}/cars`,
 };

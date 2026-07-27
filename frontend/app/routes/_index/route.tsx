@@ -33,6 +33,8 @@ export default function Index() {
     }
   }, [carMakes.length, carBodyTypes.length]);
 
+  console.log("carMakes from index route:", carMakes);
+
   return (
     <>
       <LoadingIndicator isLoading={loading} />
