@@ -17,11 +17,12 @@ module.exports = {
     "dialect": process.env.DB_DIALECT || "mysql"
   },
   production: {
-    "username": process.env.MYSQLUSER || "admin",
+    "username": process.env.MYSQLUSER || "root",
     "password": process.env.MYSQLPASSWORD,
     "database": process.env.MYSQLDATABASE || "railway",
-    "host": process.env.MYSQLHOST || "127.0.0.1",
+    "host": process.env.MYSQLHOST,
     "port": process.env.MYSQLPORT || 3306,
-    "dialect": process.env.DB_DIALECT || "mysql"
+    "dialect": process.env.DB_DIALECT || "mysql",
+    "logging": false
   }
 }
