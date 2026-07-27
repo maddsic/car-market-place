@@ -39,26 +39,28 @@ export const useCarStore = create<CarStore>((set) => ({
         apiEndpoints.latestCars,
       ];
 
-      const res = await Promise.all(
+      const results = await Promise.all(
         endPoints.map((endpoint) => apiFetch(endpoint)),
       );
       console.log('"fetched car data from store"');
-      console.log(res[0]?.data);
-      console.log(res)
-      console.log("Raw API Response for Makes:", res[0]);
+      console.log(results[0]?.data);
+      console.log(results)
+      console.log("Raw API Response for Makes:", results[0]);
 
-      const results = {
-        carMakes: res[0]?.data || [],
-        carBodyTypes: res[1]?.data || [],
-        premiumCars: res[2]?.data || [],
-        latestCars: res[3]?.data || [],
-      };
-      // SET STATE IN ZUSTAND STORE
+      // Extract response data safely
+      const makesRes = results[0].status === 'fulfilled' ? results[0].value : null;
+      const bodyTypesRes = results[1].status === 'fulfilled' ? results[1].value : null;
+      const premiumCarsRes = results[2].status === 'fulfilled' ? results[2].value : null;
+      const latestCarsRes = results[3].status === 'fulfilled' ? results[3].value : null;
+
+      console.log("Makes Response:", makesRes);
+
+      // Update Zustand state individually
       set({
-        carMakes: results.carMakes || [],
-        carBodyTypes: results.carBodyTypes || [],
-        premiumCars: results.premiumCars || [],
-        latestCars: results.latestCars || [],
+        carMakes: makesRes?.data || [],
+        carBodyTypes: bodyTypesRes?.data || [],
+        premiumCars: premiumCarsRes?.data || [],
+        latestCars: latestCarsRes?.data || [],
       });
     } catch (error) {
       console.error("Error fetching car data:", error);
