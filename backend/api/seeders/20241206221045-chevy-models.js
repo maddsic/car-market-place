@@ -4,11 +4,21 @@ const { v4: uuidv4 } = require('uuid');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const [make] = await queryInterface.sequelize.query(
+      `SELECT id FROM CarMake WHERE name = 'Chevrolet' LIMIT 1;`
+    );
+
+    if (!make || make.length === 0) {
+      throw new Error('Chevrolet make not found in database');
+    }
+
+    const chevroletMakeId = make[0].id;
+
     await queryInterface.bulkInsert('CarModel', [
       {
         id: uuidv4(),
         name: 'Malibu',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -16,7 +26,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Traverse',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -24,7 +34,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Tahoe',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -32,7 +42,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Suburban',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -40,7 +50,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Silverado 1500',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -48,7 +58,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Colorado',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -56,7 +66,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Camaro',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -64,7 +74,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'Corvette',
-        make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a',
+        make_id: chevroletMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -73,9 +83,19 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
+    const [make] = await queryInterface.sequelize.query(
+      `SELECT id FROM CarMake WHERE name = 'Chevrolet' LIMIT 1;`
+    );
+
+    if (!make || make.length === 0) {
+      return;
+    }
+
+    const chevroletMakeId = make[0].id;
+
     await queryInterface.bulkDelete(
       'CarModel',
-      { make_id: 'dbea2563-f7a3-47b8-a30e-b3d33840003a' },
+      { make_id: chevroletMakeId },
       {}
     );
   },
