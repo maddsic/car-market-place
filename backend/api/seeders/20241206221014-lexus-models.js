@@ -4,11 +4,21 @@ const { v4: uuidv4 } = require('uuid');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const [make] = await queryInterface.sequelize.query(
+      `SELECT id FROM CarMake WHERE name = 'Lexus' LIMIT 1;`
+    );
+
+    if (!make || make.length === 0) {
+      throw new Error('Lexus make not found in database');
+    }
+
+    const lexusMakeId = make[0].id;
+
     await queryInterface.bulkInsert('CarModel', [
       {
         id: uuidv4(),
         name: 'RX 350',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -16,7 +26,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'ES 300h',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -24,7 +34,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'GX 460',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -32,7 +42,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'LX 600',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -40,7 +50,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'NX 350',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -48,7 +58,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'IS 500',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -56,7 +66,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'RC 350',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -64,7 +74,7 @@ module.exports = {
       {
         id: uuidv4(),
         name: 'UX 250h',
-        make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6',
+        make_id: lexusMakeId,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
@@ -73,10 +83,16 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete(
-      'CarModel',
-      { make_id: '71adb301-071a-4d0e-9571-a7d8e93ceec6' },
-      {}
+    const [make] = await queryInterface.sequelize.query(
+      `SELECT id FROM CarMake WHERE name = 'Lexus' LIMIT 1;`
     );
+
+    if (!make || make.length === 0) {
+      return;
+    }
+
+    const lexusMakeId = make[0].id;
+
+    await queryInterface.bulkDelete('CarModel', { make_id: lexusMakeId }, {});
   },
 };
