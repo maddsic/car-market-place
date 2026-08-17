@@ -1,9 +1,7 @@
 import { create } from "zustand";
-import { apiFetch } from "~/utils/apiFetch";
 import { BodyType, CarMake, CarModel, LatestCar, PremiumCar } from "./carStoreInterfaces";
 import { apiEndpoints } from "./apiEndpoints";
 
-// create interface for carStore
 interface CarStore {
   carMakes: CarMake[];
   setCarMakes: (carMakes: CarMake[]) => void;
@@ -31,35 +29,30 @@ export const useCarStore = create<CarStore>((set) => ({
   setCarModels: (carModels: CarModel[]) => set({ carModels }),
 
   fetchCarData: async () => {
+    // Helper function using direct native fetch
+    const safeGetCarData = async (url: string) => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          console.warn(`[API Alert] ${url} returned status ${response.status}`);
+          return [];
+        }
+        const json = await response.json();
+        // Return json.data if it exists, otherwise the json object or empty array
+        return json?.data || (Array.isArray(json) ? json : []);
+      } catch (err) {
+        console.error(`[API Error] Direct fetch failed for ${url}:`, err);
+        return [];
+      }
+    };
+
     try {
-      const endPoints = [
-        apiEndpoints.carMakes,
-        apiEndpoints.carBodyTypes,
-        apiEndpoints.premiumCars,
-        apiEndpoints.latestCars,
-      ];
-
-      const results = await Promise.allSettled(
-        endPoints.map((endpoint) => apiFetch(endpoint)),
-      );
-
-
-      // Extract values safely from Promise.allSettled
-      const makesRes = results[0].status === "fulfilled" ? results[0].value : null;
-      const bodyTypesRes = results[1].status === "fulfilled" ? results[1].value : null;
-      const premiumCarsRes = results[2].status === "fulfilled" ? results[2].value : null;
-      const latestCarsRes = results[3].status === "fulfilled" ? results[3].value : null;
-
-      console.log("Makes Response from Store Fetch:", makesRes);
-
-      set({
-        carMakes: makesRes?.data || [],
-        carBodyTypes: bodyTypesRes?.data || [],
-        premiumCars: premiumCarsRes?.data || [],
-        latestCars: latestCarsRes?.data || [],
-      });
+      safeGetCarData(apiEndpoints.carMakes).then((makes) => set({ carMakes: makes }));
+      safeGetCarData(apiEndpoints.carBodyTypes).then((bodyTypes) => set({ carBodyTypes: bodyTypes }));
+      safeGetCarData(apiEndpoints.premiumCars).then((premium) => set({ premiumCars: premium }));
+      safeGetCarData(apiEndpoints.latestCars).then((latest) => set({ latestCars: latest }));
     } catch (error) {
-      console.error("Error fetching car data:", error);
+      console.error("Error running store fetch:", error);
     }
   },
 }));

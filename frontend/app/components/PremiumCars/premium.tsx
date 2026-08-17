@@ -15,7 +15,7 @@ import Image from "../Image/Image";
 import { Car } from "~/interfaces";
 import { useCarStore } from "~/store/carStore";
 
-const PremiumCars = () => {
+const PremiumCars = ({ }) => {
   const { premiumCars } = useCarStore();
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ const PremiumCars = () => {
       />
 
       <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
-        {premiumCars.map((car: Car) => (
+        {premiumCars.map((car) => (
           <div
             className="group relative cursor-pointer overflow-clip rounded-lg border border-transparent hover:border-gray-200 transition-all duration-300"
             key={car.carId}

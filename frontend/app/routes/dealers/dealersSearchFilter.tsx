@@ -19,6 +19,8 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   const navigation = useNavigation();
   const loading = navigation?.state === "loading";
 
+  console.log("car makes from dealer search filter", carMakes)
+
   if (loading) {
     return <Loader />;
   }

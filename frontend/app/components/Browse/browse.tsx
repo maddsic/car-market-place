@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import Heading from "../Heading/heading";
 import Divider from "../Divider/divider";
 import NextButton from "../PaginationRight/next";
@@ -11,15 +10,12 @@ const BrowseBymake = () => {
   const carMakes = useCarStore((state) => state.carMakes);
   const [startIndex, setStartIndex] = useState<number>(0);
   const [carsPerPage, setCarsPerPage] = useState<number>(8);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  console.log("Car Makes from the Browse Component:", carMakes);
-
-  const handleNavigate = (section: string, value: string) => {
-    navigate(`/inventory?section=${section}&value=${value}`);
-  };
-
   useEffect(() => {
+    setIsMounted(true);
+
     const handleWindowSizeChanged = () => {
       const width = window.innerWidth;
       if (width < 768) {
@@ -31,62 +27,82 @@ const BrowseBymake = () => {
       }
     };
 
-    // Call our function
     handleWindowSizeChanged();
     window.addEventListener("resize", handleWindowSizeChanged);
 
-    // Clean up function
     return () => window.removeEventListener("resize", handleWindowSizeChanged);
   }, []);
 
-  // Next button
+  const handleNavigate = (section: string, value: string) => {
+    navigate(`/inventory?section=${section}&value=${value}`);
+  };
+
   const handleNext = () => {
     if (startIndex + 1 < carMakes.length - carsPerPage + 1) {
       setStartIndex(startIndex + 1);
     }
   };
 
-  // Prev button
   const handlePrev = () => {
     if (startIndex > 0) {
       setStartIndex(startIndex - 1);
     }
   };
 
+  // Match root element (<div>) with mounted return block
+  if (!isMounted) {
+    return (
+      <div className="max__container p-6 md:block">
+        <div className="flex items-center justify-between">
+          <Heading title="Browse By" colouredText="make" />
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-4 lg:mt-10 lg:grid-cols-8 min-h-[120px]">
+          <div className="col-span-full py-4 text-center text-gray-400">
+            Loading makes...
+          </div>
+        </div>
+        <Divider />
+      </div>
+    );
+  }
+
   return (
-    <main className="max__container p-6 md:block">
+    <div className="max__container p-6 md:block">
       <div className="flex items-center justify-between">
         <Heading title="Browse By" colouredText="make" />
-        {/* PAGINATION */}
         <div className="flex gap-4">
           <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
-
           <NextButton
             handleNext={handleNext}
             startIndex={startIndex}
             carsPerPage={carsPerPage}
-            carsLength={carMakes.length}
+            carsLength={carMakes ? carMakes.length : 0}
           />
         </div>
       </div>
-      <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-4 lg:mt-10 lg:grid-cols-8">
+      <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-4 lg:mt-10 lg:grid-cols-8"
+        suppressHydrationWarning
+      >
         {carMakes &&
           carMakes
             .slice(startIndex, startIndex + carsPerPage)
             .map((make: any) => (
-
               <div
-                key={make.id}
+                key={make.id || make.name}
                 className="flex transform cursor-pointer flex-col items-center justify-center p-4 transition duration-1000 ease-linear animate-out hover:border"
                 onClick={() => handleNavigate("make", make.name)}
               >
-                <img src={make?.imageUrl} alt={make.name} className="mb-4 h-16 w-20 object-contain" />
+                <img
+                  src={make?.imageUrl}
+                  alt={make.name}
+                  className="mb-4 h-16 w-20 object-contain"
+                />
                 <p className="text-lg font-medium text-gray-600">{make.name}</p>
               </div>
             ))}
       </div>
       <Divider />
-    </main>
+    </div>
   );
 };
 

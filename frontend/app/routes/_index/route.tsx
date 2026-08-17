@@ -26,27 +26,15 @@ export const meta: MetaFunction = () => {
 
 // MAIN
 export default function Index() {
-  const initialData = useLoaderData<typeof loader>();
+  const fetchCarData = useCarStore((state) => state.fetchCarData);
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
 
-  // Zustand store setters
-  const setCarMakes = useCarStore((state) => state.setCarMakes);
-  const setCarBodyTypes = useCarStore((state) => state.setCarBodyTypes);
-  const setPremiumCars = useCarStore((state) => state.setPremiumCars);
-  const setLatestCars = useCarStore((state) => state.setLatestCars);
 
-  // Set initial data from loader to Zustand store
   useEffect(() => {
-    if (initialData.carMakes.length > 0)
-      setCarMakes(initialData.carMakes);
-    if (initialData.carBodyTypes.length > 0)
-      setCarBodyTypes(initialData.carBodyTypes);
-    if (initialData.premiumCars.length > 0)
-      setPremiumCars(initialData.premiumCars);
-    if (initialData.latestCars.length > 0)
-      setLatestCars(initialData.latestCars);
-  }, [initialData, setCarMakes, setCarBodyTypes, setPremiumCars, setLatestCars]);
+    fetchCarData();
+  }, [fetchCarData]);
+
 
   return (
     <>
@@ -75,32 +63,6 @@ export default function Index() {
   );
 }
 
-// 1. REMIX SERVER LOADER (Bypasses all client 304 cache issues)
-export async function loader() {
-  try {
-    const [makesRes, bodyTypesRes, premiumRes, latestRes] = await Promise.all([
-      fetch(apiEndpoints.carMakes).then((r) => r.json()).catch(() => null),
-      fetch(apiEndpoints.carBodyTypes).then((r) => r.json()).catch(() => null),
-      fetch(apiEndpoints.premiumCars).then((r) => r.json()).catch(() => null),
-      fetch(apiEndpoints.latestCars).then((r) => r.json()).catch(() => null),
-    ]);
-
-    return json({
-      carMakes: makesRes?.data || [],
-      carBodyTypes: bodyTypesRes?.data || [],
-      premiumCars: premiumRes?.data || [],
-      latestCars: latestRes?.data || [],
-    });
-  } catch (error) {
-    console.error("Loader fetch error:", error);
-    return json({
-      carMakes: [],
-      carBodyTypes: [],
-      premiumCars: [],
-      latestCars: [],
-    });
-  }
-}
 
 // Route Error Boundary
 export function ErrorBoundary() {

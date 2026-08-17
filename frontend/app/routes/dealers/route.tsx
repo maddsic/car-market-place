@@ -57,14 +57,14 @@ const Dealers = () => {
         <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex flex-col gap-5 overflow-y-auto lg:h-[350px]">
           {dealers && dealers.length > 0
             ? dealers.map((dealer: DealerData, index: number) => (
-                <DisplayDealerInfo key={index} {...dealer} query={query} />
-              ))
+              <DisplayDealerInfo key={index} {...dealer} query={query} />
+            ))
             : null}
           {/* DISPLAY ALL DEALERS IF NO FILTER IS PASSED */}
           {dealers.length === 0 && allDealers && allDealers.length > 0
             ? allDealers.map((dealer: DealerData, index: number) => (
-                <DisplayDealerInfo key={index} {...dealer} />
-              ))
+              <DisplayDealerInfo key={index} {...dealer} />
+            ))
             : null}
         </div>
         {/* TODO: PAGINATION */}
@@ -104,7 +104,7 @@ export default Dealers;
 
 // BASE URL
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 // LOADER -GETTING LOADER DATA

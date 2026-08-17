@@ -1,6 +1,7 @@
 export async function apiFetch(url: string, token?: string) {
   try {
     const response = await fetch(url, {
+      cache: "no-cache",
       headers: {
         Authorization: token ? `Bearer ${token}` : "",
         "Content-Type": "application/json",
