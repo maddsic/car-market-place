@@ -3,72 +3,74 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const { v4: uuidv4 } = require('uuid');
+
     return queryInterface.bulkInsert('CarBodyType', [
       {
-        typeId: '1a2b3c4d-1234-5678-abcd-1234567890ab',
+        typeId: uuidv4(),
         typeName: 'SUV',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '2b3c4d5e-2345-6789-bcde-234567890abc',
+        typeId: uuidv4(),
         typeName: 'Truck',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '3c4d5e6f-3456-7890-cdef-34567890abcd',
+        typeId: uuidv4(),
         typeName: 'Sedan',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '4d5e6f7g-4567-8901-def0-4567890abcde',
+        typeId: uuidv4(),
         typeName: 'Coupe',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '5e6f7g8h-5678-9012-ef01-567890abcdef',
+        typeId: uuidv4(),
         typeName: 'Convertible',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '6f7g8h9i-6789-0123-f012-67890abcdef1',
+        typeId: uuidv4(),
         typeName: 'Hatchback',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '7g8h9i0j-7890-1234-0123-7890abcdef12',
+        typeId: uuidv4(),
         typeName: 'Minivan',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '8h9i0j1k-8901-2345-1234-890abcdef123',
+        typeId: uuidv4(),
         typeName: 'Wagon',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '9i0j1k2l-9012-3456-2345-901abcdef234',
+        typeId: uuidv4(),
         typeName: 'Pickup Truck',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       },
       {
-        typeId: '0j1k2l3m-0123-4567-3456-012abcdef345',
+        typeId: uuidv4(),
         typeName: 'Crossover',
         createdAt: new Date(),
         updatedAt: new Date(),
