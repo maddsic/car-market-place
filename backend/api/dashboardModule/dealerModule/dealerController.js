@@ -84,7 +84,7 @@ class DealerController {
         last_name,
         address,
         phone,
-        avatarUrl: req.file ? req.file.filename : undefined
+        avatarUrl: req.file ? (req.file.path || req.file.filename) : undefined
       }
 
       console.log("UPDATED PROFILE DATA BEFORE : ", updateProfileData)
