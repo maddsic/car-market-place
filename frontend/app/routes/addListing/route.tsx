@@ -181,7 +181,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const token = getAuthToken(request);
   const payload = token ? verifyJwtToken(token) : null;
   if (!token || !payload) {
-    throw redirect("/auth/login?message=Please log in to continue")
+    throw redirect("/auth/login?redirectTo=/addListing&message=Please log in to continue")
   }
 
   console.log("Submit Mode:", carId ? "UPDATE" : "CREATE", "ID:", carId);

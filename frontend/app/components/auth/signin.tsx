@@ -10,7 +10,13 @@ import Button from "~/components/Button/button";
 import DisplayError from "../DisplayError/displayError";
 import Logo from "../Logo/logo";
 
-const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
+const SignIn = ({
+  actionData,
+  redirectTo,
+}: {
+  actionData: SignInActionDataProps;
+  redirectTo?: string | null;
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
@@ -105,6 +111,10 @@ const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
                 </Link>
               </div>
             </div>
+
+            {redirectTo && (
+              <input type="hidden" name="redirectTo" value={redirectTo} />
+            )}
 
             <Button
               title="Sign In"
