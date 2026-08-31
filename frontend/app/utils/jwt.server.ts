@@ -8,6 +8,9 @@ interface JwtPayload {
 }
 
 // Verify a JWT and return its payload
+// NOTE: This file must only be imported from server-side code (loaders/actions).
+// The ".server.ts" suffix ensures Remix strips this module out of the client
+// bundle, so `process.env.JWT_SECRET_KEY` is always available at runtime.
 export const verifyJwtToken = (token: string) => {
   try {
     const decoded = jwt.verify(

@@ -34,7 +34,7 @@ import Loader from "~/components/Loader/loader";
 import { apiFetch } from "~/utils/apiFetch";
 import { apiEndpoints } from "~/store/apiEndpoints";
 import { getAuthToken } from "~/utils/authHelpers";
-import { verifyJwtToken } from "~/utils/jwt";
+import { verifyJwtToken } from "~/utils/jwt.server";
 
 // Libraries
 import "react-quill/dist/quill.snow.css";
