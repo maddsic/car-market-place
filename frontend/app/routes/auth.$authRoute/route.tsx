@@ -13,7 +13,7 @@ interface AuthTokenPayload extends jwt.JwtPayload {
 }
 
 const AuthRoute = () => {
-  const { authRoute, message } = useLoaderData<typeof loader>();
+  const { authRoute, message, redirectTo } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   return (
@@ -25,7 +25,7 @@ const AuthRoute = () => {
         </div>
       )}
       {authRoute === "login" ? (
-        <SignIn actionData={actionData ?? {}} />
+        <SignIn actionData={actionData ?? {}} redirectTo={redirectTo} />
       ) : (
         <SignUp actionData={actionData} />
       )}
@@ -39,15 +39,23 @@ export default AuthRoute;
 // This is used to determine which component to render (SignUp or Signin).
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const token = getAuthToken(request);
+  const url = new URL(request.url);
+  const redirectTo = url.searchParams.get("redirectTo");
 
   // Check if token exists
-  if (token) {   const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
+  if (token) {
+    const decodedToken = jwt.decode(token) as AuthTokenPayload | null;
+
+    // If a safe redirectTo is provided, honor it over the default redirect
+    if (redirectTo && (redirectTo === "/addListing" || redirectTo === "/inventory")) {
+      return redirect(redirectTo);
+    }
+
     if (decodedToken?.role === "agent" || decodedToken?.role === "admin") return redirect("/dashboard");
     return redirect(`/profile/${decodedToken?.userId}`);
   }
 
   // Extract message from the params
-  const url = new URL(request.url)
   const message = url.searchParams.get("message") // Grabs "Please log in to create a car"
 
   // Gran the Auth Route
@@ -55,7 +63,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (authRoute !== "signup" && authRoute !== "login") {
     throw new Response("Page Not Found", { status: 404 });
   }
-  return { authRoute, message };
+  return { authRoute, message, redirectTo };
 };
 
 
