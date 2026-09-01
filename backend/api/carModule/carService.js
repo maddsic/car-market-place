@@ -124,9 +124,9 @@ class CarService {
   async getLatestCars() {
     try {
       const cars = await this.carRepository.findAllCars({
-        // where: {
-        //   status: 'available' // Exact ENUM match ('available') instead of Op.like
-        // },
+        where: {
+          status: 'available' // Exact ENUM match ('available') instead of Op.like
+        },
         attributes: [
           'carId',
           'userId',
