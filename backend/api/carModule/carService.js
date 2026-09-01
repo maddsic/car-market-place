@@ -122,21 +122,55 @@ class CarService {
 
   // 4. GET LATEST CARS FOR HOMEPAGE
   async getLatestCars() {
-    const cars = await this.carRepository.findAllCars({
-      where: { status: { [Op.like]: '%available%' } },
-      attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType', 'stockNumber'],
-      include: [
-        {
-          model: User,
-          as: 'owner',
-          attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
+    try {
+      const cars = await this.carRepository.findAllCars({
+        where: {
+          status: 'available' // Exact ENUM match ('available') instead of Op.like
         },
-      ],
-      order: [['createdAt', 'DESC']],
-      limit: 8,
-    });
+        attributes: [
+          'carId',
+          'userId',
+          'stockNumber',
+          'carType',         // 👈 Match model field name
+          'condition',
+          'make',
+          'model',
+          'year',
+          'price',
+          'mileage',
+          'fuelType',
+          'imageUrl',
+          'transmission',
+          'status',
+          'createdAt',       // Required for ordering
+        ],
+        include: [
+          {
+            model: User,
+            as: 'owner',     // 👈 Matches Car.belongsTo(models.User, { as: 'owner' })
+            attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
+            required: false,
+          },
+          {
+            model: CarBodyType,
+            as: 'bodyType',  // 👈 Matches Car.belongsTo(models.CarBodyType, { as: 'bodyType' })
+            attributes: ['id', 'typeName'],
+            required: false,
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+        limit: 8,
+      });
 
-    return processCarImages(cars);
+      if (!cars || cars.length === 0) {
+        return [];
+      }
+
+      return processCarImages(cars);
+    } catch (error) {
+      console.error("Error in getLatestCars Service:", error);
+      throw error;
+    }
   }
 
   // 5. GET CAR BY CAR ID
