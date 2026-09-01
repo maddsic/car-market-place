@@ -32,7 +32,6 @@ const LatestCars = () => {
     <div className="max__container relative">
       <div className="mt-10">
         <Heading title="latest for" colouredText="sale" classNames="text-center" />
-
         <div className="mt-10 grid gap-10 xl:grid-cols-2">
           {latestCars.map((car: LatestCar) => (
             <div
@@ -46,7 +45,7 @@ const LatestCars = () => {
                   {car.status || "Available"}
                 </div>
                 <img
-                  src={car?.image}
+                  src={car?.imageUrl}
                   alt={`${car?.make} ${car?.model}`}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />

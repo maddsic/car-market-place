@@ -75,6 +75,8 @@ const CreateListingSellerNote = ({ initialData }) => {
       />
 
       <div className="">
+        {/* HIDDEN INPUT PASSES CONTENT TO REMIX FORM / FORMDATA */}
+        <input type="hidden" name="seller_note" value={content} />
         {editorLoaded && (
           <ReactQuill
             ref={quillRef}

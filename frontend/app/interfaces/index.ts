@@ -56,6 +56,7 @@ export interface Car {
   images?: carImage[];
   engineType: string;
   status: string;
+  seller_note: string;
   transmission: string;
   createdAt: Date | string;
   owner: Owner;

@@ -93,7 +93,7 @@ class CarService {
         options.order = [['createdAt', 'DESC']];
         break;
       case 'category':
-        options.where.status = value;
+        options.where.category = value;
         break;
       case 'inventory':
         if (!value || String(value).toLowerCase() === 'all') {
@@ -123,7 +123,7 @@ class CarService {
   // 4. GET LATEST CARS FOR HOMEPAGE
   async getLatestCars() {
     const cars = await this.carRepository.findAllCars({
-      where: { status: 'available' },
+      where: { status: { [Op.like]: '%available%' } },
       attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType', 'stockNumber'],
       include: [
         {

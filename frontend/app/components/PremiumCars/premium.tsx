@@ -62,19 +62,19 @@ const PremiumCars = ({ }) => {
             </div>
 
             <div className="relative overflow-hidden">
-              <Image car={car} />
+              <Image car={car as Car} />
               {/* Hover overlay effect */}
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
             <div className="mt-3 flex justify-between px-1">
-              <CarMakeAndModel car={car} />
+              <CarMakeAndModel car={car as Car} />
               <Price price={car.price} className="text-[14px]" />
             </div>
 
             <div className="px-1">
-              <CarDescription car={car} />
-              <Special />
+              <CarDescription car={car as Car} />
+              {/* <Special /> */}
             </div>
 
             <hr className="mt-3 border-gray-100" />

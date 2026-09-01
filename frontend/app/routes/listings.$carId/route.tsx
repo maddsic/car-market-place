@@ -104,7 +104,7 @@ const ViewListing = () => {
             <Divider />
             <ViewListingCarFeatures />
             <Divider />
-            <SellerNote />
+            <SellerNote car={car!} />
           </aside>
 
           {/*TOP: ASIDE RIGHT - Dealer contact info*/}
