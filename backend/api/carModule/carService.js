@@ -90,13 +90,14 @@ class CarService {
         options.where = { isPremium: true, status: 'available' };
         break;
       case 'latest':
-        options.order = { where: { status: 'available' } }[['createdAt', 'DESC']];
+        options.where = { status: 'available' };
+        options.order = [['createdAt', 'DESC']];
         break;
       case 'category':
         options.where = { category: value, status: 'available' };
         break;
       case 'inventory':
-        if (value === 'all') options = { where: { status: 'available' } };
+        if (value === 'all') options.where = { status: 'available' };
         break;
       default:
         break;
