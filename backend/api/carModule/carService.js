@@ -154,7 +154,7 @@ class CarService {
           {
             model: CarBodyType,
             as: 'bodyType',  // 👈 Matches Car.belongsTo(models.CarBodyType, { as: 'bodyType' })
-            attributes: ['id', 'typeName'],
+            attributes: ['typeId', 'typeName'],
             required: false,
           },
         ],
