@@ -67,7 +67,9 @@ const LatestCars = () => {
                     <FaRoad className="text-yellow" />
                     <div className="flex flex-col">
                       <span className="text-gray-400">Mil</span>
-                      <span className="font-bold">{car?.mileage} km</span>
+                      <span className="font-bold">
+                        {car?.mileage ? car.mileage.toLocaleString() : 0} km
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 border-r border-gray-200 pr-2">
@@ -90,7 +92,7 @@ const LatestCars = () => {
                 <div className="mt-4 flex items-center gap-3 rounded-lg bg-gray-50 p-2">
                   <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm">
                     <img
-                      src={avatarUrl || "/profile.jpeg"}
+                      src={car?.owner?.avatarUrl || "/profile.jpeg"}
                       alt={car.owner?.first_name}
                       className="h-full w-full object-cover"
                     />

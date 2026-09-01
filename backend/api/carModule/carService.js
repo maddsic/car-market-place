@@ -159,7 +159,7 @@ class CarService {
           },
         ],
         order: [['createdAt', 'DESC']],
-        limit: 8,
+        limit: 6,
       });
 
       if (!cars || cars.length === 0) {
