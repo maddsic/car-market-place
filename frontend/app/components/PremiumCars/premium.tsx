@@ -40,7 +40,7 @@ const PremiumCars = () => {
   };
 
   return (
-    <section className="max__container relative py-12">
+    <section className="max__container relative">
       <Heading
         title="Latest Premium"
         colouredText="Cars"

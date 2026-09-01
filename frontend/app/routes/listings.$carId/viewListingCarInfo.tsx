@@ -19,7 +19,7 @@ export const ViewListingCarInfo = ({ car }: { car: Car }) => {
       <CarDetail type="model" value={car?.model!} icon={<MdDirectionsCar />} />
       <CarDetail
         type="mileage"
-        value={car?.mileage!}
+        value={car?.mileage ? car.mileage.toLocaleString() + " km" : "N/A"}
         icon={<MdDirectionsCar />}
       />
       <CarDetail

@@ -29,7 +29,7 @@ const LatestCars = () => {
   };
 
   return (
-    <section className="max__container relative py-12">
+    <section className="max__container relative">
       <Heading title="latest for" colouredText="sale" classNames="text-center" />
 
       {/* CAR GRID */}
