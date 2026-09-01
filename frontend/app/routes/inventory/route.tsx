@@ -34,6 +34,20 @@ const InventoryPage = () => {
     navigate(`/listings/${carId}`);
   };
 
+  // Helper for dynamic status badge styling
+  const getStatusStyles = (status?: string) => {
+    switch (status?.toLowerCase()) {
+      case "sold":
+        return "bg-red-500/90 text-white backdrop-blur-md";
+      case "reserved":
+        return "bg-amber-500/90 text-white backdrop-blur-md";
+      case "pending":
+        return "bg-orange-500/90 text-white backdrop-blur-md";
+      default:
+        return "bg-emerald-500/90 text-white backdrop-blur-md";
+    }
+  };
+
   // PAGINATE RIGHT
   const handleNext = () => {
     if (startIndex + 1 < cars.length - carsPerPage + 1) {
@@ -83,21 +97,36 @@ const InventoryPage = () => {
                   .slice(startIndex, startIndex + carsPerPage)
                   .map((car: Car) => (
                     <div
-                      className="relative cursor-pointer overflow-clip"
+                      className="group relative cursor-pointer overflow-clip rounded-xl p-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                       key={car.carId}
                       onClick={() => handleNavigateToListings(car.carId!)}
                     >
-                      <Image
-                        car={car}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="mt-3 flex justify-between">
+                      {/* IMAGE CONTAINER WITH ZOOM & STATUS BADGE */}
+                      <div className="relative overflow-hidden rounded-lg">
+                        {/* STATUS BADGE */}
+                        <div
+                          className={`absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-md ${getStatusStyles(
+                            car.status
+                          )}`}
+                        >
+                          {car.status || "Available"}
+                        </div>
+
+                        <Image
+                          car={car}
+                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      </div>
+
+                      {/* CARD DETAILS */}
+                      <div className="mt-3 flex justify-between transition-colors duration-300 group-hover:text-yellow">
                         <CarMakeAndModel car={car} />
                         <Price price={car.price} className="text-[14px]" />
                       </div>
                       <CarDescription car={car} />
-                      <Special />
-                      <hr className="mt-3 border-gray-300" />
+                      {/* <Special /> */}
+                      <hr className="mt-3 border-gray-300 transition-colors duration-300 group-hover:border-yellow" />
                     </div>
                   ))
               ) : (
@@ -105,7 +134,7 @@ const InventoryPage = () => {
               )}
             </div>
 
-            {/* TODO: PAGINATION */}
+            {/* PAGINATION */}
             {cars && cars.length > 0 && (
               <div className="mt-10 flex items-center justify-between">
                 {/* PREV BUTTON */}
@@ -149,7 +178,7 @@ const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 // LOADER - FETCHING CAR MAKES
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
-  //
+
   const section = url.searchParams.get("section");
   const value = url.searchParams.get("value");
 
@@ -164,7 +193,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     if (condition || carType || make || model) {
       const queryParams = new URLSearchParams();
-      console.log("Filters applied:", queryParams.toString());
 
       if (condition) queryParams.append("condition", condition);
       if (carType) queryParams.append("carType", carType);
