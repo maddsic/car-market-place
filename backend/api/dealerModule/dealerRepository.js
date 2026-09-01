@@ -24,7 +24,7 @@ class DealerRepository {
         },
         {
           model: Review,
-          as: 'reviews', // Adjust this alias to match your association definition
+          as: 'dealerReviews', // Adjust this alias to match your association definition
           attributes: [],
           required: false, // Set to false so dealers with 0 reviews are still returned
         },
