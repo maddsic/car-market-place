@@ -15,7 +15,7 @@ const Category = () => {
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
   };
-  
+
 
   useEffect(() => {
     const width: number = window.innerWidth;
