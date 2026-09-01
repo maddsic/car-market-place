@@ -93,7 +93,7 @@ class CarService {
         options.order = [['createdAt', 'DESC']];
         break;
       case 'category':
-        options.where.category = value;
+        options.where.carType = value;
         break;
       case 'inventory':
         if (!value || String(value).toLowerCase() === 'all') {
