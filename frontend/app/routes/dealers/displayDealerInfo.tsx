@@ -28,9 +28,8 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
   query,
 }) => {
   const [showFullNumber, setShowFullNumber] = useState(false);
-  const profileUrl = `/profile/${userId}?condition=${query?.condition || ""}&make=${
-    query?.make || ""
-  }&model=${query?.model || ""}`;
+  const profileUrl = `/profile/${userId}?condition=${query?.condition || ""}&make=${query?.make || ""
+    }&model=${query?.model || ""}`;
 
   const handleShowNumber = () => {
     setShowFullNumber(true);
@@ -55,7 +54,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                   <div className="text-center">
                     <div className="text-xs font-bold leading-tight">SS</div>
                     <div className="text-xs font-bold leading-tight">
-                      JAMMEH
+                      {username}
                     </div>
                     <div className="mt-1 border-t border-white/30 pt-1 text-[10px] font-semibold">
                       MOTORS

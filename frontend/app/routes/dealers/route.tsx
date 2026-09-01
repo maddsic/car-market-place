@@ -39,6 +39,9 @@ const Dealers = () => {
     }
   };
 
+  console.log("dealers data:", dealers);
+  console.log("all dealers data:", allDealers);
+
   return (
     <div className="max__container h-calc(100vh-80px) relative my-10">
       <div className="flex flex-col gap-5 lg:gap-10">
