@@ -34,7 +34,7 @@ import Loader from "~/components/Loader/loader";
 import { apiFetch } from "~/utils/apiFetch";
 import { apiEndpoints } from "~/store/apiEndpoints";
 import { getAuthToken } from "~/utils/authHelpers";
-import { verifyJwtToken } from "~/utils/jwt";
+import { verifyJwtToken } from "~/utils/jwt.server";
 
 // Libraries
 import "react-quill/dist/quill.snow.css";
@@ -177,14 +177,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const carId = url.searchParams.get("carId")
 
-  // Check the authToken to determine if the user is loggedIn or not
+  // 1. Read token & verify
   const token = getAuthToken(request);
   const payload = token ? verifyJwtToken(token) : null;
+
   if (!token || !payload) {
-    throw redirect("/auth/login?message=Please log in to continue")
+    throw redirect("/auth/login?message=Please log in to continue");
   }
 
-  console.log("Submit Mode:", carId ? "UPDATE" : "CREATE", "ID:", carId);
+  // console.log("Submit Mode:", carId ? "UPDATE" : "CREATE", "ID:", carId);
 
   try {
     const [makeResponse, bodyTypeResponse, editCarsResponse] = await Promise.all([
@@ -193,19 +194,19 @@ export const loader: LoaderFunction = async ({ request }) => {
       carId ? apiFetch(`${apiEndpoints.getCarById}/${carId}`) : Promise.resolve(null),
     ]);
 
-    return {
+    return json({
       carMakes: makeResponse?.data || [],
       carBodyTypes: bodyTypeResponse?.data || [],
       editCar: editCarsResponse?.data || null,
       isUserLoggedIn: true
-    }
+    })
   } catch (error) {
-    return {
+    return json({
       carMakes: [],
       carBodyTypes: [],
       editCar: null,
       error: "failed to load listing parameters"
-    }
+    })
   }
 
 

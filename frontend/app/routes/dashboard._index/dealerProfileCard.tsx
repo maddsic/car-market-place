@@ -41,7 +41,7 @@ export default function DealerProfileCard({ profileData }: DealerProfileCardProp
               className="h-20 w-20 rounded-full border-4 border-primary shadow-md"
             />
           </Link>
-          <CardTitle className="mt-3 text-xl font-semibold text-gray-900">
+          <CardTitle className="mt-3 text-xl font-semibold text-gray-900 capitalize">
             {dealer?.fullName}
           </CardTitle>
           <div className="flex items-center gap-2 text-sm text-gray-500">

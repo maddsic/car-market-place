@@ -12,6 +12,7 @@ import {
 import { deleteVehicle, updateVehicleStatus } from "~/service/car.server";
 import React from "react";
 import { getAuthToken } from "~/utils/authHelpers";
+import { Car } from "~/interfaces";
 
 
 
@@ -51,7 +52,7 @@ export default function InventoryDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {cars.map((car: any) => (
+                  {cars.map((car: Car) => (
                     <InventoryRow key={car.carId} car={car} />
                   ))}
                 </tbody>
@@ -79,7 +80,7 @@ export default function InventoryDashboard() {
   );
 }
 
-function InventoryRow({ car }: { car: any }) {
+function InventoryRow({ car }: { car: Car }) {
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);
   const fetcher = useFetcher();
   const navigate = useNavigate()
@@ -106,7 +107,7 @@ function InventoryRow({ car }: { car: any }) {
           <div className="flex items-center gap-4">
             <img src={car.image} className="w-16 h-12 rounded-lg object-cover border" alt="car" />
             <div>
-              <div className={`font-bold ${isSold ? "text-slate-400 line-through" : "text-slate-900"}`}>
+              <div className={`font-bold capitalize ${isSold ? "text-slate-400  line-through" : "text-slate-900"}`}>
                 {car.year} {car.make} {car.model}
               </div>
               <div className="text-[10px] font-mono text-slate-500 uppercase">{car.stockNumber}</div>
@@ -241,13 +242,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const intent = formData.get("intent");
   const carId = formData.get("carId") as string;
 
-  console.log(carId)
-  console.log(intent)
+  // console.log(carId)
+  // console.log(intent)
 
   try {
     if (intent === "update-status") {
       const status = formData.get("status") as string;
-      console.log(status)
+      // console.log(status)
       await updateVehicleStatus(request, carId, status);
       return json({ success: true, message: "Status updated" });
     }

@@ -15,12 +15,11 @@ import Button from "~/components/Button/button";
 import ProfileTabs from "./profileTabs";
 
 import { getAuthToken } from "~/utils/authHelpers";
-import { verifyJwtToken } from "~/utils/jwt";
+import { verifyJwtToken } from "~/utils/jwt.server";
 
 const ProfilePage = () => {
   const { user, userCars, dealers, reviews, isUserLoggedIn } =
     useLoaderData<typeof loader>();
-
 
   const description: string =
     user?.role === "user" ? "Private Seller" : "Private Dealer";
@@ -31,10 +30,10 @@ const ProfilePage = () => {
   const emailDesc: string =
     user?.role === "user" ? "Seller Email" : "Dealer Email";
 
-  const sellerFullname: string = user
-    ? user?.first_name || user?.last_name
+  const sellerFullname: string | null = user
+    ? user?.first_name + " " + user?.last_name
     : null;
-  const dealerFullname: string = dealers ? dealers?.username : null;
+  const dealerFullname: string | null = dealers ? dealers?.username : null;
 
   return (
     <main className="max__container relative mb-10 box-border p-4 md:p-10">
@@ -44,8 +43,8 @@ const ProfilePage = () => {
             {/* PROFILE IMAGE */}
             <span className="">
               <ListingSellerImage
-                imgUrl="/sain.jpeg"
-                name={sellerFullname || dealerFullname}
+                imgUrl={user?.avatarUrl}
+                name={sellerFullname || dealerFullname || ""}
                 className="h-22 w-22 border-b md:border-none"
                 desc={description}
               />
@@ -128,9 +127,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     // Create review
     const response = await createReview(dealerId!, data, token);
+    // console.log("✅ createReview response:", response.success, response.message);
 
     if (response.success) {
-      return redirect(`/profile/${dealerId}`);
+      return json({ success: true, message: "Review submitted successfully" });
+      // return redirect(`/profile/${dealerId}`);
     }
 
     return json({ success: false, message: response.message }, { status: 400 });

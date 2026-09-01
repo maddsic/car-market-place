@@ -57,7 +57,6 @@ const Navbar = () => {
 
             {/* USER ACTIONS */}
             <div className="flex items-center gap-3 md:gap-6">
-
               {/* MOBILE ADD BUTTON */}
               <Link
                 to="/addListing"
@@ -65,7 +64,6 @@ const Navbar = () => {
               >
                 <FaPlusCircle size={20} />
               </Link>
-
               {/* PROFILE / LOGIN */}
               <Link
                 to="/auth/login"

@@ -10,9 +10,10 @@ import { Input } from "~/components/ui/input";
 import { SiTransmission } from "react-icons/si";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import CreateListingLocation from "./createListingLocation";
+import { CarBodyType } from "~/interfaces";
 
 type CreateListingInfoProps = {
-  carBodyTypes: { id: string; typeName: string }[];
+  carBodyTypes: { typeId: string; typeName: string }[];
   formData: {
     errors: {
       carType: string;
@@ -58,7 +59,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
             placeholder="Select Body"
             defaultValue={initialData?.carType}
             className="font-body gray__text-light w-full appearance-none border-none pl-5 text-xs outline-none"
-            options={carBodyTypes.map((carType: any) => ({
+            options={carBodyTypes.map((carType: CarBodyType) => ({
               label: carType.typeName,
               value: carType.typeName,
               key: carType.typeId,

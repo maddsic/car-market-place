@@ -25,7 +25,7 @@ export default function ProfileSettings() {
     if (actionData?.success) {
       toast.success("Profile Updated Successfully!")
     }
-  }, [])
+  }, [actionData])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

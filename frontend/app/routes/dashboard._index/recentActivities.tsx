@@ -2,26 +2,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "~/components/ui/card";
 import { motion } from "framer-motion";
 import { FaCarSide, FaEdit, FaTrashAlt } from "react-icons/fa";
 
-// const activities = [
-//   {
-//     id: 1,
-//     action: "Added a new listing: 2022 BMW X5",
-//     icon: <FaCarSide className="text-blue-500" />,
-//     time: "2 hours ago",
-//   },
-//   {
-//     id: 2,
-//     action: "Updated price for 2018 Toyota Camry",
-//     icon: <FaEdit className="text-yellow-500" />,
-//     time: "Yesterday",
-//   },
-//   {
-//     id: 3,
-//     action: "Removed listing: 2017 Audi A4",
-//     icon: <FaTrashAlt className="text-red-500" />,
-//     time: "2 days ago",
-//   },
-// ];
+
 
 type Activity = {
   activityId: string;
@@ -60,7 +41,7 @@ export default function RecentActivities({ activities }: { activities: Activity[
               </div>
 
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium capitalize text-gray-800">
                   {activity.action === "CREATED" ? "Added:" : activity.action === "UPDATED" ? "Updated:" : "Removed:"} {" "}
                   {activity.description}
                 </p>

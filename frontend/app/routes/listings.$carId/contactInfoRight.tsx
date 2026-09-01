@@ -17,7 +17,7 @@ export const ListingContactInfoBottom = ({
   car,
 }: ListingContactInfoBottomProps) => {
 
-  const profileImage = car?.owner?.avatarUrl ? `http://localhost:3000/image_uploads/profiles/${car?.owner?.avatarUrl}` : '/sain.jpeg';
+  const profileImage = car?.owner?.avatarUrl ? car?.owner?.avatarUrl : '/sain.jpeg';
 
   return (
     <aside className="col-span-12 box-border md:col-span-5 lg:col-span-4">

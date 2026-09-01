@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Form, Link } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { FaStar } from "react-icons/fa";
 import SubHeading from "~/components/Heading/subheading";
+import LoadingIndicator from "~/components/Loader/loadingIndicator";
+import { toast } from "react-toastify";
 
 interface DealerWriteReviewTabProps {
   isUserLoggedIn: boolean;
@@ -16,6 +18,7 @@ const ratingData = [
 export default function WriteReview({
   isUserLoggedIn,
 }: DealerWriteReviewTabProps) {
+  const actionData = useActionData<{ success?: boolean; message?: string }>();
   // Track rating for each category
   const [ratings, setRatings] = useState({
     buyingProcess: 0,
@@ -30,18 +33,41 @@ export default function WriteReview({
     overallExperience: 0,
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const navigation = useNavigation();
+  const loading = navigation.state === "loading";
+  const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (actionData?.success) {
+      toast.success(actionData.message || "Review submitted successfully");
+      // 2. Reset native HTML inputs (like <textarea name="comment">)
+      formRef.current?.reset();
+      // 3. Reset ratings and hover state
+      setRatings({
+        buyingProcess: 0,
+        customerService: 0,
+        overallExperience: 0,
+      });
+    } else if (actionData?.success === false) {
+      toast.error(actionData.message || "Failed to submit review");
+    }
+  }, [actionData]);
+
   // "buyingProcess" | "customerService" | "overallExperience" value: number
-  const handleRating = (field: keyof typeof ratings, value: number) => {
+  const handleRating = (field: string, value: number) => {
     setRatings((prev) => ({ ...prev, [field]: value }));
   };
 
   // "buyingProcess" | "customerService" | "overallExperience" value: number
-  const handleHover = (field: keyof typeof hover, value: number) => {
-    setHover((prev) => ({ ...prev, [field]: value }));
-  };
+  const handleHover = (field: string, value: number) => {
+    setHover({ ...hover, [field]: value })
+  }
 
   return (
     <section className="w-full pb-10">
+      <LoadingIndicator isLoading={loading} />
       <SubHeading
         className="font-extrabold capitalize md:text-xl"
         title="Write a Review"
@@ -62,10 +88,16 @@ export default function WriteReview({
         </div>
       ) : (
         <Form
+          ref={formRef}
           method="post"
           className="mx-auto mt-8 flex max-w-2xl flex-col gap-8 rounded-lg bg-white p-6 shadow-md"
         >
-          {/* Rating Categories */}
+          {/* HIDDEN INPUTS TO PASS STAR VALUES TO REMIX ACTION */}
+          <input type="hidden" name="buyingProcess" value={ratings.buyingProcess} />
+          <input type="hidden" name="customerService" value={ratings.customerService} />
+          <input type="hidden" name="overallExperience" value={ratings.overallExperience} />
+
+          {/* RATING CATEGORIES */}
           <div className="flex flex-col gap-6 lg:flex-row lg:justify-between lg:gap-10">
             {ratingData.map(({ key, label }) => (
               <div key={key}>
@@ -80,10 +112,10 @@ export default function WriteReview({
                           key={i}
                           size={26}
                           className={`cursor-pointer transition ${index <=
-                              (hover[key as keyof typeof hover] ||
-                                ratings[key as keyof typeof ratings])
-                              ? "text-yellow"
-                              : "text-gray-300"
+                            (hover[key as keyof typeof hover] ||
+                              ratings[key as keyof typeof ratings])
+                            ? "text-yellow"
+                            : "text-gray-300"
                             }`}
                           onClick={() =>
                             handleRating(key as keyof typeof ratings, index)
@@ -121,7 +153,7 @@ export default function WriteReview({
             type="submit"
             className="w-full rounded-lg bg-primary py-3 font-semibold text-white transition hover:bg-primary/90"
           >
-            Submit Review
+            {isSubmitting ? "Submitting..." : "Submit Review"}
           </button>
         </Form>
       )}

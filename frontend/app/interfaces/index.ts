@@ -60,3 +60,8 @@ export interface Car {
   createdAt: Date | string;
   owner: Owner;
 }
+
+export interface CarBodyType {
+  typeId: string;
+  typeName: string;
+}

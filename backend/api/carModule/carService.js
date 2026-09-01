@@ -127,6 +127,7 @@ class CarService {
           attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
         },
       ],
+      order: [['createdAt', 'DESC']],
       limit: 8,
     });
 
