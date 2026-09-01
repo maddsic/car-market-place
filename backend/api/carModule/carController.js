@@ -56,8 +56,7 @@ class CarController {
   getLatestCars = async (req, res) => {
     try {
       const latestCars = await this.carService.getLatestCars()
-      return
-      sendResponse(
+      return sendResponse(
         res,
         200,
         true,
