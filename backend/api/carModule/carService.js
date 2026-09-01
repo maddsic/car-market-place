@@ -1,5 +1,5 @@
 const { processCarImages } = require('../helpers/processCarImage');
-const { User } = require('../models');
+const { User, CarBodyType } = require('../models');
 const { Op } = require('sequelize');
 
 class CarService {

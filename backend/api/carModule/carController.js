@@ -55,7 +55,7 @@ class CarController {
   // GET LATEST CARS
   getLatestCars = async (req, res) => {
     try {
-      const latestCars = await this.carService.getLatestCars() // console.log('REQ.FILE:', req.file);
+      const latestCars = await this.carService.getLatestCars()
       return
       sendResponse(
         res,
