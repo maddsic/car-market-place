@@ -120,7 +120,7 @@ const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
               <span className="text-xs font-black text-primary uppercase tracking-widest">Demo Account</span>
             </div>
             <div className="text-sm text-slate-900 font-bold space-y-1">
-              <p>Email: <span className="font-mono text-blue-900">alpha@email.com</span></p>
+              <p>Email: <span className="font-mono text-blue-900">sidibehsain1@gmail.com</span></p>
               <p>Pass: <span className="font-mono text-blue-900">Password1234$</span></p>
             </div>
           </div>
