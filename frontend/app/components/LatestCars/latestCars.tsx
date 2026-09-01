@@ -11,7 +11,7 @@ import { LatestCar } from "~/store/carStoreInterfaces";
 
 const LatestCars = () => {
   const { latestCars } = useCarStore();
-  // console.log("Latest cars", latestCars)
+  console.log("Latest cars", latestCars)
   const navigate = useNavigate();
 
   const avatarUrl = `http://localhost:3000/image_uploads/profiles/${latestCars?.[0]?.owner?.avatarUrl}`

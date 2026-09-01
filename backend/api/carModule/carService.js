@@ -84,19 +84,19 @@ class CarService {
 
     switch (section) {
       case 'make':
-        options.where = { make: { [Op.like]: `%${value}%` } };
+        options.where = { make: { [Op.like]: `%${value}%`, status: 'available' } };
         break;
       case 'premium':
-        options.where = { isPremium: true };
+        options.where = { isPremium: true, status: 'available' };
         break;
       case 'latest':
-        options.order = [['createdAt', 'DESC']];
+        options.order = { where: { status: 'available' } }[['createdAt', 'DESC']];
         break;
       case 'category':
-        options.where = { category: value };
+        options.where = { category: value, status: 'available' };
         break;
       case 'inventory':
-        if (value === 'all') options = {};
+        if (value === 'all') options = { where: { status: 'available' } };
         break;
       default:
         break;
@@ -109,7 +109,7 @@ class CarService {
   // 3. GET PREMIUM CARS FOR HOMEPAGE
   async getPremiumCars() {
     const cars = await this.carRepository.findAllCars({
-      where: { isPremium: true },
+      where: { isPremium: true, status: 'available' },
       attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType'],
       limit: 3,
     });
@@ -119,6 +119,7 @@ class CarService {
   // 4. GET LATEST CARS FOR HOMEPAGE
   async getLatestCars() {
     const cars = await this.carRepository.findAllCars({
+      where: { status: 'available' },
       attributes: ['carId', 'make', 'model', 'price', 'imageUrl', 'mileage', 'transmission', 'fuelType', 'stockNumber'],
       include: [
         {
