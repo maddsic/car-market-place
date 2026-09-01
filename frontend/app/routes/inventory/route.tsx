@@ -164,6 +164,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     if (condition || carType || make || model) {
       const queryParams = new URLSearchParams();
+      console.log("Filters applied:", queryParams.toString());
 
       if (condition) queryParams.append("condition", condition);
       if (carType) queryParams.append("carType", carType);

@@ -80,24 +80,27 @@ class CarService {
 
   // 2. GET CARS BASED ON SECTION AND VALUE
   async getCars(section, value) {
-    let options = {};
+    let options = { where: { status: 'available' } };
 
     switch (section) {
       case 'make':
-        options.where = { make: { [Op.like]: `%${value}%`, status: 'available' } };
+        options.where.make = { [Op.like]: `%${value}%` };
         break;
       case 'premium':
-        options.where = { isPremium: true, status: 'available' };
+        options.where.isPremium = true;
         break;
       case 'latest':
-        options.where = { status: 'available' };
         options.order = [['createdAt', 'DESC']];
         break;
       case 'category':
-        options.where = { category: value, status: 'available' };
+        options.where.status = value;
         break;
       case 'inventory':
-        if (value === 'all') options.where = { status: 'available' };
+        if (!value || String(value).toLowerCase() === 'all') {
+          options.where.status = "available";
+        } else {
+          options.where.status = "available";
+        }
         break;
       default:
         break;
