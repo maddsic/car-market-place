@@ -54,17 +54,21 @@ class AuthService {
   async sendPasswordResetCode(email) {
     const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
-      return { status: 444, message: "If this account exists, a verification code has been sent to your email." };
+      return { status: 200, message: "If this account exists, a verification code has been sent to your email." };
     }
 
-    // Generate a random 6-digit code string (e.g., "482910")
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    // 1. Generate cryptographically secure 6-digit code
+    const code = crypto.randomInt(100000, 999999).toString();
+
+    // 2. Hash the code before storing it in the database for security
+    const hashedCode = await hashPassword(code);
+
 
     // Set expiration to 15 minutes from right now
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
     // Save to DB
-    await this.authRepository.updateUserResetCode(email, code, expiresAt);
+    await this.authRepository.updateUserResetCode(email, hashedCode, expiresAt);
 
     // Send it asynchronously straight to Mailpit local inbox!
     try {
@@ -74,7 +78,7 @@ class AuthService {
       return { status: 500, message: "Failed to transmit recovery email code." };
     }
 
-    return { status: 200, message: "Verification code sent to your email!" };
+    return { status: 200, message: "If this account exists, a verification code has been sent to your email." };
   }
 
   /**
@@ -82,26 +86,30 @@ class AuthService {
    */
   async verifyAndResetPassword(email, code, newPassword) {
     const user = await this.authRepository.findUserByEmail(email);
-    if (!user) {
-      return { status: 404, message: "User identity validation failed." };
+
+    // 1. Check if user exists and has an active reset request
+    if (!user || !user.resetCode || !user.resetCodeExpires) {
+      return { status: 404, message: "Invalid or expired verification request." };
     }
 
-    // 1. Verify code exists and matches exactly
-    if (!user.resetCode || user.resetCode !== code) {
-      return { status: 400, message: "Please enter a valid verification code." };
-    }
-
-    // 2. Verify code timeline hasn't expired
+    // 2. Check expiration timeline
     if (new Date() > new Date(user.resetCodeExpires)) {
       return { status: 400, message: "This recovery code has expired. Please request a new one." };
+    }
+
+    //  3. Compare the provided code with the hashed code in the database
+    const isCodeValid = await comparePassword(code, user.resetCode);
+    if (!isCodeValid) {
+      return { status: 400, message: "The provided verification code is incorrect." };
     }
 
     // 3. Securely hash the fresh password string
     const securePassword = await hashPassword(newPassword);
 
     // 4. Update password and remove temporary tokens
-    await this.authRepository.updateUserPassword(email, securePassword);
+    const isPasswordUpdated = await this.authRepository.updateUserPasswordAndClearResetCode(email, securePassword);
 
+    // 5. Return appropriate response based on update result
     return { status: 200, message: "Password updated successfully!" };
   }
 }

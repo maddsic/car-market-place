@@ -1,16 +1,6 @@
-const nodemailer = require("nodemailer");
+const { resend } = require('resend');
 
-//  1. Create a transporter object using SMTP transport
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || '127.0.0.1',
-  port: process.env.EMAIL_PORT || 1025,
-  secure: false, // false for local development, true for production
-  auth: process.env.EMAIL_USER ? {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  } : null,
-})
-
+const resendClient = new resend(process.env.env_RESEND_API_KEY);
 
 class EmailHelper {
   /**
@@ -19,9 +9,15 @@ class EmailHelper {
    * @param {string} code - The generated 6-digit code
    */
   static async sendResetCode(email, code) {
-    const mailOptions = {
-      from: '"Gamautos Support" <noreply@gamautos.com>',
-      to: email,
+    // Return early or fallback to Mailpit/Nodemailer if in local dev
+    if (process.env.NODE_ENV === 'development' && !process.env.RESEND_API_KEY) {
+      console.log(`[DEV MODE] Reset Code for ${email}: ${code}`);
+      return;
+    }
+
+    return await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'Gamautos Support <noreply@yourverifieddomain.com>',
+      to: [email],
       subject: 'Gamautos Account Recovery Code',
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #0f172a;">
@@ -31,13 +27,9 @@ class EmailHelper {
           <div style="background-color: #f1f5f9; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 4px; border-radius: 8px; margin: 20px 0;">
             ${code}
           </div>
-          <p style="font-size: 12px; color: #64748b;">This code will expire shortly. If you did not make this request, please disregard this email safely.</p>
+          <p style="font-size: 12px; color: #64748b;">This code will expire in 15 minutes. If you did not make this request, please disregard this email safely.</p>
         </div>
       `
-    };
-
-    return transporter.sendMail(mailOptions);
+    });
   }
 }
-
-module.exports = EmailHelper;
