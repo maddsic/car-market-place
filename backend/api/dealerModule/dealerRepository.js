@@ -19,7 +19,7 @@ class DealerRepository {
         model: Car,
         as: 'cars',
         attributes: [],
-        required: false, // Include dealers even if they have no cars
+        required: true, // Ensure only dealers with cars are included
       },
     });
   }
