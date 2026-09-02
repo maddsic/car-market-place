@@ -2,35 +2,25 @@ const { User, Car, Sequelize } = require('../models');
 
 // Repository for accessing dealer data from the database
 class DealerRepository {
-  // Get all dealers with the count of their cars and reviews
+  // Get all dealers with the count of their cars
   async getAllDealersWithCarCount() {
     return User.findAll({
       where: { role: 'agent' },
+      group: ['User.userId'],
       attributes: [
         'username',
         'phone',
         'address',
         'role',
         'userId',
-        [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('cars.carId'))), 'carsCount'],
-        [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('reviews.reviewId'))), 'reviewCount'],
+        [Sequelize.fn('COUNT', Sequelize.col('cars.carId')), 'carsCount'],
       ],
-      include: [
-        {
-          model: Car,
-          as: 'cars',
-          attributes: [],
-          required: false, // Set to true if you only want dealers who have cars
-        },
-        {
-          model: Review,
-          as: 'dealerReviews', // Adjust this alias to match your association definition
-          attributes: [],
-          required: false, // Set to false so dealers with 0 reviews are still returned
-        },
-      ],
-      group: ['User.userId'],
-      subQuery: false,
+      include: {
+        model: Car,
+        as: 'cars',
+        attributes: [],
+        required: false, // Include dealers even if they have no cars
+      },
     });
   }
   // Search dealers based on filters and include the count of their cars
