@@ -14,7 +14,7 @@ const swaggerDocument = YAML.load('./docs/swagger.yaml');
 app.set('trust proxy', 1); // Trust first proxy (needed for secure cookies behind proxies/load balancers)
 
 const allowedOrigins = [
-  'https://gamautos.com',
+  process.env.CLIENT_URL,
   'https://www.gamautos.com',
   'http://localhost:3000' // local dev (backend)
 ];
