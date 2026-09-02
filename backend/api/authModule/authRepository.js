@@ -18,13 +18,26 @@ class AuthRepository {
     )
   }
 
-  // save the fresh password and wipe out the used reset tokens
-  async updateUserPassword(email, hashedPassword) {
-    return this.User.update(
-      { password: hashedPassword, resetCode: null, resetCodeExpires: null },
+
+  async updateUserPasswordAndClearResetCode(email, newHashedPassword) {
+    const [affectedRows] = await User.update(
+      {
+        password: newHashedPassword,
+        resetCode: null,
+        resetCodeExpires: null
+      },
       { where: { email } }
-    );
+    )
+    return affectedRows > 0;
   }
+
+  // // save the fresh password and wipe out the used reset tokens
+  // async updateUserPassword(email, hashedPassword) {
+  //   return this.User.update(
+  //     { password: hashedPassword, resetCode: null, resetCodeExpires: null },
+  //     { where: { email } }
+  //   );
+  // }
 }
 
 module.exports = AuthRepository;
