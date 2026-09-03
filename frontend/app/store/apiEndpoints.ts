@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://car-market-place-production.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 export const API_URL = `${BASE_URL}${API_VERSION}`;

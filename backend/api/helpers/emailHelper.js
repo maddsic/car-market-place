@@ -1,6 +1,6 @@
-const { resend } = require('resend');
+const { Resend } = require('resend');
 
-const resendClient = new resend(process.env.env_RESEND_API_KEY);
+const resendClient = new Resend(process.env.RESEND_API_KEY);
 
 class EmailHelper {
   /**
@@ -15,7 +15,7 @@ class EmailHelper {
       return;
     }
 
-    return await resend.emails.send({
+    return await resendClient.emails.send({
       from: process.env.EMAIL_FROM || 'Gamautos Support <noreply@yourverifieddomain.com>',
       to: [email],
       subject: 'Gamautos Account Recovery Code',
