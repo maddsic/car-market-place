@@ -16,7 +16,7 @@ class EmailHelper {
     }
 
     return await resendClient.emails.send({
-      from: process.env.EMAIL_FROM || 'Gamautos Support <noreply@yourverifieddomain.com>',
+      from: process.env.EMAIL_FROM || 'Gamautos Support <noreply@gamautos.com>',
       to: [email],
       subject: 'Gamautos Account Recovery Code',
       html: `
