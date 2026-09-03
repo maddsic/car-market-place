@@ -16,6 +16,7 @@ app.set('trust proxy', 1); // Trust first proxy (needed for secure cookies behin
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'https://www.gamautos.com',
+  'http://localhost:5173', // local dev (frontend)
   'http://localhost:3000' // local dev (backend)
 ];
 
