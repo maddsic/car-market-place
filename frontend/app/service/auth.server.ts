@@ -1,6 +1,6 @@
 // app/services/auth.server.ts
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
 interface SendCodeResponse {
@@ -17,6 +17,24 @@ interface ResetPasswordResponse {
  * STEP 1: Requests a 6-digit password recovery code from the Express backend
  * Endpoint: POST /api/v1/auth/forgot-password
  */
+// export async function sendPasswordResetCode(email: string): Promise<SendCodeResponse> {
+//   const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/forgot-password`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ email }),
+//   });
+
+//   const result = await response.json();
+
+//   if (!response.ok) {
+//     throw new Error(result.message || "Failed to transmit recovery email code.");
+//   }
+
+//   return result;
+// }
+
 export async function sendPasswordResetCode(email: string): Promise<SendCodeResponse> {
   const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/forgot-password`, {
     method: "POST",
@@ -26,13 +44,26 @@ export async function sendPasswordResetCode(email: string): Promise<SendCodeResp
     body: JSON.stringify({ email }),
   });
 
-  const result = await response.json();
-
+  // 1. Check if the HTTP response status is OK before attempting to parse JSON
   if (!response.ok) {
-    throw new Error(result.message || "Failed to transmit recovery email code.");
+    // Read the body as text to prevent the JSON parser from throwing a syntax error
+    const errorText = await response.text();
+    let errorMessage = "Failed to transmit recovery email code.";
+
+    try {
+      // Try parsing as JSON in case the backend sent a JSON error payload
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.message) errorMessage = errorJson.message;
+    } catch {
+      // Fallback if the server returned raw text/HTML instead of JSON
+      console.error("Server returned non-JSON error response:", errorText);
+    }
+
+    throw new Error(errorMessage);
   }
 
-  return result;
+  // 2. Safe to parse as JSON now that response.ok is true
+  return await response.json();
 }
 
 /**
