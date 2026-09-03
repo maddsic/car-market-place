@@ -1,3 +1,5 @@
+const { User } = require('../../models');
+
 class AuthRepository {
   constructor(models) {
     this.User = models.User;
@@ -30,14 +32,6 @@ class AuthRepository {
     )
     return affectedRows > 0;
   }
-
-  // // save the fresh password and wipe out the used reset tokens
-  // async updateUserPassword(email, hashedPassword) {
-  //   return this.User.update(
-  //     { password: hashedPassword, resetCode: null, resetCodeExpires: null },
-  //     { where: { email } }
-  //   );
-  // }
 }
 
 module.exports = AuthRepository;
