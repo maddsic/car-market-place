@@ -61,12 +61,12 @@ class AuthController {
   };
 
   // Controller for requesting the code (Step 1)
-  requestResetCode = async (req, res, next) => {
+  sendPasswordResetCodeController = async (req, res, next) => {
     const { email } = req.body;
     if (!email) return sendResponse(res, 400, false, "Email address is required.");
 
     try {
-      const result = await this.authService.sendPasswordResetCode(email);
+      const result = await this.authService.sendPasswordResetCodeService(email);
       return sendResponse(res, result.status, result.status === 200, result.message);
     } catch (error) {
       console.error('RESET CODE REQ ERROR:', error.message);
@@ -75,7 +75,7 @@ class AuthController {
   };
 
   // Controller for final verification and reset (Step 2)
-  resetPassword = async (req, res, next) => {
+  verifyAndResetPasswordController = async (req, res, next) => {
     const { error } = resetPasswordSchema.validate(req.body);
     if (error) {
       return sendResponse(res, 400, false, error.details[0].message);
@@ -84,7 +84,7 @@ class AuthController {
     // If validation passes, you safely pass just the password to your service!
     try {
       const { email, code, password } = req.body;
-      const result = await this.authService.verifyAndResetPassword(email, code, password);
+      const result = await this.authService.verifyAndResetPasswordService(email, code, password);
       return sendResponse(res, result.status, result.status === 200, result.message);
     } catch (error) {
       console.error('PASSWORD RESET SUBMIT ERROR:', error.message);
