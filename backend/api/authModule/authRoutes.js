@@ -16,7 +16,7 @@ router.post('/register', authLimiter, authController.register);
 router.post('/login', authLimiter, authController.login);
 
 // 2. Password reset routes with specific rate limiting
-router.post('/forgot-password', forgotPasswordRateLimiter, authController.requestResetCode);
-router.post('/reset-password', resetPasswordRateLimiter, authController.resetPassword);
+router.post('/forgot-password', forgotPasswordRateLimiter, authController.sendPasswordResetCodeController);
+router.post('/reset-password', resetPasswordRateLimiter, authController.verifyAndResetPasswordController);
 
 module.exports = router;
