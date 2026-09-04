@@ -9,6 +9,8 @@ class DealerController {
   // Seeach dealers controllers and return dealer name, casrsCount, telephone number, location
   getAllDealersWithCarCount = async (req, res, next) => {
     try {
+      console.log("INCOMING QUERY PARAMS:", req.query); // <--- ADD THIS LOG
+
       // Only flag as active if at least one parameter contains non-empty text
       const hasActiveFilters = Object.values(req.query).some(
         (val) => typeof val === 'string' && val.trim() !== ''

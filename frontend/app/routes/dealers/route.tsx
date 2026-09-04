@@ -20,9 +20,11 @@ interface DealerData {
 }
 
 const Dealers = () => {
-  // 1. Single source of truth: 'dealers' array holds either all dealers OR filtered dealers
-  const { carMakes, dealers, query, hasFilters } =
-    useLoaderData<typeof loader>() || { carMakes: [], dealers: [], query: {}, hasFilters: false };
+  // Add fallback defaults (= []) so dropdowns never break on refresh
+  const { carMakes = [], carBodyTypes = [], dealers = [], query = {}, hasFilters = false } =
+    useLoaderData<typeof loader>() || {};
+
+  console.log("dealers", dealers);
 
   const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const [startIndex, setStartIndex] = useState<number>(0);
@@ -100,19 +102,17 @@ export default Dealers;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
-// LOADER
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
 
-  // 1. Extract query params and trim empty spaces
+  // 1. Extract query params and trim whitespace
   const condition = url.searchParams.get("condition")?.trim() || "";
   const make = url.searchParams.get("make")?.trim() || "";
   const model = url.searchParams.get("model")?.trim() || "";
 
-  // 2. Check if the user actively entered search criteria
   const hasFilters = Boolean(condition || make || model);
 
-  // Fetch dropdown metadata on page load
+  // 2. Always fetch static dropdown metadata first
   const endPoints = [
     { key: "carMakes", url: `${apiEndpoints.carMakes}` },
     { key: "carBodyTypes", url: `${apiEndpoints.carBodyTypes}` },
@@ -126,35 +126,39 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     let dealers: DealerData[] = [];
 
+    // 3. Conditionally fetch filtered or default dealers
     if (hasFilters) {
-      // SCENARIO B: User submitted filters -> Fetch ONLY dealers matching the criteria
       const searchParams = new URLSearchParams();
       if (condition) searchParams.append("condition", condition);
       if (make) searchParams.append("make", make);
       if (model) searchParams.append("model", model);
 
       const dealersResult = await apiFetch(
-        `${API_BASE_URL}${API_VERSION}/dealers/search-dealers?${searchParams.toString()}`
+        `${API_BASE_URL}${API_VERSION}/dealers?${searchParams.toString()}`
       );
       dealers = dealersResult.data || [];
     } else {
-      // SCENARIO A: Initial page load (No filters) -> Fetch ALL dealers
       const dealersResult = await apiFetch(`${apiEndpoints.allDealers}`);
       dealers = dealersResult.data || [];
     }
 
+    // 4. Return both static dropdown data and dealers
     return {
-      ...staticData,
+      carMakes: staticData.carMakes || [],
+      carBodyTypes: staticData.carBodyTypes || [],
       dealers,
       hasFilters,
       query: { condition, make, model },
     };
   } catch (error) {
     console.error("Error in dealers loader:", error);
+
+    // EVEN ON ERROR: Always return empty arrays for dropdowns so React doesn't break
     return {
       carMakes: [],
+      carBodyTypes: [],
       dealers: [],
-      hasFilters,
+      hasFilters: false,
       query: { condition, make, model },
     };
   }
