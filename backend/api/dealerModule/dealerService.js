@@ -6,13 +6,13 @@ class DealerService {
     this.dealerRepository = dealerRepository;
   }
   // Helper method to extract search filters from the query parameters
-  searchFilters() {
+  searchFilters({ query = {} }) {
     const { condition, make, model } = query;
     const filters = {};
 
-    if (condition) filters.condition = condition;
-    if (make) filters.make = make;
-    if (model) filters.model = model;
+    if (condition && condition.trim() !== "") filters.condition = condition.trim();
+    if (make && make.trim() !== "") filters.make = make.trim();
+    if (model && model.trim() !== "") filters.model = model.trim();
 
     return filters;
   }
