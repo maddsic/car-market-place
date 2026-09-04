@@ -20,27 +20,26 @@ interface DealerData {
 }
 
 const Dealers = () => {
-  const { carMakes, dealers, allDealers, query } =
-    useLoaderData<typeof loader>() || null;
+  // 1. Single source of truth: 'dealers' array holds either all dealers OR filtered dealers
+  const { carMakes, dealers, query, hasFilters } =
+    useLoaderData<typeof loader>() || { carMakes: [], dealers: [], query: {}, hasFilters: false };
+
   const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const [startIndex, setStartIndex] = useState<number>(0);
 
   // PAGINATE RIGHT
   const handleNext = () => {
     if (startIndex + 1 < dealers.length - carsPerPage + 1) {
-      setStartIndex(startIndex + 6);
+      setStartIndex((prev) => prev + 6);
     }
   };
 
   // PAGINATE LEFT
   const handlePrev = () => {
     if (startIndex > 0) {
-      setStartIndex(startIndex - 6);
+      setStartIndex((prev) => prev - 6);
     }
   };
-
-  console.log("dealers data:", dealers);
-  console.log("all dealers data:", allDealers);
 
   return (
     <div className="max__container h-calc(100vh-80px) relative my-10">
@@ -50,54 +49,46 @@ const Dealers = () => {
           classNames="text-primary font-extrabold mb-5 md:mb-0"
         />
         <DealersSearchFilter carMakes={carMakes} />
+
         <SubHeading
-          title="Displaying local car dealerships"
+          title={hasFilters ? "Search Results" : "Displaying local car dealerships"}
           className="text-lg capitalize text-primary md:text-xl"
         />
         <Divider />
 
-        {/* TODO: MAP THROUGH DEALERS API DATA AND RENDER ACCORDINGLY */}
+        {/* DEALERS LIST */}
         <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex flex-col gap-5 overflow-y-auto lg:h-[350px]">
-          {dealers && dealers.length > 0
-            ? dealers.map((dealer: DealerData, index: number) => (
-              <DisplayDealerInfo key={index} {...dealer} query={query} />
+          {dealers && dealers.length > 0 ? (
+            dealers.map((dealer: DealerData, index: number) => (
+              <DisplayDealerInfo key={dealer.userId || index} {...dealer} query={query} />
             ))
-            : null}
-          {/* DISPLAY ALL DEALERS IF NO FILTER IS PASSED */}
-          {dealers.length === 0 && allDealers && allDealers.length > 0
-            ? allDealers.map((dealer: DealerData, index: number) => (
-              <DisplayDealerInfo key={index} {...dealer} />
-            ))
-            : null}
+          ) : (
+            /* Clear feedback when a search returns 0 results */
+            <p className="py-8 text-center text-gray-500">
+              No dealers found with cars matching your search criteria.
+            </p>
+          )}
         </div>
-        {/* TODO: PAGINATION */}
-        {(dealers && dealers.length > 0) ||
-          (allDealers && allDealers.length > 0 && (
-            <div className="mt-10 flex items-center justify-between">
-              {/* PREV BUTTON */}
-              <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
-              {/* PAGINATION PAGE NUMBERS */}
-              <div className="flex items-center gap-2">
-                <span className="rounded bg-gray-200 px-4 py-1 text-white">
-                  1
-                </span>
-                <span className="rounded bg-yellow px-4 py-1 text-white">
-                  2
-                </span>
-                <span className="rounded bg-yellow px-4 py-1 text-white">
-                  3
-                </span>
-              </div>
 
-              {/* NEXT BUTTON */}
-              <NextButton
-                handleNext={handleNext}
-                startIndex={startIndex}
-                carsPerPage={carsPerPage}
-                carsLength={dealers.length}
-              />
+        {/* PAGINATION */}
+        {dealers && dealers.length > 0 && (
+          <div className="mt-10 flex items-center justify-between">
+            <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
+
+            <div className="flex items-center gap-2">
+              <span className="rounded bg-gray-200 px-4 py-1 text-white">1</span>
+              <span className="rounded bg-yellow px-4 py-1 text-white">2</span>
+              <span className="rounded bg-yellow px-4 py-1 text-white">3</span>
             </div>
-          ))}
+
+            <NextButton
+              handleNext={handleNext}
+              startIndex={startIndex}
+              carsPerPage={carsPerPage}
+              carsLength={dealers.length}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -106,66 +97,64 @@ const Dealers = () => {
 export default Dealers;
 
 // BASE URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 const API_VERSION = import.meta.env.VITE_API_VERSION || "/api/v1";
 
-// LOADER -GETTING LOADER DATA
+// LOADER
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
 
-  // GET QUERY PARAMS
-  const condition = url.searchParams.get("condition");
-  const make = url.searchParams.get("make");
-  const model = url.searchParams.get("model");
+  // 1. Extract query params and trim empty spaces
+  const condition = url.searchParams.get("condition")?.trim() || "";
+  const make = url.searchParams.get("make")?.trim() || "";
+  const model = url.searchParams.get("model")?.trim() || "";
 
-  // Fetch these data on page load.
+  // 2. Check if the user actively entered search criteria
+  const hasFilters = Boolean(condition || make || model);
+
+  // Fetch dropdown metadata on page load
   const endPoints = [
-    {
-      key: "carMakes",
-      url: `${apiEndpoints.carMakes}`,
-    },
-    {
-      key: "carBodyTypes",
-      url: `${apiEndpoints.carBodyTypes}`,
-    },
-    {
-      key: "allDealers",
-      url: `${apiEndpoints.allDealers}`,
-    },
+    { key: "carMakes", url: `${apiEndpoints.carMakes}` },
+    { key: "carBodyTypes", url: `${apiEndpoints.carBodyTypes}` },
   ];
 
-  const result = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
-
-  const make_model_data = Object.fromEntries(
-    result.map((result, index) => [endPoints[index].key, result.data]),
-  );
-
-  // ONLY FETCH DEALERS IF ANY OF THE FILTERS ARE APPLIED
   try {
+    const result = await Promise.all(endPoints.map(({ url }) => apiFetch(url)));
+    const staticData = Object.fromEntries(
+      result.map((res, index) => [endPoints[index].key, res.data])
+    );
+
     let dealers: DealerData[] = [];
-    if (condition || make || model) {
+
+    if (hasFilters) {
+      // SCENARIO B: User submitted filters -> Fetch ONLY dealers matching the criteria
       const searchParams = new URLSearchParams();
       if (condition) searchParams.append("condition", condition);
       if (make) searchParams.append("make", make);
       if (model) searchParams.append("model", model);
 
       const dealersResult = await apiFetch(
-        `${API_BASE_URL}${API_VERSION}/dealers/search-dealers?${searchParams.toString()}`,
+        `${API_BASE_URL}${API_VERSION}/dealers/search-dealers?${searchParams.toString()}`
       );
+      dealers = dealersResult.data || [];
+    } else {
+      // SCENARIO A: Initial page load (No filters) -> Fetch ALL dealers
+      const dealersResult = await apiFetch(`${apiEndpoints.allDealers}`);
       dealers = dealersResult.data || [];
     }
 
     return {
-      ...make_model_data,
+      ...staticData,
       dealers,
+      hasFilters,
       query: { condition, make, model },
     };
   } catch (error) {
-    console.error("Error fetching dealers:", error);
+    console.error("Error in dealers loader:", error);
     return {
-      ...make_model_data,
+      carMakes: [],
       dealers: [],
+      hasFilters,
       query: { condition, make, model },
     };
   }
