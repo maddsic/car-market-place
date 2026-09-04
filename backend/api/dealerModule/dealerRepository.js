@@ -25,6 +25,12 @@ class DealerRepository {
   }
   // Search dealers based on filters and include the count of their cars
   async searchDealersWithFilters(filters) {
+    // Build case-insensitive ILike/Like filters for strings
+    const carWhere = {};
+    if (filters.make) carWhere.make = { [Op.iLike || Op.like]: `%${filters.make}%` };
+    if (filters.model) carWhere.model = { [Op.iLike || Op.like]: `%${filters.model}%` };
+    if (filters.condition) carWhere.condition = filters.condition;
+
     return User.findAll({
       where: { role: 'agent' },
       group: ['User.userId'],
@@ -45,6 +51,15 @@ class DealerRepository {
           required: true,
         },
       ],
+      group: [
+        'User.userId',
+        'User.username',
+        'User.phone',
+        'User.address',
+        'User.role'
+      ],
+      subQuery: false,
+
     });
   }
 
