@@ -7,9 +7,9 @@ class DealerController {
   }
 
   // Seeach dealers controllers and return dealer name, casrsCount, telephone number, location
-  getDealers = async (req, res, next) => {
+  getAllDealersWithCarCount = async (req, res, next) => {
     try {
-      const dealers = await this.dealerService.getDealers();
+      const dealers = await this.dealerService.getAllDealersWithCarCount();
       return sendResponse(res, 200, true, 'Dealers found', dealers || []);
     } catch (error) {
       console.log('ERROR FROM GET DEALERS CLASS: ' + error.message);
@@ -18,9 +18,9 @@ class DealerController {
   };
 
   // Search dealers based on filters and include the count of their cars
-  searchDealers = async (req, res, next) => {
+  searchDealersWithFilters = async (req, res, next) => {
     try {
-      const dealers = await this.dealerService.searchDealers(req.query);
+      const dealers = await this.dealerService.searchDealersWithFilters(req.query);
       return sendResponse(res, 200, true, 'Result(s) found...', dealers || []);
     } catch (error) {
       console.log('ERROR FROM SEARCH DEALER CAR CLASS: ' + error.message);
