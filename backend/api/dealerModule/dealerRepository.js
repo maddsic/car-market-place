@@ -46,7 +46,7 @@ class DealerRepository {
         {
           model: Car,
           as: 'cars',
-          where: filters,
+          where: carWhere,
           attributes: [],
           required: true,
         },

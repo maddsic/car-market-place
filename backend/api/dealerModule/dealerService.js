@@ -18,12 +18,12 @@ class DealerService {
   }
 
   // Get all dealers with the count of their cars
-  async getDealers() {
+  async getAllDealersWithCarCount() {
     return this.dealerRepository.getAllDealersWithCarCount();
   }
 
   // Search dealers based on filters and include the count of their cars
-  async searchDealers(query) {
+  async searchDealersWithFilters(query) {
     const filters = this.searchFilters(query);
     return this.dealerRepository.searchDealersWithFilters(filters);
   }

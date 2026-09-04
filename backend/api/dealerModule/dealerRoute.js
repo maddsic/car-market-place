@@ -9,8 +9,8 @@ const dealerRepository = new DealerRepository();
 const dealerService = new DealerService(dealerRepository);
 const dealerController = new DealerController(dealerService);
 
-router.get('/', dealerController.getDealers);
-router.get('/search-dealers', dealerController.searchDealers);
+router.get('/', dealerController.getAllDealersWithCarCount);
+router.get('/search-dealers', dealerController.searchDealersWithFilters);
 router.get(
   '/filtered-cars/:userId',
   dealerController.getDealerByIdWithFilteredCars
