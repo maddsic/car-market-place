@@ -14,6 +14,8 @@ exports.carSchema = Joi.object({
   engineType: Joi.string().required(),
   transmission: Joi.string().required(),
   location: Joi.string().required(),
+  forRent: Joi.boolean().truthy('on', 'true').optional().default(false),
+  pricePerDay: Joi.number().optional(),
   // Changed to optional to match your frontend Zod
   ext_color: Joi.string().optional().allow(''),
   drive: Joi.string().optional().allow(''),
@@ -46,4 +48,5 @@ exports.carSchema = Joi.object({
   power_seat: Joi.boolean().truthy('on', 'true').optional().default(false),
   bucket_seat: Joi.boolean().truthy('on', 'true').optional().default(false),
   leather_seat: Joi.boolean().truthy('on', 'true').optional().default(false),
+
 });

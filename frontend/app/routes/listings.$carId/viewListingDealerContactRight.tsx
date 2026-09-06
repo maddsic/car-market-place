@@ -18,7 +18,7 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
     <aside className="relative col-span-3 hidden flex-col gap-3 lg:flex">
       <Price
         price={Number(car?.price)}
-        className="flex items-center justify-center border-b-8 border-b-gray-900 py-5 text-3xl"
+        className="flex items-center justify-center border-b-8 border-b-gray-900 py-5 md:text-3xl"
       />
       {/* SELLER PIC */}
       <Link to={`/profile/${car?.owner?.userId}`} className="mt-5">

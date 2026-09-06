@@ -52,7 +52,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="body*"
+          label="body"
         >
           <Select
             name="carType"
@@ -75,7 +75,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="Mileage*"
+          label="Mileage"
         >
           <Input
             name="mileage"
@@ -93,7 +93,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="fuel type*"
+          label="fuel type"
         >
           <Select
             name="fuelType"
@@ -122,7 +122,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="Engine*"
+          label="Engine Type"
         >
           <Input
             name="engineType"
@@ -140,7 +140,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="transmission*"
+          label="transmission"
         >
           <Select
             name="transmission"
@@ -191,7 +191,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="Exterior color*"
+          label="Exterior color"
         >
           <Input
             name="ext_color"
@@ -225,9 +225,11 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
             <IoDocumentTextSharp
               size={20}
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
+
             />
           }
           label="VIN"
+          isRequired={false}
         >
           <Input
             name="vin"

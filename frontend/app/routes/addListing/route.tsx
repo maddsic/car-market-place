@@ -55,17 +55,25 @@ const AddListingPage = () => {
 
   if (actionData) {
     console.log("FORM DATA ERROR FROM ADD LISTING PAGE");
-    console.log(actionData);
+    console.log(actionData.error);
   }
 
   useEffect(() => {
-    if (actionData?.success) {
-      toast.success(
-        "Successful! Redirecting to inventory...",
-      );
+    if (!actionData) return; // Do nothing on initial render
+
+    if (actionData.success) {
+      toast.success("Successful! Redirecting to inventory...");
       setTimeout(() => {
         navigate("/inventory");
       }, 2000);
+    } else if (actionData.errors) {
+      // 1. Zod Validation Errors (e.g., missing required fields)
+      const errorMessages = Object.values(actionData.errors).flat();
+      const firstError = errorMessages[0] || "Please check the form for errors.";
+      toast.error(`Validation Error: ${firstError}`);
+    } else if (actionData.message || actionData.error) {
+      // 2. Server or API Errors
+      toast.error(actionData.message || actionData.error || "Failed to submit form.");
     }
   }, [actionData, navigate]);
 
@@ -251,8 +259,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const newValidatedFormData = new FormData();
     // Append non-file fields
     for (const [key, value] of Object.entries(validatedForm)) {
-      if (key !== "imageUrl") {
-        newValidatedFormData.append(key, value as string);
+      if (key !== "imageUrl" && value !== undefined && value !== null) {
+        newValidatedFormData.append(key, String(value));
       }
     }
 
