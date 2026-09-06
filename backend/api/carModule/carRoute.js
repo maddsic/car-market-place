@@ -37,6 +37,9 @@ router.get('/premium-cars', carController.getPremiumCars);
 // ------------------- LATEST CARS --------------------------------
 router.get('/latest-cars', carController.getLatestCars);
 
+// ------------------- RENTAL CARS --------------------------------
+router.get('/rental-cars', carController.getRentalCars);
+
 // ------------------- SEARCH --------------------------------------
 router.get('/search', carController.searchCarInventory);
 
