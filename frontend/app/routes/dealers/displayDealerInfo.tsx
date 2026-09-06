@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "@remix-run/react";
 import { Car, ExternalLink, MapPin, Phone, Star } from "lucide-react";
+import { IoCarSport } from "react-icons/io5";
 
 interface DealershipInfoProps {
   userId: string;
@@ -23,7 +24,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
   address,
   phone,
   carsCount,
-  reviewCount = 34, // Placeholder for review count
+  reviewCount = 0, // Placeholder for review count
   logoUrl,
   query,
 }) => {
@@ -47,18 +48,18 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                 <img
                   src={logoUrl || "/placeholder.svg"}
                   alt={`${username} Logo`}
-                  className="h-12 w-auto"
+                  className="h-12 w-auto object-contain"
                 />
               ) : (
-                <div className="rounded-lg bg-gradient-to-br from-blue-600 to-purple-700 p-1 text-white shadow-lg">
-                  <div className="text-center">
-                    <div className="text-xs font-bold leading-tight">SS</div>
-                    <div className="text-xs font-bold leading-tight">
+                <div className="flex h-12 items-center gap-2.5 rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 shadow-xs">
+                  <div className="h-full w-1.5 rounded-full bg-yellow" />
+                  <div className="flex flex-col">
+                    <span className="font-montserrat text-xs font-extrabold uppercase tracking-tight text-slate-900 leading-none">
                       {username}
-                    </div>
-                    <div className="mt-1 border-t border-white/30 pt-1 text-[10px] font-semibold">
-                      MOTORS
-                    </div>
+                    </span>
+                    <span className="text-[9px] font-semibold tracking-widest text-slate-400 uppercase leading-tight mt-0.5">
+                      Verified Dealer
+                    </span>
                   </div>
                 </div>
               )}
