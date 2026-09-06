@@ -21,6 +21,16 @@ const NavLinks = [
   { id: 7, title: "Contact", href: "/contact", icon: <FaPhoneAlt size={20} /> },
 ];
 
+const MobileNavLinks = [
+  { id: 1, title: "Home", href: "/", icon: <FaHome size={20} /> },
+  { id: 2, title: "Inventory", href: "/inventory", icon: <FaCarSide size={20} /> },
+  { id: 3, title: "Dealers", href: "/dealers", icon: <FaUsers size={20} /> },
+  { id: 4, title: "Rentals", href: "/rentals", icon: <FaCarSide size={20} /> },
+  { id: 5, title: "Auction", href: "/auctions", icon: <FaGavel size={20} /> },
+  { id: 6, title: "About", href: "/about", icon: <FaInfoCircle size={20} /> },
+  // { id: 7, title: "Contact", href: "/contact", icon: <FaPhoneAlt size={20} /> },
+];
+
 const Navbar = () => {
   return (
     <header className="relative h-[80px] w-full">
@@ -90,7 +100,7 @@ const Navbar = () => {
 
       {/* MOBILE BOTTOM NAVIGATION */}
       <div className="fixed bottom-0 left-0 z-50 flex w-full justify-around border-t border-slate-200 bg-white pb-safe pt-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:hidden rounded-t-2xl">
-        {NavLinks.slice(0, 5).map((link) => (
+        {MobileNavLinks.slice(0, 6).map((link) => (
           <NavLink
             key={link.id}
             to={link.href}
