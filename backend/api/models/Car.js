@@ -125,6 +125,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 'available',
       },
+      forRent: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
+      pricePerDay: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+      },
     },
     {
       freezeTableName: true,
