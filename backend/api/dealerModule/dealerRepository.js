@@ -4,58 +4,73 @@ const { User, Car, Review, Sequelize } = require('../models');
 class DealerRepository {
   // Get all dealers with the count of their cars
   async getAllDealersWithCarCount() {
-    return User.findAll({
-      where: { role: 'agent' },
-      attributes: [
-        'userId',
-        'username',
-        'phone',
-        'address',
-        'role',
-        // Total distinct cars count
-        [
-          Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('cars.carId'))),
-          'carsCount'
+    try {
+      return await User.findAll({
+        where: { role: 'agent' },
+        attributes: [
+          'userId',
+          'username',
+          'phone',
+          'address',
+          'role',
+          // Distinct count of cars owned by the agent
+          [
+            Sequelize.fn(
+              'COUNT',
+              Sequelize.fn('DISTINCT', Sequelize.col('cars.carId'))
+            ),
+            'carsCount'
+          ],
+          // Average overall experience rating rounded to 1 decimal place (defaults to 0 if no reviews)
+          [
+            Sequelize.fn(
+              'COALESCE',
+              Sequelize.fn(
+                'ROUND',
+                Sequelize.fn('AVG', Sequelize.col('dealerReviews.overallExperience')),
+                1
+              ),
+              0
+            ),
+            'avgRating'
+          ],
+          // Distinct count of reviews received using the correct PK reviewId
+          [
+            Sequelize.fn(
+              'COUNT',
+              Sequelize.fn('DISTINCT', Sequelize.col('dealerReviews.reviewId'))
+            ),
+            'reviewsCount'
+          ],
         ],
-        // Average rating (defaults to 0 if no reviews exist)
-        [
-          Sequelize.fn(
-            'COALESCE',
-            Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('dealerReviews.rating')), 1),
-            0
-          ),
-          'avgRating'
+        include: [
+          {
+            model: Car,
+            as: 'cars',
+            attributes: [],
+            required: true, // Only returns dealers with at least 1 car
+          },
+          {
+            model: Review,
+            as: 'dealerReviews',
+            attributes: [],
+            required: false, // Left join to calculate reviews if present
+          }
         ],
-        // Total distinct reviews count
-        [
-          Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('dealerReviews.reviewId'))),
-          'reviewsCount'
+        group: [
+          'User.userId',
+          'User.username',
+          'User.phone',
+          'User.address',
+          'User.role'
         ],
-      ],
-      include: [
-        {
-          model: Car,
-          as: 'cars',
-          attributes: [],
-          required: true, // Ensures only dealers with at least 1 car are included
-        },
-        {
-          model: Review,
-          as: 'dealerReviews',
-          attributes: [],
-          required: false, // Left join to calculate reviews if present
-        }
-      ],
-      group: [
-        'User.userId',
-        'User.username',
-        'User.phone',
-        'User.address',
-        'User.role'
-      ],
-      raw: true,
-      subQuery: false,
-    });
+        raw: true,
+        subQuery: false,
+      });
+    } catch (error) {
+      console.error("Error in getAllDealersWithCarCount:", error);
+      throw error;
+    }
   }
   // Search dealers based on filters and include the count of their cars
   async searchDealersWithFilters(filters) {
