@@ -74,10 +74,8 @@ const ViewListing = () => {
               title={car?.make + " " + car?.model}
               classNames="lg:text-[38px] text-[24px] uppercase"
             />
-
             {/* SUB HEADER */}
             <SubHeader car={car!} />
-
             {/* BIG IMAGE */}
             <BigImage
               imageUrl={
@@ -85,6 +83,26 @@ const ViewListing = () => {
               }
               price={car?.price!}
             />
+
+            {/* RENTAL PRICE BADGE / BANNER */}
+            {car?.forRent && (
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-primary p-3 px-5 text-white shadow-md sm:flex-nowrap">
+                <div className="flex items-center gap-2">
+                  <span className="rounded bg-white/20 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">
+                    For Rent
+                  </span>
+                  <span className="text-sm font-medium sm:text-base">
+                    Daily Rental Rate Available
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-xl font-extrabold sm:text-2xl">
+                    D{car?.pricePerDay.toLocaleString()}
+                  </span>
+                  <span className="text-xs font-medium opacity-90 sm:text-sm"> / day</span>
+                </div>
+              </div>
+            )}
 
             {/* THUMBNAILS */}
             <div className="relative flex flex-row justify-between gap-4">

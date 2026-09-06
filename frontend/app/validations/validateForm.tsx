@@ -42,7 +42,23 @@ export const createListingValidateor = z.object({
   leather_seat: checkbox,
   imageUrl: z.array(z.any()).min(1, "Please upload at least 1 image"),
   seller_note: z.string().optional(),
-});
+  forRent: checkbox,
+  pricePerDay: z.preprocess(
+    (val) => (val === "" || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
+    z.number().positive("Price per day must be a positive number").optional()
+  ),
+}).refine(
+  (data) => {
+    if (data.forRent) {
+      return data.pricePerDay !== undefined && data.pricePerDay > 0;
+    }
+    return true;
+  },
+  {
+    message: "Price per day is required when vehicle is for rent",
+    path: ["pricePerDay"],
+  }
+);
 
 // 1. Keep the schema simple and clear
 export const messageDealerSchema = z.object({

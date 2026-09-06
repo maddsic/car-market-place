@@ -60,6 +60,11 @@ export interface Car {
   transmission: string;
   createdAt: Date | string;
   owner: Owner;
+  forRent: boolean;
+  pricePerDay: number;
+  location: string;
+  lat: string;
+  lng: string;
 }
 
 export interface CarBodyType {

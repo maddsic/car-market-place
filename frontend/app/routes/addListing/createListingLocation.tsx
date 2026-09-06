@@ -19,7 +19,7 @@ const CreateListingLocation = ({ initailData }) => {
               className="transition duration-1000 ease-in-out group-hover:text-yellow"
             />
           }
-          label="location*"
+          label="location"
         >
           <Input
             name="location"
@@ -38,6 +38,7 @@ const CreateListingLocation = ({ initailData }) => {
             />
           }
           label="latitude"
+          isRequired={false}
         >
           <Input
             name="lat"
@@ -57,6 +58,7 @@ const CreateListingLocation = ({ initailData }) => {
             />
           }
           label="longitude"
+          isRequired={false}
         >
           <Input
             name="lng"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "../Select/select";
 import { CarMake, CarModel } from "~/interfaces";
+import Error from "../Error/error";
 
 interface ListingDetailsProps {
   carMakes: CarMake[];
@@ -92,7 +93,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
       <div className="flex flex-col gap-2">
         {" "}
         <p className="text-sm font-extrabold capitalize text-white">
-          condition*
+          condition <span className="text-red-500">*</span>
         </p>
         <Select
           key={initialData?.condition ? "loaded" : "loading"}
@@ -109,7 +110,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
       </div>
       {/* MAKE */}
       <div className="flex flex-col gap-2">
-        <p className="text-sm font-extrabold capitalize text-white">make*</p>
+        <p className="text-sm font-extrabold capitalize text-white">make<span className="text-red-500">*</span></p>
         <Select
           name="make"
           className="capitalize text-white"
@@ -125,7 +126,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
       </div>
       {/* models */}
       <div className="flex flex-col gap-2">
-        <p className="text-sm font-extrabold capitalize text-white">model*</p>
+        <p className="text-sm font-extrabold capitalize text-white">model<span className="text-red-500">*</span></p>
         <Select
           key={models.length}
           name="model"
@@ -142,7 +143,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
       </div>
       {/* year */}
       <div className="flex flex-col gap-2">
-        <p className="text-sm font-extrabold capitalize text-white">year*</p>
+        <p className="text-sm font-extrabold capitalize text-white">year<span className="text-red-500">*</span></p>
         <Select
           key={availableYears.length}
           name="year"
