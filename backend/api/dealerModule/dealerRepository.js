@@ -6,16 +6,30 @@ class DealerRepository {
   async getAllDealersWithCarCount() {
     return User.findAll({
       where: { role: 'agent' },
-      group: ['User.userId'],
       attributes: [
+        'userId',
         'username',
         'phone',
         'address',
         'role',
-        'userId',
+        // Total distinct cars count
         [
           Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('cars.carId'))),
           'carsCount'
+        ],
+        // Average rating (defaults to 0 if no reviews exist)
+        [
+          Sequelize.fn(
+            'COALESCE',
+            Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('dealerReviews.rating')), 1),
+            0
+          ),
+          'avgRating'
+        ],
+        // Total distinct reviews count
+        [
+          Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('dealerReviews.reviewId'))),
+          'reviewsCount'
         ],
       ],
       include: [
@@ -23,16 +37,15 @@ class DealerRepository {
           model: Car,
           as: 'cars',
           attributes: [],
-          required: true, // Ensure only dealers with cars are included
+          required: true, // Ensures only dealers with at least 1 car are included
         },
         {
           model: Review,
           as: 'dealerReviews',
           attributes: [],
-          required: false, // Include dealers even if they have no reviews
+          required: false, // Left join to calculate reviews if present
         }
       ],
-      // 2. Group by all selected non-aggregated columns
       group: [
         'User.userId',
         'User.username',
@@ -40,7 +53,6 @@ class DealerRepository {
         'User.address',
         'User.role'
       ],
-      // Preserve plain JSON response format
       raw: true,
       subQuery: false,
     });
