@@ -1,4 +1,4 @@
-const { User, Car, Sequelize } = require('../models');
+const { User, Car, Review, Sequelize } = require('../models');
 
 // Repository for accessing dealer data from the database
 class DealerRepository {
@@ -13,14 +13,36 @@ class DealerRepository {
         'address',
         'role',
         'userId',
-        [Sequelize.fn('COUNT', Sequelize.col('cars.carId')), 'carsCount'],
+        [
+          Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('cars.carId'))),
+          'carsCount'
+        ],
       ],
-      include: {
-        model: Car,
-        as: 'cars',
-        attributes: [],
-        required: true, // Ensure only dealers with cars are included
-      },
+      include: [
+        {
+          model: Car,
+          as: 'cars',
+          attributes: [],
+          required: true, // Ensure only dealers with cars are included
+        },
+        {
+          model: Review,
+          as: 'dealerReviews',
+          attributes: [],
+          required: false, // Include dealers even if they have no reviews
+        }
+      ],
+      // 2. Group by all selected non-aggregated columns
+      group: [
+        'User.userId',
+        'User.username',
+        'User.phone',
+        'User.address',
+        'User.role'
+      ],
+      // Preserve plain JSON response format
+      raw: true,
+      subQuery: false,
     });
   }
   // Search dealers based on filters and include the count of their cars
