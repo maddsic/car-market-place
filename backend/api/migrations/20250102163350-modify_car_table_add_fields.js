@@ -36,7 +36,7 @@ module.exports = {
     ];
 
     // 3. Sequentially add each column if it doesn't already exist
-    for (const column of columnToAdd) {
+    for (const column of columnsToAdd) {
       if (!tableInfo[column.name]) {
         await queryInterface.addColumn('Car', column.name, {
           type: column.type,
