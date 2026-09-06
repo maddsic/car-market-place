@@ -2,22 +2,31 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Add resetCode column
-    await queryInterface.addColumn('User', 'resetCode', {
-      type: Sequelize.STRING,
-      allowNull: true,
-    });
+    const table = await queryInterface.describeTable('User');
 
-    // Add resetCodeExpires column
-    await queryInterface.addColumn('User', 'resetCodeExpires', {
-      type: Sequelize.DATE,
-      allowNull: true,
-    });
+    if (!table.resetCode) {
+      await queryInterface.addColumn('User', 'resetCode', {
+        type: Sequelize.STRING,
+        allowNull: true,
+      });
+    }
+
+    if (!table.resetCodeExpires) {
+      await queryInterface.addColumn('User', 'resetCodeExpires', {
+        type: Sequelize.DATE,
+        allowNull: true,
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
-    // Remove columns if migration is rolled back
-    await queryInterface.removeColumn('User', 'resetCode');
-    await queryInterface.removeColumn('User', 'resetCodeExpires');
+    const table = await queryInterface.describeTable('User');
+
+    if (table.resetCode) {
+      await queryInterface.removeColumn('User', 'resetCode');
+    }
+    if (table.resetCodeExpires) {
+      await queryInterface.removeColumn('User', 'resetCodeExpires');
+    }
   }
 };

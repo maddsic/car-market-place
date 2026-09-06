@@ -2,36 +2,44 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('CarBodyType', {
-      typeId: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-        primaryKey: true,
-      },
-      typeName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'),
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'),
-      },
-      deletedAt: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
-    });
+    const tables = await queryInterface.showAllTables();
+
+    if (!tables.includes('CarBodyType')) {
+      await queryInterface.createTable('CarBodyType', {
+        typeId: {
+          type: Sequelize.UUID,
+          defaultValue: Sequelize.UUIDV4,
+          allowNull: false,
+          primaryKey: true,
+        },
+        typeName: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true,
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.fn('NOW'),
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.fn('NOW'),
+        },
+        deletedAt: {
+          type: Sequelize.DATE,
+          allowNull: true,
+        },
+      });
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('CarBodyType', null, {});
+    const tables = await queryInterface.showAllTables();
+
+    if (tables.includes('CarBodyType')) {
+      await queryInterface.dropTable('CarBodyType');
+    }
   },
 };
