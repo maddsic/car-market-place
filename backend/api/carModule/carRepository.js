@@ -107,6 +107,50 @@ class CarRepository {
       limit,
     });
   }
+
+  // Add inside your existing CarRepository class
+  async findRentalCars() {
+    return this.models.Car.findAll({
+      where: {
+        forRent: true,
+        status: 'available',
+      },
+      attributes: [
+        'carId',
+        'userId',
+        'stockNumber',
+        'carType',
+        'condition',
+        'make',
+        'model',
+        'year',
+        'price',
+        'pricePerDay',
+        'forRent',
+        'mileage',
+        'fuelType',
+        'imageUrl',
+        'transmission',
+        'status',
+        'createdAt',
+      ],
+      include: [
+        {
+          model: this.models.User,
+          as: 'owner',
+          attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
+          required: false,
+        },
+        {
+          model: this.models.CarBodyType,
+          as: 'bodyType',
+          attributes: ['typeId', 'typeName'],
+          required: false,
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+  }
 }
 
 module.exports = CarRepository;

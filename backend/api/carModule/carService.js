@@ -273,6 +273,23 @@ class CarService {
     const cars = await this.carRepository.findAllCars({ where: filters });
     return processCarImages(cars);
   }
+
+  // GET RENTAL CARS
+  // Add inside your existing CarService class
+  async getRentalCars() {
+    try {
+      const cars = await this.carRepository.findRentalCars();
+
+      if (!cars || cars.length === 0) {
+        return [];
+      }
+
+      return processCarImages(cars);
+    } catch (error) {
+      console.error("Error in getRentalCars Service:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = CarService;

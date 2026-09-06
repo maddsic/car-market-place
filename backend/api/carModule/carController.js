@@ -244,6 +244,26 @@ class CarController {
       return sendResponse(res, 500, false, error.message);
     }
   };
+
+  // GET RENTAL CARS
+  // Add inside your existing CarController class
+  getRentalCars = async (req, res) => {
+    try {
+      const cars = await this.carService.getRentalCars();
+
+      return res.status(200).json({
+        success: true,
+        message: "Rental cars retrieved successfully",
+        data: cars,
+      });
+    } catch (error) {
+      console.error("Error in getRentalCars Controller:", error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Failed to retrieve rental cars",
+      });
+    }
+  };
 }
 
 module.exports = CarController;
