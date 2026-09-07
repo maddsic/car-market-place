@@ -22,7 +22,7 @@ export const SignUpSchema = z.object({
     ),
   phone: z
     .string()
-    .min(10, "Phone number must be at least 10 digits long")
+    .min(7, "Phone number must be at least 7 digits long")
     .regex(/^\d+$/, "Phone number must contain only digits"),
   username: z.string().min(3, "Username must be at least 3 characters long"),
   role: z.enum(["admin", "agent", "user"]).default("user"),
