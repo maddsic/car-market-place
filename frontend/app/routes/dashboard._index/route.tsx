@@ -12,18 +12,25 @@ type DashboardStats = {
   availableListings: number;
   soldListings: number;
   reviewCount: number;
-}
-
+};
 
 export default function DashboardIndex() {
   const data = useLoaderData<typeof loader>();
 
-  // Handle error state
+  // Handle error state with responsive UI container
   if ("error" in data) {
-    return <div className="text-red-500">Error: {data.error}</div>;
+    return (
+      <div className="mx-auto max-w-7xl p-4 sm:p-6">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600 shadow-sm sm:p-6 sm:text-base">
+          <p className="font-semibold">Error Loading Dashboard</p>
+          <p>{data.error}</p>
+        </div>
+      </div>
+    );
   }
+
   // Get stats from loader data
-  const { stats, activities, profileData } = data
+  const { stats, activities, profileData } = data;
 
   const statsCardData = [
     {
@@ -52,52 +59,62 @@ export default function DashboardIndex() {
     },
   ];
 
-
   return (
-    <div className="mb-10 flex flex-col gap-8">
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-        {statsCardData.map((statsData, i) => (
-          <StatsCard
-            key={i}
-            title={statsData.title}
-            value={statsData.value}
-            icon={statsData.icon}
-          />
-        ))}
-      </div>
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="flex flex-col gap-6 sm:gap-8">
 
-      {/* Middle: Chart + Profile */}
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="col-span-2">
-          <DashboardChart />
+        {/* Stats Section - Stacks on mobile, 2 per row on tablet, 4 per row on desktop */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+          {statsCardData.map((statsData, i) => (
+            <StatsCard
+              key={i}
+              title={statsData.title}
+              value={statsData.value}
+              icon={statsData.icon}
+            />
+          ))}
         </div>
-        <DealerProfileCard profileData={profileData} />
-      </div>
 
-      {/* Bottom: Recent Activities */}
-      <RecentActivities activities={activities} />
+        {/* Middle Section: Chart + Profile */}
+        <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
+          <div className="w-full lg:col-span-2">
+            <DashboardChart />
+          </div>
+          <div className="w-full lg:col-span-1">
+            <DealerProfileCard profileData={profileData} />
+          </div>
+        </div>
+
+        {/* Bottom Section: Recent Activities */}
+        <div className="w-full">
+          <RecentActivities activities={activities} />
+        </div>
+
+      </div>
     </div>
   );
 }
 
 export const loader = async ({ request }: { request: Request }) => {
-  const token = getAuthToken(request)
+  const token = getAuthToken(request);
   if (!token) {
-    return redirect("/auth/login")
+    return redirect("/auth/login");
   }
 
   try {
     const [stats, activitiesData, profileData] = await Promise.all([
       getDealerDashboardStats(request),
       getDashboardActivities(request),
-      getDealerProfileCardData(request)
-    ])
+      getDealerProfileCardData(request),
+    ]);
 
-    console.log(activitiesData)
-    return json({ stats: stats as DashboardStats, activities: activitiesData.data || [], profileData: profileData.data || {} });
+    return json({
+      stats: stats as DashboardStats,
+      activities: activitiesData?.data || [],
+      profileData: profileData?.data || {},
+    });
   } catch (error) {
-    console.error("Dashboard loader error", error)
+    console.error("Dashboard loader error", error);
     return json({ error: "Failed to load dashboard data" }, { status: 500 });
   }
-}
+};

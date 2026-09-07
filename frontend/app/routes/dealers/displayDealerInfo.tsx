@@ -9,7 +9,8 @@ interface DealershipInfoProps {
   address: string;
   phone: string;
   carsCount: number;
-  reviewCount?: number;
+  reviewsCount?: number;
+  avgRating?: number;
   logoUrl?: string;
   query?: {
     condition?: string;
@@ -24,7 +25,8 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
   address,
   phone,
   carsCount,
-  reviewCount = 0, // Placeholder for review count
+  reviewsCount,
+  avgRating,
   logoUrl,
   query,
 }) => {
@@ -68,20 +70,37 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
             {/* Business Name and Reviews */}
             <div>
               <Link to={profileUrl} className="">
-                <h1 className="text-lg font-bold text-gray-900 transition duration-1000 hover:text-yellow lg:text-xl">
+                <h1 className="text-lg font-bold text-gray-900 capitalize transition duration-1000 hover:text-yellow lg:text-xl">
                   {username}
                 </h1>
               </Link>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>(Reviews {reviewCount})</span>
+                <span>({avgRating} Rating)</span>
                 <div className="ml-2 flex items-center">
+                  {[...Array(5)].map((_, i) => {
+                    const ratingValue = Math.round(Number(avgRating) || 0);
+                    return (
+                      <Star
+                        key={i}
+                        className={`h-3 w-3 ${i < ratingValue
+                          ? "fill-current text-yellow"
+                          : "text-gray-300"
+                          }`}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex items-center space-x-1 text-sm text-gray-600">
+                <span>({reviewsCount} Reviews)</span>
+                {/* <div className="ml-2 flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       className={`h-3 w-3 ${i < 4 ? "fill-current text-yellow" : "text-gray-300"}`}
                     />
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

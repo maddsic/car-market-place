@@ -133,7 +133,7 @@ const RentalsPage = () => {
                         <div className="flex items-baseline gap-1">
                           <Price
                             price={car.pricePerDay || car.price}
-                            className=""
+                            className="text-[10px py-0 px-0]"
                           />
                           <span className="text-xs font-semibold text-gray-500">/day</span>
                         </div>
