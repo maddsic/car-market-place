@@ -7,7 +7,7 @@ export const DashboardTopNav = () => {
   return (
     <div className="mb-5 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
       <h1 className="text-2xl font-semibold text-primary">
-        Alpha Motors
+        Welcome to your Dashboard
       </h1>
       <div className="flex items-center gap-5">
         <button onClick={() => navigate('/dashboard/messages')} className="relative text-gray-500 transition hover:text-primary"
