@@ -122,7 +122,7 @@ const InventoryPage = () => {
                       {/* CARD DETAILS */}
                       <div className="mt-3 flex justify-between transition-colors duration-300 group-hover:text-yellow">
                         <CarMakeAndModel car={car} />
-                        <Price price={car.price} className="text-[14px]" />
+                        <Price price={car.price} className="px-o py-0" />
                       </div>
                       <CarDescription car={car} />
                       {/* <Special /> */}

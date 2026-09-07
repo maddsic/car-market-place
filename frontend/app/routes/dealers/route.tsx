@@ -77,10 +77,10 @@ const Dealers = () => {
           <div className="mt-10 flex items-center justify-between">
             <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
 
-            <div className="flex items-center gap-2">
-              <span className="rounded bg-gray-200 px-4 py-1 text-white">1</span>
-              <span className="rounded bg-yellow px-4 py-1 text-white">2</span>
-              <span className="rounded bg-yellow px-4 py-1 text-white">3</span>
+            {/* PAGINATION INDICATOR */}
+            <div className="flex items-center gap-2 text-sm font-semibold text-gray-600">
+              Page {Math.floor(startIndex / carsPerPage) + 1} of{" "}
+              {Math.ceil(dealers.length / carsPerPage)}
             </div>
 
             <NextButton
