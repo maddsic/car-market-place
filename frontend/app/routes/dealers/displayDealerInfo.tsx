@@ -11,7 +11,7 @@ interface DealershipInfoProps {
   carsCount: number;
   reviewsCount?: number;
   avgRating?: number;
-  logoUrl?: string;
+  avatarUrl?: string;
   query?: {
     condition?: string;
     make?: string;
@@ -27,7 +27,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
   carsCount,
   reviewsCount,
   avgRating,
-  logoUrl,
+  avatarUrl,
   query,
 }) => {
   const [showFullNumber, setShowFullNumber] = useState(false);
@@ -46,10 +46,10 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
           <div className="flex items-center space-x-4">
             {/* Logo */}
             <Link to={profileUrl} className="flex-shrink-0 cursor-pointer">
-              {logoUrl ? (
+              {avatarUrl ? (
                 <img
-                  src={logoUrl || "/placeholder.svg"}
-                  alt={`${username} Logo`}
+                  src={avatarUrl || "/placeholder.svg"}
+                  alt={`${username} Avatar`}
                   className="h-12 w-auto object-contain"
                 />
               ) : (
@@ -74,7 +74,7 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                   {username}
                 </h1>
               </Link>
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
+              <div className="md:flex items-center space-x-1 text-sm text-gray-600 hidden">
                 <span>({avgRating} Rating)</span>
                 <div className="ml-2 flex items-center">
                   {[...Array(5)].map((_, i) => {
@@ -91,16 +91,8 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
                   })}
                 </div>
               </div>
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
+              <div className="md:flex hidden items-center space-x-1 text-sm text-gray-600">
                 <span>({reviewsCount} Reviews)</span>
-                {/* <div className="ml-2 flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 ${i < 4 ? "fill-current text-yellow" : "text-gray-300"}`}
-                    />
-                  ))}
-                </div> */}
               </div>
             </div>
           </div>
@@ -168,10 +160,25 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
         {/* Mobile-optimized bottom section */}
         <div className="mt-4 lg:hidden">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span className="flex items-center space-x-1">
-              <Star className="text-yellow-400 h-4 w-4 fill-current" />
-              <span>4.2 rating</span>
-            </span>
+            <div className="flex items-center space-x-1 text-sm text-gray-600 md:hidden">
+              {/* <span>({avgRating} Rating)</span> */}
+              <div className="ml-2 flex items-center">
+                {[...Array(5)].map((_, i) => {
+                  const ratingValue = Math.round(Number(avgRating) || 0);
+                  return (
+                    <Star
+                      key={i}
+                      className={`h-3 w-3 ${i < ratingValue
+                        ? "fill-current text-yellow"
+                        : "text-gray-300"
+                        }`}
+                    />
+                  );
+                })}
+              </div>
+              <span>{avgRating} Rating</span>
+
+            </div>
             <span>Open until 8:00 PM</span>
           </div>
         </div>

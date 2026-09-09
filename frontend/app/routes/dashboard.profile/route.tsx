@@ -73,8 +73,8 @@ export default function ProfileSettings() {
           type="button"
           onClick={() => setActiveTab(1)}
           className={`py-3 px-4 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${activeTab === 1
-              ? "border-primary text-primary"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            ? "border-primary text-primary"
+            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
         >
           1. General Profile
@@ -83,8 +83,8 @@ export default function ProfileSettings() {
           type="button"
           onClick={() => setActiveTab(2)}
           className={`py-3 px-4 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${activeTab === 2
-              ? "border-primary text-primary"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            ? "border-primary text-primary"
+            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
         >
           2. Contact & Location
@@ -93,8 +93,8 @@ export default function ProfileSettings() {
           type="button"
           onClick={() => setActiveTab(3)}
           className={`py-3 px-4 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${activeTab === 3
-              ? "border-primary text-primary"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            ? "border-primary text-primary"
+            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
         >
           3. Photo & Branding

@@ -13,6 +13,7 @@ class DealerRepository {
           'phone',
           'address',
           'role',
+          'avatarUrl',
           // Distinct count of cars owned by the agent
           [
             Sequelize.fn(
@@ -62,7 +63,8 @@ class DealerRepository {
           'User.username',
           'User.phone',
           'User.address',
-          'User.role'
+          'User.role',
+          'User.avatarUrl'
         ],
         raw: true,
         subQuery: false,
