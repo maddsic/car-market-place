@@ -5,6 +5,7 @@ import {
   FaLinkedinIn,
   FaTwitter,
 } from "react-icons/fa";
+import { NavLinks } from "~/data/navLinks"; // Adjust path to where your navLinks are stored
 import Divider from "../Divider/divider";
 import Logo from "../Logo/logo";
 
@@ -14,55 +15,40 @@ const Footer = () => {
   return (
     <footer className="w-full bg-primary text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-        {/* TOP SECTION: Logo, Quick Links & Socials */}
+        {/* TOP SECTION: Logo & Navigation */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center justify-between">
 
-          {/* Logo & Brief Tagline */}
+          {/* Logo & Tagline */}
           <div className="md:col-span-4 flex flex-col items-start gap-3">
             <Logo />
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
-              Your trusted marketplace for buying, selling, and managing dealership vehicle fleets.
+              Your trusted marketplace for buying, selling, renting, and bidding on vehicle fleets.
             </p>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="md:col-span-8 flex flex-wrap items-center justify-start md:justify-end gap-x-6 gap-y-2 text-xs font-semibold uppercase tracking-wider">
-            <Link
-              to="/dealers"
-              className="text-slate-400 hover:text-white transition-colors duration-300 py-1"
-            >
-              Dealers List
-            </Link>
-            <span className="hidden sm:inline text-slate-700">•</span>
+          {/* Dynamic NavLinks Mapping - Hidden on small devices (below md) */}
+          <nav className="hidden md:flex md:col-span-8 flex-wrap items-center justify-end gap-x-5 gap-y-3 text-xs font-semibold uppercase tracking-wider">
+            {NavLinks.map((link, index) => (
+              <div key={link.id} className="flex items-center gap-x-5">
+                <Link
+                  to={link.href}
+                  className="text-slate-400 hover:text-white transition-colors duration-300"
+                >
+                  {link.title}
+                </Link>
 
-            <Link
-              to="/inventory"
-              className="text-slate-400 hover:text-white transition-colors duration-300 py-1"
-            >
-              Inventory
-            </Link>
-            <span className="hidden sm:inline text-slate-700">•</span>
-
-            <Link
-              to="/about"
-              className="text-slate-400 hover:text-white transition-colors duration-300 py-1"
-            >
-              About Us
-            </Link>
-            <span className="hidden sm:inline text-slate-700">•</span>
-
-            <Link
-              to="/contact"
-              className="text-slate-400 hover:text-white transition-colors duration-300 py-1"
-            >
-              Contact Us
-            </Link>
+                {/* Bullet separator between items except the last one */}
+                {index < NavLinks.length - 1 && (
+                  <span className="text-slate-700">•</span>
+                )}
+              </div>
+            ))}
           </nav>
         </div>
 
         <Divider classNames="my-8 border-slate-800" />
 
-        {/* BOTTOM SECTION: Copyright & Social Icons */}
+        {/* BOTTOM SECTION: Copyright & Socials */}
         <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {currentYear} GamAutos. All rights reserved.</p>
 

@@ -148,7 +148,7 @@ class CarService {
           {
             model: User,
             as: 'owner',     // 👈 Matches Car.belongsTo(models.User, { as: 'owner' })
-            attributes: ['first_name', 'last_name', 'phone', 'role', 'avatarUrl'],
+            attributes: ['first_name', 'last_name', 'username', 'phone', 'role', 'avatarUrl'],
             required: false,
           },
           {

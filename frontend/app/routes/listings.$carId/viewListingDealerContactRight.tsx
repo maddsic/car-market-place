@@ -24,7 +24,7 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
       <Link to={`/profile/${car?.owner?.userId}`} className="mt-5">
         <ListingSellerImage
           imgUrl={profileImage || "/sain.jpeg"}
-          name={fullname}
+          name={car?.owner?.username || fullname}
           className="h-22 w-22 border-b"
         />
       </Link>

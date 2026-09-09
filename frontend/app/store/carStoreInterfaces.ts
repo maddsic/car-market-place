@@ -32,6 +32,7 @@ export interface LatestCar {
   carId: string;
   make: string;
   model: string;
+  year: number;
   price: number;
   image: string;
   imageUrl: string;
@@ -45,5 +46,6 @@ export interface LatestCar {
     last_name: string;
     phone: string;
     avatarUrl?: string;
+    username?: string;
   };
 }

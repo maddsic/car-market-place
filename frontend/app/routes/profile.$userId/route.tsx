@@ -33,7 +33,7 @@ const ProfilePage = () => {
   const sellerFullname: string | null = user
     ? user?.first_name + " " + user?.last_name
     : null;
-  const dealerFullname: string | null = dealers ? dealers?.username : null;
+  const username: string | null = dealers ? dealers?.username : null;
 
   return (
     <main className="max__container relative mb-10 box-border p-4 md:p-10">
@@ -44,7 +44,7 @@ const ProfilePage = () => {
             <span className="">
               <ListingSellerImage
                 imgUrl={user?.avatarUrl}
-                name={sellerFullname || dealerFullname || ""}
+                name={username || sellerFullname || ""}
                 className="h-22 w-22 border-b md:border-none"
                 desc={description}
               />
