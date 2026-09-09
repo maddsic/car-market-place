@@ -11,6 +11,8 @@ import { LatestCar } from "~/store/carStoreInterfaces";
 
 const LatestCars = () => {
   const { latestCars } = useCarStore();
+
+  // console.log("LATEST CARS:", latestCars)
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
@@ -129,7 +131,7 @@ const LatestCars = () => {
                   <div className="flex flex-col">
                     <span className="text-[10px] text-gray-400">Listed by</span>
                     <span className="text-xs font-bold text-gray-800 capitalize">
-                      {car?.owner?.first_name} {car?.owner?.last_name}
+                      {car?.owner?.username || `${car?.owner?.first_name} ${car?.owner?.last_name}`}
                     </span>
                   </div>
                 </div>
@@ -156,7 +158,7 @@ const LatestCars = () => {
       </div>
 
       {/* VIEW ALL BUTTON */}
-      <div className="mt-12 flex justify-center">
+      <div className="my-10 flex justify-center">
         <Button
           onClick={() => handleNavigate("latest", "all")}
           title="show all latest cars"
