@@ -118,8 +118,8 @@ export default function InventoryDashboard() {
                           key={pageNum}
                           onClick={() => handlePageChange(pageNum)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${currentPage === pageNum
-                              ? "bg-indigo-600 text-white shadow-xs"
-                              : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                            ? "bg-indigo-600 text-white shadow-xs"
+                            : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                             }`}
                         >
                           {pageNum}
@@ -217,8 +217,8 @@ function InventoryRow({ car }: { car: Car }) {
                 value="update-status"
                 disabled={isUpdating}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all ${isSold
-                    ? "bg-white border text-slate-600 hover:bg-slate-50"
-                    : "bg-emerald-600 text-white hover:bg-emerald-700"
+                  ? "bg-white border text-slate-600 hover:bg-slate-50"
+                  : "bg-emerald-600 text-white hover:bg-emerald-700"
                   }`}
               >
                 {isSold ? <HiOutlineRefresh size={16} /> : <HiOutlineCheckCircle size={16} />}
@@ -308,8 +308,8 @@ function MobileInventoryCard({ car }: { car: Car }) {
             value="update-status"
             disabled={isUpdating}
             className={`w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isSold
-                ? "bg-white border text-slate-600 hover:bg-slate-50"
-                : "bg-emerald-600 text-white hover:bg-emerald-700"
+              ? "bg-white border text-slate-600 hover:bg-slate-50"
+              : "bg-emerald-600 text-white hover:bg-emerald-700"
               }`}
           >
             {isSold ? <HiOutlineRefresh size={14} /> : <HiOutlineCheckCircle size={14} />}
