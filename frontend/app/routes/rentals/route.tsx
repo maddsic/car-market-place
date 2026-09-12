@@ -126,7 +126,7 @@ const RentalsPage = () => {
                       </div>
 
                       {/* CARD DETAILS */}
-                      <div className="mt-3 flex items-center justify-between transition-colors duration-300 group-hover:text-yellow">
+                      <div className="mt-3 flex items-center justify-between transition-colors duration-300 group-hover:text-black">
                         <CarMakeAndModel car={car} />
 
                         {/* RENTAL PRICE DISPLAY */}

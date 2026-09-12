@@ -12,6 +12,7 @@ interface FormInputProps {
   defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
+  maxLength?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -29,6 +30,7 @@ export function FormInput({
   defaultValue,
   required,
   disabled,
+  maxLength,
   onChange,
   onFocus,
   onBlur,
@@ -53,6 +55,7 @@ export function FormInput({
         onError={error}
         required={required}
         disabled={disabled}
+        maxLength={maxLength}
       />
     </div>
   );
