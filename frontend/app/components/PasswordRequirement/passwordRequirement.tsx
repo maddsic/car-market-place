@@ -46,7 +46,7 @@ const PasswordRequirements = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+        className="bg-slate-800/80 border-slate-700 focus:bg-slate-800 text-white [&_input]:text-white font-medium placeholder:text-slate-500 shadow-sm text-sm rounded-xl"
         onFocus={() => setIsInputFocused(true)}
         onBlur={() => setIsInputFocused(false)}
       />
@@ -59,9 +59,8 @@ const PasswordRequirements = ({
             {validationRulesChecks.map((check, index) => (
               <li key={index} className="flex items-center gap-2">
                 <span
-                  className={`h-2 w-2 rounded-full ${
-                    check.isValid ? "bg-green-500" : "bg-red-400"
-                  }`}
+                  className={`h-2 w-2 rounded-full ${check.isValid ? "bg-green-500" : "bg-red-400"
+                    }`}
                 />
                 <span
                   className={check.isValid ? "text-green-700" : "text-gray-700"}

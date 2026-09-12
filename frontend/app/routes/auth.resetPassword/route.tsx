@@ -20,11 +20,10 @@ interface ActionData {
   error?: string;
 }
 
-
 export async function action({ request }: ActionFunctionArgs) {
   let formData: FormData | null = null;
   try {
-    const formData = await request.formData();
+    formData = await request.formData();
     const intent = formData.get("intent");
 
     // 📩 STEP 1: Request Code
@@ -65,8 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return json({ success: false, error: "Invalid action" }, { status: 400 });
   } catch (error: any) {
-    // const formData = await request.formData();
-    const intent = (formData as FormData | null)?.get("intent") || "send-code";    // Gracefully catches throw errors from the auth.server layer
+    const intent = (formData as FormData | null)?.get("intent") || "send-code";
     return json({
       success: false,
       step: intent === "reset-password" ? 2 : 1,
@@ -102,52 +100,65 @@ export default function ResetPassword() {
     <React.Fragment>
       <LoadingIndicator isLoading={isSubmitting} />
 
-      <div className="min-h-screen bg-[url('/auth_bg.png')] bg-cover bg-center flex items-center justify-center p-4 lg:p-0">
+      <div className="min-h-screen w-full bg-slate-950 relative overflow-hidden flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        {/* Background Ambient Radial Glows */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* 🪟 Glassmorphism Container */}
+        {/* Main Glass/Dark Container */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col lg:flex-row w-full max-w-5xl bg-white/20 backdrop-blur-xl rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[600px] border border-white/30"
+          className="flex flex-col lg:flex-row w-full max-w-5xl bg-slate-900/90 backdrop-blur-2xl rounded-3xl sm:rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[600px] border border-slate-800 relative z-10 my-auto"
         >
 
-          {/* LEFT SIDE: Brand/Visual Side (Dark Glass Layout) */}
-          <div className="hidden lg:flex lg:w-1/2 bg-slate-950/40 relative p-12 flex-col justify-between text-white border-r border-white/10">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+          {/* LEFT SIDE: Brand Visual Side (Dark Slate Header) */}
+          <div className="hidden lg:flex lg:w-1/2 bg-slate-950 p-10 xl:p-12 flex-col justify-between text-white border-r border-slate-800/80 relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-transparent to-amber-500/10 pointer-events-none" />
 
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-10">
-                <div className="bg-primary p-2.5 rounded-xl shadow-lg">
+                <div className="bg-slate-800 p-2.5 rounded-xl shadow-lg border border-slate-700">
                   <Logo />
                 </div>
-                <span className="text-2xl font-black tracking-tighter">GAMAUTOS</span>
+                <span className="text-2xl font-black tracking-tighter text-white">GAMAUTOS</span>
               </div>
-              <h1 className="text-5xl font-extrabold leading-tight tracking-tight">
+              <h1 className="text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight text-white">
                 Reset <br />
                 <span className="text-yellow font-black">Password.</span>
               </h1>
-              <p className="mt-4 text-slate-200 font-medium max-w-xs">
+              <p className="mt-4 text-slate-400 text-sm xl:text-base font-medium max-w-xs leading-relaxed">
                 Recover access to your dealer account and resume connecting with buyers.
               </p>
             </div>
 
-            <div className="relative z-10 p-6 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md">
-              <p className="text-white text-xs italic font-medium">
+            <div className="relative z-10 p-5 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <p className="text-slate-300 text-xs italic font-medium">
                 "Connecting Gambian dealers and buyers with trust and transparency."
               </p>
             </div>
           </div>
 
-          {/* RIGHT SIDE: The Step-by-Step Forms (Clear Glass) */}
-          <div className="w-full lg:w-1/2 p-8 md:p-16 flex flex-col justify-center bg-white/40">
+          {/* RIGHT SIDE: Form Area */}
+          <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-12 lg:p-14 flex flex-col justify-center bg-slate-900/50">
+
+            {/* Mobile Header Brand */}
+            <div className="flex lg:hidden items-center gap-3 mb-6">
+              <div className="bg-slate-800 p-2 rounded-lg border border-slate-700">
+                <Logo />
+              </div>
+              <span className="text-xl font-black tracking-tighter text-white">
+                GAMAUTOS
+              </span>
+            </div>
 
             {/* Context Header Text */}
-            <div className="mb-10">
-              <h2 className="text-4xl font-black text-slate-950 tracking-tight">
+            <div className="mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
                 {step === 3 ? "Success!" : "Recovery"}
               </h2>
-              <p className="text-slate-900 font-bold mt-2">
+              <p className="text-slate-400 font-medium text-xs sm:text-sm mt-1">
                 {step === 1 && "Enter your email address to receive a recovery code."}
                 {step === 2 && `We sent a code to ${userEmail}.`}
                 {step === 3 && "Your account password has been safely updated."}
@@ -156,7 +167,7 @@ export default function ResetPassword() {
 
             {/* STEP 1: REQUEST CODE FORM */}
             {step === 1 && (
-              <Form method="post" className="space-y-6">
+              <Form method="post" className="space-y-4 sm:space-y-5">
                 <input type="hidden" name="intent" value="send-code" />
 
                 {actionData?.error && <DisplayError error={actionData.error} />}
@@ -169,7 +180,7 @@ export default function ResetPassword() {
                     type="email"
                     required
                     placeholder="name@example.com"
-                    className="bg-white/60 border-white/50 focus:bg-white/80 text-slate-950 font-semibold placeholder:text-slate-500 shadow-sm"
+                    className="bg-slate-800/80 border-slate-700 focus:bg-slate-800 text-white [&_input]:text-white font-medium placeholder:text-slate-500 shadow-sm text-sm rounded-xl"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -178,14 +189,14 @@ export default function ResetPassword() {
                   title={isSubmitting ? "Sending Code..." : "Send Reset Code"}
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-yellow hover:bg-primary text-white font-black rounded-2xl transition-all active:scale-95 shadow-xl uppercase tracking-wider mt-2"
+                  className="w-full py-3.5 sm:py-4 bg-yellow hover:bg-amber-500 text-slate-950 font-black rounded-xl transition-all active:scale-95 shadow-xl uppercase tracking-wider text-xs sm:text-sm mt-2"
                 />
               </Form>
             )}
 
             {/* STEP 2: VERIFY CODE & SET NEW PASSWORD */}
             {step === 2 && (
-              <Form method="post" className="space-y-6">
+              <Form method="post" className="space-y-4 sm:space-y-5">
                 <input type="hidden" name="intent" value="reset-password" />
                 <input type="hidden" name="email" value={userEmail} />
 
@@ -201,7 +212,7 @@ export default function ResetPassword() {
                     required
                     placeholder="Enter 6-digit code"
                     maxLength={6}
-                    className="w-full bg-white/60 border-white/50 focus:bg-white/80 text-slate-950 font-mono tracking-widest text-center text-lg shadow-sm"
+                    className="w-full bg-slate-800/80 border-slate-700 focus:bg-slate-800 text-white [&_input]:text-white font-mono tracking-widest text-center text-lg shadow-sm rounded-xl"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -215,7 +226,7 @@ export default function ResetPassword() {
                     type="password"
                     required
                     placeholder="••••••••"
-                    className="bg-white/60 border-white/50 focus:bg-white/80 text-slate-950 font-semibold shadow-sm"
+                    className="bg-slate-800/80 border-slate-700 focus:bg-slate-800 text-white [&_input]:text-white font-medium shadow-sm text-sm rounded-xl"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -229,24 +240,24 @@ export default function ResetPassword() {
                     type="password"
                     required
                     placeholder="••••••••"
-                    className="bg-white/60 border-white/50 focus:bg-white/80 text-slate-950 font-semibold shadow-sm"
+                    className="bg-slate-800/80 border-slate-700 focus:bg-slate-800 text-white [&_input]:text-white font-medium shadow-sm text-sm rounded-xl"
                     disabled={isSubmitting}
                   />
                 </div>
 
-                <div className="space-y-4 pt-2">
+                <div className="space-y-3 pt-2">
                   <Button
                     title={isSubmitting ? "Updating..." : "Update Password"}
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 bg-yellow hover:bg-primary text-white font-black rounded-2xl transition-all active:scale-95 shadow-xl uppercase tracking-wider"
+                    className="w-full py-3.5 sm:py-4 bg-yellow hover:bg-amber-500 text-slate-950 font-black rounded-xl transition-all active:scale-95 shadow-xl uppercase tracking-wider text-xs sm:text-sm"
                   />
 
                   <div className="text-center">
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="text-xs font-bold text-slate-800 hover:text-blue-700 underline underline-offset-2 transition-colors"
+                      className="text-xs font-semibold text-slate-400 hover:text-yellow underline underline-offset-2 transition-colors"
                     >
                       Back to change email
                     </button>
@@ -258,30 +269,30 @@ export default function ResetPassword() {
             {/* STEP 3: SUCCESS STATE */}
             {step === 3 && (
               <div className="text-center space-y-6 mt-2">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-700 border border-green-500/30 backdrop-blur-sm shadow-inner">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-sm shadow-inner">
                   <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
 
-                <p className="text-sm text-slate-950 font-bold leading-relaxed max-w-sm mx-auto">
+                <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed max-w-sm mx-auto">
                   Your account credentials have been safely updated. You can now access your dashboard again.
                 </p>
 
                 <Link
                   to="/auth/login"
-                  className="inline-block w-full py-4 bg-slate-950 hover:bg-primary text-white font-black rounded-2xl text-center shadow-xl uppercase tracking-wider transition-all active:scale-95"
+                  className="inline-block w-full py-3.5 sm:py-4 bg-yellow hover:bg-amber-500 text-slate-950 font-black rounded-xl text-center shadow-xl uppercase tracking-wider text-xs sm:text-sm transition-all active:scale-95"
                 >
                   Go to Sign In
                 </Link>
               </div>
             )}
 
-            {/* Back to Safety Anchor Footer (Hidden in Success Step) */}
+            {/* Back Anchor Footer */}
             {step !== 3 && (
-              <p className="mt-10 text-center text-sm text-slate-950 font-bold">
+              <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-slate-400 font-medium">
                 Remember your password?{" "}
-                <Link to="/auth/login" className="text-blue-700 font-black hover:underline underline-offset-4">
+                <Link to="/auth/login" className="text-yellow font-bold hover:underline underline-offset-4">
                   Sign In
                 </Link>
               </p>
