@@ -61,7 +61,7 @@ const Navbar = () => {
               <Link
                 to="/addListing"
                 aria-label="Add Listing"
-                className="flex lg:hidden rounded-xl bg-amber-400 p-2.5 text-slate-950 shadow-lg shadow-amber-400/20 active:scale-95 transition-transform"
+                className="flex lg:hidden rounded-xl bg-yellow p-2.5 text-slate-950 shadow-lg shadow-amber-400/20 active:scale-95 transition-transform"
               >
                 <FaPlusCircle size={18} />
               </Link>
@@ -93,13 +93,13 @@ const Navbar = () => {
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
       <div className="fixed bottom-0 left-0 z-50 flex w-full justify-around border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-xl px-2 py-2 md:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-        {NavLinks.slice(0, 5).map((link) => (
+        {NavLinks.slice(0, 6).map((link) => (
           <NavLink
             key={link.id}
             to={link.href}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center px-3 py-1.5 rounded-xl transition-all ${isActive
-                ? "text-amber-400 bg-amber-400/10 font-bold scale-105"
+                ? "text-yellow bg-amber-400/10 font-bold scale-105"
                 : "text-slate-400 hover:text-slate-200"
               }`
             }

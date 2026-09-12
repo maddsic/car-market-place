@@ -40,21 +40,21 @@ const Footer = () => {
             <div className="flex flex-col gap-2 mt-2">
               <a
                 href="mailto:support@gamautos.com"
-                className="inline-flex items-center gap-2.5 text-xs text-slate-400 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-2.5 text-xs text-slate-400 hover:text-yellow transition-colors"
               >
-                <span className="p-1.5 rounded-md bg-slate-900 border border-slate-800 text-amber-400">
+                <span className="p-1.5 rounded-md bg-slate-900 border border-slate-800 text-yellow">
                   <FaEnvelope size={12} />
                 </span>
                 support@gamautos.com
               </a>
               <a
                 href="tel:+18005550199"
-                className="inline-flex items-center gap-2.5 text-xs text-slate-400 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-2.5 text-xs text-slate-400 hover:text-yellow transition-colors"
               >
-                <span className="p-1.5 rounded-md bg-slate-900 border border-slate-800 text-amber-400">
+                <span className="p-1.5 rounded-md bg-slate-900 border border-slate-800 text-yellow">
                   <FaPhoneAlt size={12} />
                 </span>
-                +1 (800) 555-0199
+                +220 7252222
               </a>
             </div>
           </div>
@@ -69,7 +69,7 @@ const Footer = () => {
                 <li key={link.id}>
                   <Link
                     to={link.href}
-                    className="text-slate-400 hover:text-amber-400 transition-colors duration-200"
+                    className="text-slate-400 hover:text-yellow transition-colors duration-200"
                   >
                     {link.title}
                   </Link>
@@ -80,27 +80,27 @@ const Footer = () => {
 
           {/* Marketplace Services Column */}
           <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-black uppercase tracking-widest text-white border-l-2 border-amber-400 pl-2">
+            <h3 className="text-xs font-black uppercase tracking-widest text-white border-l-2 border-yellow pl-2">
               Marketplace
             </h3>
             <ul className="flex flex-col gap-2 text-xs font-medium text-slate-400 mt-1">
               <li>
-                <Link to="/inventory" className="hover:text-amber-400 transition-colors">
+                <Link to="/inventory" className="hover:text-yellow transition-colors">
                   Browse Inventory
                 </Link>
               </li>
               <li>
-                <Link to="/auctions" className="hover:text-amber-400 transition-colors">
+                <Link to="/auctions" className="hover:text-yellow transition-colors">
                   Live Auctions
                 </Link>
               </li>
               <li>
-                <Link to="/sell" className="hover:text-amber-400 transition-colors">
+                <Link to="/sell" className="hover:text-yellow transition-colors">
                   Sell Your Vehicle
                 </Link>
               </li>
               <li>
-                <Link to="/fleet-rentals" className="hover:text-amber-400 transition-colors">
+                <Link to="/fleet-rentals" className="hover:text-yellow transition-colors">
                   Fleet Rentals
                 </Link>
               </li>
@@ -109,22 +109,22 @@ const Footer = () => {
 
           {/* Legal & Support Column */}
           <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-black uppercase tracking-widest text-white border-l-2 border-amber-400 pl-2">
+            <h3 className="text-xs font-black uppercase tracking-widest text-white border-l-2 border-yellow pl-2">
               Legal & Help
             </h3>
             <ul className="flex flex-col gap-2 text-xs font-medium text-slate-400 mt-1">
               <li>
-                <Link to="/terms" className="hover:text-amber-400 transition-colors">
+                <Link to="/terms" className="hover:text-yellow transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="hover:text-amber-400 transition-colors">
+                <Link to="/privacy" className="hover:text-yellow transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-amber-400 transition-colors">
+                <Link to="/faq" className="hover:text-yellow transition-colors">
                   Help Center & FAQ
                 </Link>
               </li>
@@ -151,7 +151,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={social.label}
-                className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-slate-950 hover:bg-amber-400 hover:border-amber-400 transition-all duration-300 transform hover:-translate-y-1 shadow-md"
+                className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-slate-950 hover:bg-yellow hover:border-yellow transition-all duration-300 transform hover:-translate-y-1 shadow-md"
               >
                 {social.icon}
               </a>
