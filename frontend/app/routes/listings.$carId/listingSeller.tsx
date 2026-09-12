@@ -38,7 +38,7 @@ export const ListingSellerImage: React.FC<ListingSellerProps> = ({
 
       {/* Seller Info */}
       <div className="flex flex-col items-center justify-center">
-        <h3 className="gray__text-dark text-xl font-semibold capitalize md:text-xl">
+        <h3 className="gray__text-dark text-xl font-semibold uppercase md:text-xl">
           {name}
         </h3>
         <span className="md:font-body flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 shadow lg:shadow-sm">

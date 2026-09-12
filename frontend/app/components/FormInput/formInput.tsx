@@ -35,7 +35,7 @@ export function FormInput({
 }: FormInputProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name}>
+      <label htmlFor={name} className="text-white">
         {label}
         <span className="text-red-500">*</span>
       </label>
@@ -49,7 +49,7 @@ export function FormInput({
         onFocus={onFocus}
         onBlur={onBlur}
         id={id ? String(id) : undefined}
-        className={`border-slate-200 focus:border-blue-500 focus:ring-blue-500 ${className}`}
+        className={`text-white border-slate-200 focus:border-blue-500 focus:ring-blue-500 ${className}`}
         onError={error}
         required={required}
         disabled={disabled}

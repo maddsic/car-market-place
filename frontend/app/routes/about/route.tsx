@@ -16,7 +16,7 @@ const AboutUs = () => {
   return (
     <Fragment>
       <div className="mb-10 flex flex-col gap-y-10 p-2">
-        <div className="max__container font-montserrat relative flex flex-col gap-y-8 p-4 md:gap-y-16 md:p-10">
+        <div className="max__container font-montserrat relative flex flex-col p-4 md:gap-y-0 md:p-10">
           <AboutGamAutos />
           <CoreValues />
         </div>
@@ -28,7 +28,7 @@ const AboutUs = () => {
           </div>
         </section>
         <Team />
-        <OurPartners />
+        {/* <OurPartners /> */}
       </div>
     </Fragment>
   );
