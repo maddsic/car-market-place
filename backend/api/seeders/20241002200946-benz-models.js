@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = {
   async up(queryInterface, Sequelize) {
     const [make] = await queryInterface.sequelize.query(
-      `SELECT id FROM CarMake WHERE name = 'Mercedez' LIMIT 1;`
+      `SELECT id FROM CarMake WHERE name = 'Mercedes' LIMIT 1;`
     );
 
     if (!make || make.length === 0) {
