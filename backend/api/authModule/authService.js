@@ -7,26 +7,99 @@ class AuthService {
     this.authRepository = authRepository;
   }
 
-  // REGISTER USER
+  // // REGISTER USER
+  // async registerUser(data) {
+  //   const existingUser = await this.authRepository.findUserByEmail(
+  //     data.email
+  //   );
+  //   if (existingUser) {
+  //     return { status: 409, message: 'User with this email already exists' };
+  //   }
+  //   const hashedPassword = await hashPassword(data.password);
+  //   data.password = hashedPassword;
+
+  //   const newUser = await this.authRepository.createUser(data);
+  //   const { password, ...formData } = newUser.toJSON();
+
+  //   return {
+  //     status: 201,
+  //     message: `User ${data.first_name} ${data.last_name} created successfully`,
+  //     data: data,
+  //   };
+  // }
+
+  // STEP 1: Process User Registration & Dispatch Verification Email
   async registerUser(data) {
-    const existingUser = await this.authRepository.findUserByEmail(
-      data.email
-    );
+    const existingUser = await this.authRepository.findUserByEmail(data.email);
     if (existingUser) {
       return { status: 409, message: 'User with this email already exists' };
     }
-    const hashedPassword = await hashPassword(data.password);
-    data.password = hashedPassword;
 
-    const newUser = await this.authRepository.createUser(data);
-    const { password, ...formData } = newUser.toJSON();
+    const hashedPassword = await hashPassword(data.password);
+
+    // Generate a secure verification token (64 hex characters)
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
+    // Set expiration (e.g., 24 hours from now)
+    const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    const userData = {
+      ...data,
+      password: hashedPassword,
+      verificationToken,
+      verificationTokenExpires,
+      isVerified: false
+    };
+
+    const newUser = await this.authRepository.createUser(userData);
+    const { password, verificationToken: token, ...formData } = newUser.toJSON ? newUser.toJSON() : newUser;
+
+    // Send the Welcome & Verification Email
+    try {
+      await EmailHelper.sendVerificationEmail(
+        newUser.email,
+        `${newUser.first_name} ${newUser.last_name}`,
+        verificationToken
+      );
+    } catch (emailError) {
+      console.error('Email sending failed during registration:', emailError.message);
+      // Decide if failure to deliver email should log an error or fail registration
+      return json({
+        status: 500,
+        message: 'User created, but failed to send verification email. Please contact support.',
+        data: formData,
+        error: emailError.message
+      })
+    }
 
     return {
       status: 201,
-      message: `User ${data.first_name} ${data.last_name} created successfully`,
-      data: data,
+      message: `User ${data.first_name} ${data.last_name} created successfully. Please check your email to verify your account.`,
+      data: formData,
     };
   }
+
+
+  // STEP 2: Process Email Verification Link Click
+  async verifyUserEmail(token) {
+    if (!token) {
+      return { status: 400, message: 'Verification token is required.' };
+    }
+
+    const user = await this.authRepository.findUserByVerificationToken(token);
+    if (!user) {
+      return { status: 400, message: 'Invalid or expired verification token.' };
+    }
+
+    // Update user: mark account verified and clear verification token
+    await this.authRepository.updateUser(user.id, {
+      isVerified: true,
+      verificationToken: null
+    });
+
+    return { status: 200, message: 'Email verified successfully. You can now log in.' };
+  }
+
 
   // LOGIN USER
   async loginUser(email, password) {
