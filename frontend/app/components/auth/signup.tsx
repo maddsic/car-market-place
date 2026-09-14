@@ -31,6 +31,7 @@ interface SignUpActionDataProps {
     phone?: string;
   };
   success?: boolean;
+  message?: string;
   role?: "admin" | "agent" | "user";
 }
 
@@ -40,7 +41,7 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
 
   useEffect(() => {
     if (actionData?.success) {
-      toast.success("Welcome to Gamautos! Please sign in to continue.");
+      toast.success(actionData?.message);
       setTimeout(() => navigate("/auth/login"), 1000);
     }
   }, [actionData, navigate]);
