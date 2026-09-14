@@ -51,7 +51,9 @@ class AuthService {
       isVerified: false
     };
 
+    // Create the user in the database
     const newUser = await this.authRepository.createUser(userData);
+    // Destructure to exclude sensitive fields from the response eg. password and verificationToken
     const { password, verificationToken: token, ...formData } = newUser.toJSON ? newUser.toJSON() : newUser;
 
     // Send the Welcome & Verification Email
@@ -64,12 +66,12 @@ class AuthService {
     } catch (emailError) {
       console.error('Email sending failed during registration:', emailError.message);
       // Decide if failure to deliver email should log an error or fail registration
-      return json({
+      return {
         status: 500,
         message: 'User created, but failed to send verification email. Please contact support.',
         data: formData,
         error: emailError.message
-      })
+      };
     }
 
     return {

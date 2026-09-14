@@ -54,13 +54,10 @@ class EmailHelper {
   static async sendVerificationEmail(email, name, verificationToken) {
     const verificationUrl = `${process.env.CLIENT_URL || 'https://gamautos.com'}/verify-email?token=${verificationToken}`;
 
-    // Development / Fallback Mode check
-    if (!process.env.RESEND_API_KEY || process.env.NODE_ENV === 'development') {
-      console.log(`[DEV MODE] Verification Link for ${email}: ${verificationUrl}`);
-      if (!process.env.RESEND_API_KEY) {
-        throw new Error("RESEND_API_KEY is not defined in environment variables.");
-      }
-      return;
+    // Only skip sending if RESEND_API_KEY is missing
+    if (!process.env.RESEND_API_KEY) {
+      console.log(`[NO API KEY] Verification Link for ${email}: ${verificationUrl}`);
+      throw new Error("RESEND_API_KEY is not defined in environment variables.");
     }
 
     try {
