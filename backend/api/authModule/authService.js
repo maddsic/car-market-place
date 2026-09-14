@@ -7,27 +7,6 @@ class AuthService {
     this.authRepository = authRepository;
   }
 
-  // // REGISTER USER
-  // async registerUser(data) {
-  //   const existingUser = await this.authRepository.findUserByEmail(
-  //     data.email
-  //   );
-  //   if (existingUser) {
-  //     return { status: 409, message: 'User with this email already exists' };
-  //   }
-  //   const hashedPassword = await hashPassword(data.password);
-  //   data.password = hashedPassword;
-
-  //   const newUser = await this.authRepository.createUser(data);
-  //   const { password, ...formData } = newUser.toJSON();
-
-  //   return {
-  //     status: 201,
-  //     message: `User ${data.first_name} ${data.last_name} created successfully`,
-  //     data: data,
-  //   };
-  // }
-
   // STEP 1: Process User Registration & Dispatch Verification Email
   async registerUser(data) {
     const existingUser = await this.authRepository.findUserByEmail(data.email);
