@@ -12,6 +12,24 @@ class AuthRepository {
     return this.User.create(userData);
   }
 
+  async findUserByVerificationToken(token) {
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationTokenExpires: { $gt: Date.now() }
+    });
+
+    return user;
+  };
+
+  async updateUser(userId, updateData) {
+    const [affectedCount] = await User.update(updateData, {
+      where: { id }
+    });
+
+    return affectedCount > 0;
+  }
+
+
   // Update the user's password
   async updateUserResetCode(email, code, expiresAt) {
     return this.User.update(

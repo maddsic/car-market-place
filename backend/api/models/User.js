@@ -46,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
       },
+      verificationTokenExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+      }
     },
     {
       freezeTableName: true,

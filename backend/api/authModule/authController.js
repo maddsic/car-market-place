@@ -10,23 +10,53 @@ class AuthController {
   }
 
   // Register route
-  register = async (req, res, next) => {
-    const { error } = registerSchema.validate(req.body);
-    if (error) {
-      return sendResponse(res, 400, false, error.details[0].message);
-    }
+  // register = async (req, res, next) => {
+  //   const { error } = registerSchema.validate(req.body);
+  //   if (error) {
+  //     return sendResponse(res, 400, false, error.details[0].message);
+  //   }
 
+  //   try {
+  //     const response = await this.authService.registerUser(req.body);
+  //     return sendResponse(
+  //       res,
+  //       response.status,
+  //       response.status < 400,
+  //       response.message,
+  //       response.data
+  //     );
+  //   } catch (error) {
+  //     console.error('REGISTER ERROR:', error.message);
+  //     next(error);
+  //   }
+  // };
+
+
+  register = async (req, res, next) => {
     try {
       const response = await this.authService.registerUser(req.body);
-      return sendResponse(
-        res,
-        response.status,
-        response.status < 400,
-        response.message,
-        response.data
-      );
+      return res.status(response.status).json({
+        success: response.status < 400,
+        message: response.message,
+        data: response.data || null
+      });
     } catch (error) {
       console.error('REGISTER ERROR:', error.message);
+      next(error);
+    }
+  };
+
+  verifyEmail = async (req, res, next) => {
+    try {
+      const { token } = req.query; // e.g. /api/v1/auth/verify-email?token=xyz...
+      const response = await this.authService.verifyUserEmail(token);
+
+      return res.status(response.status).json({
+        success: response.status === 200,
+        message: response.message
+      });
+    } catch (error) {
+      console.error('VERIFY EMAIL ERROR:', error.message);
       next(error);
     }
   };

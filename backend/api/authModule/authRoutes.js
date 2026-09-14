@@ -13,6 +13,8 @@ const authController = new AuthController(authService);
 
 // 1. Authentication routes with rate limiting
 router.post('/register', authLimiter, authController.register);
+// Route for handling verification link clicks from email
+router.get('/verify-email', authController.verifyEmail);
 router.post('/login', authLimiter, authController.login);
 
 // 2. Password reset routes with specific rate limiting
