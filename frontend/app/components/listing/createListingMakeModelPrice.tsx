@@ -5,21 +5,22 @@ import Error from "../Error/error";
 
 interface ListingDetailsProps {
   carMakes: CarMake[];
-  formData: {
-    errors: {
-      condition: string;
-      make: string;
-      model: string;
-      year: number;
+  // 1. Made formData optional (?) and relaxed the shape so TypeScript doesn't throw errors when actionData is undefined
+  formData?: {
+    errors?: {
+      condition?: string | string[];
+      make?: string | string[];
+      model?: string | string[];
+      year?: number | string | string[];
     };
-  };
-  initialData: {
-    carId: string,
+  } | null;
+  initialData?: {
+    carId?: string;
     condition?: string;
     make?: string;
     model?: string;
     year?: number;
-  };
+  } | null;
 }
 
 const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
@@ -107,6 +108,8 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
             { label: "Used", value: "used" },
           ]}
         />
+        {formData?.errors?.condition && <Error error={formData.errors.condition} />}
+
       </div>
       {/* MAKE */}
       <div className="flex flex-col gap-2">
@@ -122,7 +125,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
             value: make.name,
           }))}
         />
-        {/* {formData?.errors?.make && <Error error={formData.errors.make} />} */}
+        {formData?.errors?.make && <Error error={formData.errors.make} />}
       </div>
       {/* models */}
       <div className="flex flex-col gap-2">
@@ -139,7 +142,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
             value: model.name,
           }))}
         />
-        {/* {formData?.errors?.model && <Error error={formData.errors.model} />} */}
+        {formData?.errors?.model && <Error error={formData.errors.model} />}
       </div>
       {/* year */}
       <div className="flex flex-col gap-2">
@@ -155,7 +158,7 @@ const CreateListingConditionMakeModelPrice: React.FC<ListingDetailsProps> = ({
             value: year.year,
           }))}
         />
-        {/* {formData?.errors?.year && <Error error={formData.errors.year} />} */}
+        {formData?.errors?.year && <Error error={formData.errors.year} />}
       </div>
     </div>
   );

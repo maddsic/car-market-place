@@ -1,6 +1,6 @@
 import React from "react";
 
-const Error = ({ error }: { error: string }) => {
+const Error = ({ error }: { error: string | string[] | number }) => {
   return <p className="pt-2 text-xs font-bold text-red-500">{error}</p>;
 };
 

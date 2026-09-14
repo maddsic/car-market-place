@@ -44,22 +44,23 @@ import { toast } from "react-toastify";
 import { createListingValidateor } from "~/validations/validateForm";
 
 
+type ActionData =
+  | { success: true; data: any }
+  | { success?: false; error?: boolean | string; message?: string; values?: Record<string, any>; errors?: Record<string, string[]> }
+
+
 const AddListingPage = () => {
-  const { carMakes, carBodyTypes, editCar } = useLoaderData<typeof loader>() || null;
-  const actionData = useActionData<typeof loader>() || null;
+  const { carMakes, carBodyTypes, editCar } = useLoaderData<typeof loader>() || {};
+  const actionData = useActionData() as ActionData | undefined; // Type directly from action
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
-  console.log("EDIT CARS", editCar)
-
-  if (actionData) {
-    console.log("FORM DATA ERROR FROM ADD LISTING PAGE");
-    console.log(actionData.error);
-  }
+  // Merge submitted form values (if any) with editCar data
+  const formValues = (actionData && "values" in actionData ? actionData.values : null) || editCar || {};
 
   useEffect(() => {
-    if (!actionData) return; // Do nothing on initial render
+    if (!actionData) return;
 
     if (actionData.success) {
       toast.success("Successful! Redirecting to inventory...");
@@ -67,12 +68,11 @@ const AddListingPage = () => {
         navigate("/inventory");
       }, 2000);
     } else if (actionData.errors) {
-      // 1. Zod Validation Errors (e.g., missing required fields)
+      // Handles field-level validation errors like "Maximum 5 images allowed"
       const errorMessages = Object.values(actionData.errors).flat();
       const firstError = errorMessages[0] || "Please check the form for errors.";
       toast.error(`Validation Error: ${firstError}`);
     } else if (actionData.message || actionData.error) {
-      // 2. Server or API Errors
       toast.error(actionData.message || actionData.error || "Failed to submit form.");
     }
   }, [actionData, navigate]);
@@ -80,8 +80,6 @@ const AddListingPage = () => {
   if (isSubmitting) {
     return <Loader />;
   }
-
-
 
   return (
     <div className="max__container relative">
@@ -92,67 +90,64 @@ const AddListingPage = () => {
           <Divider />
         </div>
 
-        {/* Listing Items Details */}
+        {/* Global Error Alert Banner */}
+        {actionData && "errors" in actionData && actionData.errors && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+            <div className="flex items-center gap-2 font-bold">
+              <AlertTriangle className="h-5 w-5" />
+              <span>Please fix the following issues before submitting:</span>
+            </div>
+            <ul className="mt-2 list-disc pl-5 text-sm">
+              {Object.entries(actionData.errors as Record<string, string[]>).map(
+                ([field, errs]) => (
+                  <li key={field}>
+                    <strong>{field}:</strong> {errs.join(", ")}
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        )}
+
         <div className="listing__details">
           <Heading
             title="Listing item details"
-            classNames="uppercase  mb-5 md:mb-10 lg:text-md"
+            classNames="uppercase mb-5 md:mb-10 lg:text-md"
           />
-          {/* FORM */}
-          <Form
-            action="/addListing"
-            method="post"
-            encType="multipart/form-data"
-          >
+          <Form action="/addListing" method="post" encType="multipart/form-data">
             <CreateListingConditionMakeModelPrice
               carMakes={carMakes}
               formData={actionData}
-              initialData={editCar}
+              initialData={formValues}
+              errors={actionData && "errors" in actionData ? actionData.errors : undefined}
             />
-            {/* CAR DETAILS */}
+
             <CreateListingInfo
               carBodyTypes={carBodyTypes}
               formData={actionData}
-              initialData={editCar}
-
+              initialData={formValues}
+              errors={actionData && "errors" in actionData ? actionData.errors : undefined}
             />
 
-            {/* SEPARATOR */}
             <Divider classNames="mt-10" />
 
-            {/* LISTING FEATURES */}
-            <SelectListingFeature
-              initialData={editCar}
+            <SelectListingFeature initialData={formValues} />
 
-            />
+            <Divider classNames="mt-10" />
 
-            {/* SEPARATOR */}
-            <Divider classNames="mt-10"
-            />
-
-            {/* UPLOAD */}
+            {/* Pass field error directly to image uploader */}
             <UploadListingImage
               initialImages={editCar?.images}
-
             />
 
-            {/* SEPARATOR */}
             <Divider classNames="mt-10" />
 
-            {/* SELLERS NOTES */}
-            <CreateListingSellerNote
-              initialData={editCar}
-            />
+            <CreateListingSellerNote initialData={formValues} />
 
             <Divider classNames="mt-20" />
 
-            {/* ASKING PRICE */}
-            <CreateListingPrice
-              initialData={editCar}
+            <CreateListingPrice initialData={formValues} />
 
-            />
-
-            {/* SEPARATOR */}
             <Divider classNames="mt-10" />
 
             <Button
@@ -220,13 +215,16 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 };
 
-// ACTION - HANDLING FORM SUBMISSION
+// Inside action function:
+
 export async function action({ request, params }: ActionFunctionArgs) {
   let formData = await request.formData();
+
+  // Convert formData into a plain key-value object to pass back on failure
+  const rawFormEntries = Object.fromEntries(formData);
+
+  // Get carId and image files from formData
   const carId = formData.get("carId") as string;
-
-  console.log("carID FROM ADDLISTING ACTION HANDLER:-", carId)
-
   const formDataCarImages = formData.getAll("imageUrl") as File[];
 
   // Removing images from form data for validation
@@ -235,9 +233,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   try {
+    // 1. Read token & verify
     const token = getAuthToken(request);
     if (!token) return json({ success: false, message: "Unauthorized" }, { status: 401 });
 
+    // 2. Verify JWT token
     const payload = verifyJwtToken(token);
     if (!payload) {
       return json(
@@ -246,10 +246,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
       );
     }
 
-    // Get User ID from payload
+    // 3. Get User ID from payload
     const userId = payload.userId;
 
-    // Pass form for validation
+    // 4. Validate form data using Zod schema
     let validatedForm = createListingValidateor.parse({
       ...formDataWithOutImages,
       userId: userId,
@@ -257,31 +257,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     const newValidatedFormData = new FormData();
-    // Append non-file fields
     for (const [key, value] of Object.entries(validatedForm)) {
-      if (key !== "imageUrl" && value !== undefined && value !== null) {
+      if (key !== "imageUrl" && value !== undefined && value !== null && value !== "") {
         newValidatedFormData.append(key, String(value));
       }
     }
 
-    console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER BEFORE ADDING THE IMAGES:-", newValidatedFormData)
-
-    // Re-append files
     validatedForm.imageUrl.forEach((file: File) => {
       newValidatedFormData.append("imageUrl", file);
     });
 
-    console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER AFTER APPENDING THE IMAGE URL:-", newValidatedFormData)
-
-    // DECISION LOGIC: UPDATE OR CREATE
-    const url = carId ? `${apiEndpoints.updateCar}/${carId}`
-      : `${apiEndpoints.createCar}`;
-
+    const url = carId ? `${apiEndpoints.updateCar}/${carId}` : `${apiEndpoints.createCar}`;
     const method = carId ? "PUT" : "POST";
 
-    console.log(`SENDING ${method} TO: ${url}`);
-
-    // Post the validated data to the API
     const response = await fetch(`${url}`, {
       method: method,
       headers: {
@@ -290,35 +278,144 @@ export async function action({ request, params }: ActionFunctionArgs) {
       body: newValidatedFormData,
     });
 
-    // Handle non-2xx responses
     if (!response.ok) {
       let formError = await response.json();
       return json(
         {
           error: true,
-          message:
-            formError.message || `Failed to create car: ${response.statusText}`,
+          message: formError.message || `Failed to create car: ${response.statusText}`,
+          values: rawFormEntries, // Return submitted values to persist form state
         },
-        {
-          status: response.status,
-        },
+        { status: response.status }
       );
     }
-    // Getting the response data
+
     const responseData = await response.json();
-    // Return data.
     return json({ success: true, data: responseData });
-    // return redirect("/dashboard/inventory");
 
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors = error.flatten().fieldErrors;
-      return json({ errors, values: formData }, { status: 400 });
+      return json(
+        {
+          errors,
+          values: rawFormEntries, // Return submitted text inputs
+          message: errors.imageUrl ? errors.imageUrl[0] : "Validation failed. Please check your inputs."
+        },
+        { status: 400 }
+      );
     }
-    console.error("Unexpected error occured", error);
-    return json({ error: "Whoops...something went wrong" }, { status: 500 });
+    console.error("Unexpected error occurred", error);
+    return json(
+      {
+        error: "Whoops...something went wrong",
+        values: rawFormEntries
+      },
+      { status: 500 }
+    );
   }
 }
+
+
+// ACTION - HANDLING FORM SUBMISSION
+// export async function action({ request, params }: ActionFunctionArgs) {
+//   let formData = await request.formData();
+//   const carId = formData.get("carId") as string;
+
+//   console.log("carID FROM ADDLISTING ACTION HANDLER:-", carId)
+
+//   const formDataCarImages = formData.getAll("imageUrl") as File[];
+
+//   // Removing images from form data for validation
+//   const formDataWithOutImages = Object.fromEntries(
+//     [...formData].filter(([key, value]) => typeof value === "string" || typeof value === "number"),
+//   );
+
+//   try {
+//     const token = getAuthToken(request);
+//     if (!token) return json({ success: false, message: "Unauthorized" }, { status: 401 });
+
+//     const payload = verifyJwtToken(token);
+//     if (!payload) {
+//       return json(
+//         { success: false, message: "Invalid or expired token" },
+//         { status: 401 },
+//       );
+//     }
+
+//     // Get User ID from payload
+//     const userId = payload.userId;
+
+//     // Pass form for validation
+//     let validatedForm = createListingValidateor.parse({
+//       ...formDataWithOutImages,
+//       userId: userId,
+//       imageUrl: formDataCarImages,
+//     });
+
+//     const newValidatedFormData = new FormData();
+//     // Append non-file fields
+//     for (const [key, value] of Object.entries(validatedForm)) {
+//       if (key !== "imageUrl" && value !== undefined && value !== null) {
+//         newValidatedFormData.append(key, String(value));
+//       }
+//     }
+
+//     console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER BEFORE ADDING THE IMAGES:-", newValidatedFormData)
+
+//     // Re-append files
+//     validatedForm.imageUrl.forEach((file: File) => {
+//       newValidatedFormData.append("imageUrl", file);
+//     });
+
+//     console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER AFTER APPENDING THE IMAGE URL:-", newValidatedFormData)
+
+//     // DECISION LOGIC: UPDATE OR CREATE
+//     const url = carId ? `${apiEndpoints.updateCar}/${carId}`
+//       : `${apiEndpoints.createCar}`;
+
+//     const method = carId ? "PUT" : "POST";
+
+//     console.log(`SENDING ${method} TO: ${url}`);
+
+//     // Post the validated data to the API
+//     const response = await fetch(`${url}`, {
+//       method: method,
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: newValidatedFormData,
+//     });
+
+//     // Handle non-2xx responses
+//     if (!response.ok) {
+//       let formError = await response.json();
+//       return json(
+//         {
+//           error: true,
+//           message:
+//             formError.message || `Failed to create car: ${response.statusText}`,
+//         },
+//         {
+//           status: response.status,
+//         },
+//       );
+//     }
+//     // Getting the response data
+//     const responseData = await response.json();
+//     // Return data.
+//     return json({ success: true, data: responseData });
+//     // return redirect("/dashboard/inventory");
+
+//   } catch (error) {
+//     if (error instanceof z.ZodError) {
+//       const errors = error.flatten().fieldErrors;
+//       return json({ errors, values: formData }, { status: 400 });
+//     }
+//     console.error("Unexpected error occured", error);
+//     return json({ error: "Whoops...something went wrong" }, { status: 500 });
+//   }
+// }
 
 // ERROR BOUNDARY
 export function ErrorBoundary() {
