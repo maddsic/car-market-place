@@ -3,7 +3,7 @@ import { MdOutlineCameraAlt } from "react-icons/md";
 import Heading from "~/components/Heading/heading";
 
 interface UploadListingImageProps {
-  initialImages: { imageUrl: string }[]
+  initialImages?: { imageUrl: string }[]
 }
 
 const UploadListingImage = ({ initialImages }: UploadListingImageProps) => {
@@ -43,8 +43,8 @@ const UploadListingImage = ({ initialImages }: UploadListingImageProps) => {
           <p className="gray__text-soft font-body block">
             Recommended image resolution: 800 x 470 px or higher.
           </p>
-          <p className="gray__text-soft font-body">
-            You can upload upto 5 photos.
+          <p className="text-red-500 font-body">
+            You can upload up to 5 photos.
           </p>
         </span>
       </div>
