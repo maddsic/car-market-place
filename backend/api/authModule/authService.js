@@ -62,20 +62,31 @@ class AuthService {
 
 
   // STEP 2: Process Email Verification Link Click
+  // Repository
+  async findUserByVerificationToken(token) {
+    return await User.findOne({ verificationToken: token });
+  }
+
+  // Service
   async verifyUserEmail(token) {
     if (!token) {
       return { status: 400, message: 'Verification token is required.' };
     }
 
     const user = await this.authRepository.findUserByVerificationToken(token);
+
     if (!user) {
-      return { status: 400, message: 'Invalid or expired verification token.' };
+      return { status: 400, message: 'Invalid verification token.' };
     }
 
-    // Update user: mark account verified and clear verification token
+    if (user.verificationTokenExpires && user.verificationTokenExpires < Date.now()) {
+      return { status: 400, message: 'Verification token has expired. Please request a new one.' };
+    }
+
     await this.authRepository.updateUser(user.id, {
       isVerified: true,
-      verificationToken: null
+      verificationToken: null,
+      verificationTokenExpires: null
     });
 
     return { status: 200, message: 'Email verified successfully. You can now log in.' };

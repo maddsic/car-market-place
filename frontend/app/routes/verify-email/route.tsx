@@ -50,7 +50,7 @@ export default function VerifyEmailPage() {
 
         {/* Dynamic Buttons */}
         {isSuccess ? (
-          <Link to="/login" style={styles.primaryButton}>
+          <Link to="auth/login" style={styles.primaryButton}>
             Go to Login
           </Link>
         ) : (
@@ -58,7 +58,7 @@ export default function VerifyEmailPage() {
             <Link to="/resend-verification" style={styles.primaryButton}>
               Request New Link
             </Link>
-            <Link to="/login" style={styles.secondaryButton}>
+            <Link to="auth/login" style={styles.secondaryButton}>
               Back to Login
             </Link>
           </div>
