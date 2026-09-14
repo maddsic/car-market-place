@@ -18,10 +18,10 @@ export const TeamData = [
   {
     id: 3,
     name: "Lamin Giteh",
-    email: "lgiteh@gamautos.com",
+    email: "lgitteh@gamautos.com",
     phone: "+220 2228888",
     position: "Head (Engineering Team)",
-    image: "/placeholder.png",
+    image: "/lamin.jpeg",
   },
   {
     id: 4,

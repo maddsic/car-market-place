@@ -6,7 +6,7 @@ exports.carSchema = Joi.object({
   make: Joi.string().required(),
   model: Joi.string().required(),
   // Use coerce() so "2023" (string) becomes 2023 (number)
-  year: Joi.number().integer().coerce().optional(),
+  year: Joi.number().integer().coerce().required(),
   price: Joi.number().coerce().required(),
   mileage: Joi.number().required(),
   fuelType: Joi.string().required(),
@@ -26,7 +26,7 @@ exports.carSchema = Joi.object({
   seller_note: Joi.string().optional().allow(''),
 
   // Image URL is handled by Multer, so we allow any here
-  imageUrl: Joi.any().optional(),
+  imageUrl: Joi.any().required(),
 
   // The Checkbox Fix: allows "true" string to become true boolean
   air_condition: Joi.boolean().truthy('on', 'true').optional().default(false),
