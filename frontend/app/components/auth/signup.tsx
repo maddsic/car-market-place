@@ -41,7 +41,7 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
 
   useEffect(() => {
     if (actionData?.success) {
-      toast.success(actionData?.message);
+      toast.success("Account created successfully! Please check your email to verify your account.");
       setTimeout(() => navigate("/auth/login"), 1000);
     }
   }, [actionData, navigate]);
