@@ -97,7 +97,7 @@ const BrowseBymake = () => {
                   alt={make.name}
                   className="mb-4 h-16 w-20 object-contain"
                 />
-                <p className="text-lg font-medium text-gray-600">{make.name}</p>
+                <p className="text-lg font-medium text-gray-600 capitalize">{make.name}</p>
               </div>
             ))}
       </div>

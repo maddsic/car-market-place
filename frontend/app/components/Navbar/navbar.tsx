@@ -92,7 +92,7 @@ const Navbar = () => {
       </nav>
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
-      <div className="fixed bottom-0 left-0 z-50 flex w-full justify-around border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-xl px-2 py-2 md:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+      <div className="fixed bottom-0 left-0 z-50 flex w-full justify-around border-t border-slate-800/80 bg-primary backdrop-blur-xl px-2 py-2 md:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         {NavLinks.slice(0, 6).map((link) => (
           <NavLink
             key={link.id}
