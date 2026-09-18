@@ -13,6 +13,13 @@ interface ResetPasswordResponse {
   message: string;
 }
 
+interface VerifyUserEmailTokenResponse {
+  status?: number,
+  message?: string,
+  data?: any,
+  error?: string
+}
+
 export async function sendPasswordResetCode(email: string): Promise<SendCodeResponse> {
   const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/forgot-password`, {
     method: "POST",
@@ -72,13 +79,12 @@ export async function resetPasswordSubmit(
 }
 
 
-export async function verifyUserEmailToken(token: string): Promise<SendCodeResponse> {
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/verify-email`, {
-    method: "POST",
+export async function verifyUserEmailToken(token: string): Promise<VerifyUserEmailTokenResponse> {
+  const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/verify-email?token=${encodeURIComponent}`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token }),
   });
 
   // 1. Check if the HTTP response status is OK before attempting to parse JSON

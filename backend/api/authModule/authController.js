@@ -8,30 +8,7 @@ class AuthController {
   constructor(authService) {
     this.authService = authService;
   }
-
   // Register route
-  // register = async (req, res, next) => {
-  //   const { error } = registerSchema.validate(req.body);
-  //   if (error) {
-  //     return sendResponse(res, 400, false, error.details[0].message);
-  //   }
-
-  //   try {
-  //     const response = await this.authService.registerUser(req.body);
-  //     return sendResponse(
-  //       res,
-  //       response.status,
-  //       response.status < 400,
-  //       response.message,
-  //       response.data
-  //     );
-  //   } catch (error) {
-  //     console.error('REGISTER ERROR:', error.message);
-  //     next(error);
-  //   }
-  // };
-
-
   register = async (req, res, next) => {
     try {
       const response = await this.authService.registerUser(req.body);
