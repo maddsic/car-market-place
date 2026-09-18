@@ -8,6 +8,7 @@ class EmailHelper {
    * Sends a 6-digit password reset code to a user
    * @param {string} email - Recipient email address
    * @param {string} code - The generated 6-digit code
+   *
    */
   static async sendResetCode(email, code) {
     // 1. Fallback if key is missing or in dev mode
@@ -52,7 +53,7 @@ class EmailHelper {
    * @param {string} verificationToken - Secure token generated for account verification
    */
   static async sendVerificationEmail(email, name, verificationToken) {
-    const verificationUrl = `${process.env.CLIENT_URL || 'https://gamautos.com'}/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${process.env.CLIENT_URL || 'https://gamautos.com'}/auth/verify-email?token=${verificationToken}`;
 
     // Only skip sending if RESEND_API_KEY is missing
     if (!process.env.RESEND_API_KEY) {

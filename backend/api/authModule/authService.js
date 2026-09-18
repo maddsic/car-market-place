@@ -15,10 +15,8 @@ class AuthService {
     }
 
     const hashedPassword = await hashPassword(data.password);
-
     // Generate a secure verification token (64 hex characters)
     const verificationToken = crypto.randomBytes(32).toString('hex');
-
     // Set expiration (e.g., 24 hours from now)
     const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -34,6 +32,8 @@ class AuthService {
     const newUser = await this.authRepository.createUser(userData);
     // Destructure to exclude sensitive fields from the response eg. password and verificationToken
     const { password, verificationToken: token, ...formData } = newUser.toJSON ? newUser.toJSON() : newUser;
+
+    console.log(`User ${formData.first_name} ${formData.last_name} created successfully. Verification email will be sent to ${formData.email}. ${verificationToken}`);
 
     // Send the Welcome & Verification Email
     try {

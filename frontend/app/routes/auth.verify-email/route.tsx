@@ -6,6 +6,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
 
+  console.log("Token from the verify-email component", token)
+
   if (!token) {
     return json({ success: false, error: "No verification token provided." }, { status: 400 });
   }
