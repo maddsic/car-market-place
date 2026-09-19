@@ -26,6 +26,8 @@ class AuthController {
   verifyEmail = async (req, res, next) => {
     try {
       const { token } = req.query; // e.g. /api/v1/auth/verify-email?token=xyz...
+      console.log("Token from VERIFY EMAIL CONTROLLER", token)
+
       const response = await this.authService.verifyUserEmail(token);
 
       return res.status(response.status).json({

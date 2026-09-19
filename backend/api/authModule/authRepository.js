@@ -19,7 +19,6 @@ class AuthRepository {
   async findUserByVerificationToken(token) {
     const user = await User.findOne({
       verificationToken: token,
-      verificationTokenExpires: { $gt: Date.now() }
     });
 
     return user;

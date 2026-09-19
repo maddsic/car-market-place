@@ -62,12 +62,6 @@ class AuthService {
 
 
   // STEP 2: Process Email Verification Link Click
-  // Repository
-  async findUserByVerificationToken(token) {
-    return await User.findOne({ verificationToken: token });
-  }
-
-  // Service
   async verifyUserEmail(token) {
     if (!token) {
       return { status: 400, message: 'Verification token is required.' };
@@ -79,7 +73,7 @@ class AuthService {
       return { status: 400, message: 'Invalid verification token.' };
     }
 
-    if (user.verificationTokenExpires && user.verificationTokenExpires < Date.now()) {
+    if (user.verificationTokenExpires && new Date(user.verificationTokenExpires) < new Date()) {
       return { status: 400, message: 'Verification token has expired. Please request a new one.' };
     }
 
