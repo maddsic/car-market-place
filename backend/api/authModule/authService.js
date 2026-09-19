@@ -77,7 +77,7 @@ class AuthService {
       return { status: 400, message: 'Verification token has expired. Please request a new one.' };
     }
 
-    await this.authRepository.updateUser(user.id, {
+    await this.authRepository.updateUser(user.userId, {
       isVerified: true,
       verificationToken: null,
       verificationTokenExpires: null
