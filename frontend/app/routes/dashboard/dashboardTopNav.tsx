@@ -14,15 +14,15 @@ export const DashboardTopNav = () => {
 
         >
           <FaEnvelope size={22} />
-          <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
+          {/* <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
             3
-          </span>
+          </span> */}
         </button>
         <button className="relative text-gray-500 transition hover:text-primary">
           <FaBell size={22} />
-          <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
+          {/* <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
             5
-          </span>
+          </span> */}
         </button>
         <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white">
           <FaSignOutAlt size={22} />
