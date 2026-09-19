@@ -18,9 +18,7 @@ class AuthRepository {
   // Find a user by their verification token and ensure the token hasn't expired
   async findUserByVerificationToken(token) {
     const user = await User.findOne({
-      where: {
-        verificationToken: token,
-      }
+      where: { verificationToken: token },
     });
 
     return user;
