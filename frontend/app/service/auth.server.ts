@@ -80,7 +80,7 @@ export async function resetPasswordSubmit(
 
 
 export async function verifyUserEmailToken(token: string): Promise<VerifyUserEmailTokenResponse> {
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/verify-email?token=${encodeURIComponent}`, {
+  const response = await fetch(`${API_BASE_URL}${API_VERSION}/auth/verify-email?token=${encodeURIComponent(token)}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
