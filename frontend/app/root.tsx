@@ -7,7 +7,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { type LinksFunction } from "@vercel/remix";
-import { Analytics } from "@vercel/analytics/remix";
 
 import Footer from "./components/Footer/page";
 import Navbar from "./components/Navbar/navbar";
@@ -32,7 +31,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Analytics />
         <main>
           <Navbar />
           {children}

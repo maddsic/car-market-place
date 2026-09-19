@@ -13,7 +13,7 @@ import { Link } from "@remix-run/react";
 interface DealerProfileCardProps {
   profileData?: {
     fullName: string;
-    verified: boolean;
+    isVerified: boolean;
     rating: number;
     totalReviews: number;
     location: string;
@@ -36,7 +36,7 @@ export default function DealerProfileCard({ profileData }: DealerProfileCardProp
         <CardHeader className="flex flex-col items-center justify-center text-center">
           <Link to="/dashboard/profile">
             <img
-              src={dealer?.avatarUrl}
+              src={dealer?.avatarUrl || 'placeholder.png'}
               alt="Dealer"
               className="h-20 w-20 rounded-full border-4 border-primary shadow-md"
             />
@@ -45,8 +45,8 @@ export default function DealerProfileCard({ profileData }: DealerProfileCardProp
             {dealer?.fullName}
           </CardTitle>
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>{dealer?.location} {",The Gambia"}</span>
-            {dealer?.verified && (
+            <span>{dealer?.location}</span>
+            {dealer?.isVerified && (
               <FaCheckCircle
                 className="text-green-500"
                 title="Verified Dealer"

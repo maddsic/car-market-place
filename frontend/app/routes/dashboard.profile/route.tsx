@@ -28,7 +28,7 @@ export default function ProfileSettings() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const ProfileDisplayImage = preview || user?.avatarUrl || "/sain.png";
+  const ProfileDisplayImage = preview || user?.avatarUrl || "/placeholder.png";
 
   useEffect(() => {
     if (actionData?.success) {
