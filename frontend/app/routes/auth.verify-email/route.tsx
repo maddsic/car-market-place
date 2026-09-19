@@ -1,12 +1,13 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData, Link } from "@remix-run/react";
+import { useLoaderData, Link, useNavigate } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { verifyUserEmailToken } from "~/service/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
 
-  console.log("Token from the verify-email component", token)
+  console.log("Token from the verify-email component", token);
 
   if (!token) {
     return json({ success: false, error: "No verification token provided." }, { status: 400 });
@@ -23,6 +24,29 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function VerifyEmailPage() {
   const data = useLoaderData<typeof loader>();
   const isSuccess = data.success;
+  const navigate = useNavigate();
+
+  // Countdown timer state (optional, provides feedback to user)
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    // Tick countdown every second
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    // Perform redirect after 3 seconds
+    const timeout = setTimeout(() => {
+      navigate("/auth/login"); // Ensure leading slash for absolute route
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isSuccess, navigate]);
 
   return (
     <div style={styles.wrapper}>
@@ -46,21 +70,21 @@ export default function VerifyEmailPage() {
         </h1>
         <p style={styles.description}>
           {isSuccess
-            ? "Your email has been confirmed. You can now log in to access your account."
+            ? `Your email has been confirmed. Redirecting to login in ${countdown} seconds...`
             : data.error}
         </p>
 
         {/* Dynamic Buttons */}
         {isSuccess ? (
-          <Link to="auth/login" style={styles.primaryButton}>
-            Go to Login
+          <Link to="/auth/login" style={styles.primaryButton}>
+            Go to Login Now
           </Link>
         ) : (
           <div style={styles.buttonStack}>
             <Link to="/resend-verification" style={styles.primaryButton}>
               Request New Link
             </Link>
-            <Link to="auth/login" style={styles.secondaryButton}>
+            <Link to="/auth/login" style={styles.secondaryButton}>
               Back to Login
             </Link>
           </div>
