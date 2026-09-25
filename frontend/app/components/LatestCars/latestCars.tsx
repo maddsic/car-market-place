@@ -8,6 +8,7 @@ import Price from "../Price/price";
 import Button from "../Button/button";
 import { useCarStore } from "~/store/carStore";
 import { LatestCar } from "~/store/carStoreInterfaces";
+import Image from "../Image/Image";
 
 const LatestCars = () => {
   const { latestCars } = useCarStore();
@@ -54,10 +55,9 @@ const LatestCars = () => {
               </div>
 
               {/* CAR IMAGE */}
-              <img
-                src={car?.imageUrl || "/placeholder-car.jpg"}
-                alt={`${car?.make} ${car?.model}`}
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              <Image
+                car={car}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
               />
 
               {/* OVERLAY GRADIENT */}

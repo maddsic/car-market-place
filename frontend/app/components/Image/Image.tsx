@@ -5,8 +5,8 @@ const Image = ({ car, className }: { car: Car; className?: string }) => {
   return (
     <img
       src={car.imageUrl}
-      alt={car.model}
-      className={cn(`max-h-[70%] w-full bg-gray-200 object-cover ${className}`)}
+      alt={`${car.make} ${car.model}`}
+      className={cn(`block h-full w-full bg-gray-200 object-cover`, className)}
     />
   );
 };

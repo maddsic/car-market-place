@@ -1,12 +1,10 @@
 import { type LoaderFunction, type MetaFunction } from "@vercel/remix";
 import {
   isRouteErrorResponse,
-  json,
-  useLoaderData,
   useNavigation,
   useRouteError,
 } from "@remix-run/react";
-import Header from "~/components/Header/header";
+// import Header from "~/components/Header/header";
 import BrowseBymake from "~/components/Browse/browse";
 import PremiumCars from "~/components/PremiumCars/premium";
 import Highlight from "~/components/Highlight/highlight";
@@ -15,7 +13,7 @@ import LatestCars from "~/components/LatestCars/latestCars";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 import { useEffect } from "react";
 import { useCarStore } from "~/store/carStore";
-import { apiEndpoints } from "~/store/apiEndpoints";
+import Header from "~/components/Header/header";
 
 export const meta: MetaFunction = () => {
   return [

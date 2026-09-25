@@ -95,12 +95,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/sell" className="hover:text-yellow transition-colors">
+                <Link to="/addListing" className="hover:text-yellow transition-colors">
                   Sell Your Vehicle
                 </Link>
               </li>
               <li>
-                <Link to="/fleet-rentals" className="hover:text-yellow transition-colors">
+                <Link to="/rentals" className="hover:text-yellow transition-colors">
                   Fleet Rentals
                 </Link>
               </li>

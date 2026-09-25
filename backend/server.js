@@ -2,9 +2,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('MYSQLHOST:', process.env.MYSQLHOST);
-console.log('MYSQLDATABASE:', process.env.MYSQLDATABASE);
+// console.log('NODE_ENV:', process.env.NODE_ENV);
+// console.log('MYSQLHOST:', process.env.MYSQLHOST);
+// console.log('MYSQLDATABASE:', process.env.MYSQLDATABASE);
 
 const http = require('http');
 const app = require('./app');

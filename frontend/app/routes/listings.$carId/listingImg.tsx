@@ -1,20 +1,23 @@
-export const ListingSmallImg = ({
-  className,
-  imageUrl,
-  onClick,
-}: {
-  className?: string;
-  imageUrl: string;
-  onClick?: () => void;
-}) => {
+import { cn } from "~/lib/utils";
+
+interface ListingSmallImageProps {
+  imageUrl: string,
+  onClick: () => void,
+  className?: string
+}
+
+export const ListingSmallImg = ({ imageUrl, onClick, className }: ListingSmallImageProps) => {
   return (
-    <div className="relative max-h-32 w-[25%] cursor-pointer gap-4">
+    <div className="relative h-36 w-full cursor-pointer overflow-hidden rounded-lg bg-gray-100">
       <img
         src={imageUrl}
-        alt=""
+        alt="Car thumbnail"
         sizes="30vw"
-        className={className}
         onClick={onClick}
+        className={cn(
+          "absolute inset-0 h-full w-full object-cover transition-transform duration-300 hover:scale-105",
+          className
+        )}
       />
     </div>
   );
