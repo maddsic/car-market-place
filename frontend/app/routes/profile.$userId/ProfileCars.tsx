@@ -68,8 +68,8 @@ export const ProfileCars = ({
                 key={car.carId}
                 onClick={() => navigation(`/listings/${car.carId}`)}
               >
-                {/* IMAGE CONTAINER WITH ZOOM & STATUS BADGE */}
-                <div className="relative overflow-hidden rounded-lg">
+                {/* IMAGE CONTAINER WITH STRICT LOCKED ASPECT RATIO */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-gray-100">
                   {/* STATUS BADGE */}
                   <div
                     className={`absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-md ${getStatusStyles(
@@ -79,9 +79,10 @@ export const ProfileCars = ({
                     {car.status || "Available"}
                   </div>
 
+                  {/* IMAGE PINNED ABSOLUTELY */}
                   <Image
                     car={car}
-                    className="max-h-[70%] w-full border border-gray-100 object-cover shadow-md transition-transform duration-700 ease-out group-hover:scale-110 md:h-full lg:border-none"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
@@ -89,7 +90,7 @@ export const ProfileCars = ({
                 {/* CARD DETAILS */}
                 <div className="mt-3 flex justify-between transition-colors duration-300 group-hover:text-yellow">
                   <CarMakeAndModel car={car} />
-                  <Price price={car.price} className="text-[14px]" />
+                  <Price price={car.price} className="text-[14px] p-1" />
                 </div>
                 <CarDescription car={car} />
                 {/* <Special /> */}

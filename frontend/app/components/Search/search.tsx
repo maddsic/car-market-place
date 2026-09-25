@@ -118,10 +118,10 @@ const SearchInventory = () => {
               options={
                 models && models.length > 0
                   ? models.map((model: CarModel) => ({
-                      label: model.name,
-                      value: model.name,
-                      key: model.id,
-                    }))
+                    label: model.name,
+                    value: model.name,
+                    key: model.id,
+                  }))
                   : [{ label: "All", value: "all", key: "all" }]
               }
             />
