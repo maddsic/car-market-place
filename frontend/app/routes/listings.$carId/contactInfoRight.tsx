@@ -17,7 +17,7 @@ export const ListingContactInfoBottom = ({
   car,
 }: ListingContactInfoBottomProps) => {
 
-  const profileImage = car?.owner?.avatarUrl
+  const profileImage = car?.owner?.avatarUrl || '/placeholder.png'
 
   return (
     <aside className="col-span-12 box-border md:col-span-5 lg:col-span-4">
@@ -25,7 +25,7 @@ export const ListingContactInfoBottom = ({
         {/* SELLER BIO */}
         <Link to={`/profile/${car?.owner?.userId}`}>
           <ListingSellerImage
-            imgUrl={profileImage ? profileImage : "/sain.jpeg"}
+            imgUrl={profileImage}
             name={car?.owner?.username || `${car?.owner?.first_name} ${car?.owner?.last_name}`}
             className="h-22 w-22 border-b"
           />

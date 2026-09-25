@@ -1,19 +1,22 @@
+import { ReactNode } from "react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { cn } from "~/lib/utils";
+
 import { createReview } from "~/utils/user";
-import { Form, useLoaderData } from "@remix-run/react";
-import { apiFetch } from "~/utils/apiFetch";
 import { ListingSellerImage } from "../listings.$carId/listingSeller";
 import Divider from "~/components/Divider/divider";
+
 import { BsFillTelephoneOutboundFill } from "react-icons/bs";
-import { ReactNode } from "react";
 import { HiOutlineMailOpen } from "react-icons/hi";
 
 import { Input } from "~/components/ui/input";
 import Button from "~/components/Button/button";
 import ProfileTabs from "./profileTabs";
 
+import { apiFetch } from "~/utils/apiFetch";
 import { getAuthToken } from "~/utils/authHelpers";
 import { verifyJwtToken } from "~/utils/jwt.server";
 
@@ -193,93 +196,153 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 // Route Components
-function ProfileInfo({
-  phoneDesc,
-  icon,
-  emailDesc,
-  phone,
-  email,
-}: {
+
+interface ProfileInfoProps {
   icon?: ReactNode;
   phoneDesc?: string;
   emailDesc?: string;
   phone?: string;
   email?: string;
-}) {
+  className?: string;
+}
+
+// TOP: USER INFO
+export function ProfileInfo({
+  phoneDesc,
+  icon,
+  emailDesc,
+  phone,
+  email,
+  className,
+}: ProfileInfoProps) {
   return (
-    <span className="flex w-full gap-3">
-      {icon && <span>{icon}</span>}
-      <span className="flex flex-col">
+    <div className={cn("flex w-full items-start gap-3.5", className)}>
+      {/* ICON WRAPPER */}
+      {icon && <div className="mt-1 shrink-0">{icon}</div>}
+
+      {/* TEXT CONTENT WRAPPER */}
+      <div className="flex flex-col min-w-0 overflow-hidden">
+        {/* PHONE LINK */}
         {phone && (
           <a
             href={`tel:+220${phone}`}
-            className="gray__text-dark text-[14px] font-semibold md:text-[16px] lg:text-[20px]"
+            className="truncate text-sm font-bold text-gray-800 transition-colors duration-200 hover:text-yellow md:text-base lg:text-lg"
           >
-            ( +220) {phone}
+            (+220) {phone}
           </a>
         )}
 
+        {/* EMAIL LINK */}
         {email && (
           <a
-            href=""
-            className="gray__text-dark text-[14px] font-semibold lg:text-[20px]"
+            href={`mailto:${email}`}
+            className="truncate text-sm font-bold text-gray-800 transition-colors duration-200 hover:text-yellow lg:text-base"
           >
             {email}
           </a>
         )}
 
-        <span className="font-body gray__text-light">
-          {phoneDesc || emailDesc}
-        </span>
-      </span>
-    </span>
+        {/* DESCRIPTION LABEL */}
+        {(phoneDesc || emailDesc) && (
+          <span className="text-xs font-medium text-gray-500">
+            {phoneDesc || emailDesc}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
-
 // Route Components
-function ProfileForm({ }) {
+// function ProfileInfo({
+//   phoneDesc,
+//   icon,
+//   emailDesc,
+//   phone,
+//   email,
+// }: {
+//   icon?: ReactNode;
+//   phoneDesc?: string;
+//   emailDesc?: string;
+//   phone?: string;
+//   email?: string;
+// }) {
+//   return (
+//     <div className="flex items-start gap-3">
+//       {icon && <div className="mt-0.5 shrink-0">{icon}</div>}
+//       <div className="flex flex-col overflow-hidden">
+//         {phone && (
+//           <a
+//             href={`tel:+220${phone}`}
+//             className="truncate text-sm font-bold text-gray-800 transition-colors hover:text-yellow md:text-base"
+//           >
+//             (+220) {phone}
+//           </a>
+//         )}
+
+//         {email && (
+//           <a
+//             href={`mailto:${email}`}
+//             className="truncate text-sm font-bold text-gray-800 transition-colors hover:text-yellow"
+//           >
+//             {email}
+//           </a>
+//         )}
+
+//         <span className="text-xs font-medium text-gray-500">
+//           {phoneDesc || emailDesc}
+//         </span>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ASIDE RIGHT: CONTACT DEALER
+function ProfileForm() {
   return (
-    <Form className="relative bg-primary p-5 shadow-lg">
-      <h3 className="font-montserrat mb-3 text-[14px] font-extrabold capitalize text-white lg:text-[18px]">
+    <Form className="relative rounded-2xl bg-primary p-6 shadow-xl border border-gray-800">
+      <h3 className="mb-4 text-base font-extrabold uppercase tracking-wider text-white lg:text-lg">
         Contact Seller
       </h3>
-      <div className="gray__text-light flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         <textarea
-          name=""
-          id=""
-          placeholder="Your message"
-          className="font-body w-full p-3 text-[12px] outline-none"
-          rows={7}
+          name="message"
+          placeholder="Write your message..."
+          className="w-full rounded-lg bg-white/10 p-3 text-xs text-white placeholder-gray-400 outline-none ring-1 ring-white/20 transition-all focus:bg-white/20 focus:ring-yellow"
+          rows={5}
           required
         />
 
         <Input
+          name="fullName"
           placeholder="First Name, Last Name*"
-          className="font-body pl-4 text-[12px]"
+          className="bg-white/10 text-xs text-white placeholder-gray-400 ring-1 ring-white/20 focus:ring-yellow"
           required
         />
         <Input
           type="email"
+          name="email"
           placeholder="Your Email Address*"
-          className="font-body pl-4 text-[12px]"
+          className="bg-white/10 text-xs text-white placeholder-gray-400 ring-1 ring-white/20 focus:ring-yellow"
           required
         />
         <Input
           type="text"
+          name="address"
           placeholder="Your Address*"
-          className="font-body pl-4 text-[12px]"
+          className="bg-white/10 text-xs text-white placeholder-gray-400 ring-1 ring-white/20 focus:ring-yellow"
           required
         />
         <Input
           type="tel"
+          name="phone"
           placeholder="Your Phone*"
-          className="text- pl-4 text-[12px]"
+          className="bg-white/10 text-xs text-white placeholder-gray-400 ring-1 ring-white/20 focus:ring-yellow"
           required
         />
 
         <Button
           title="Send Message"
-          className="my-6 w-full py-3 text-[14px] text-white"
+          className="mt-2 w-full py-3 text-sm font-bold uppercase tracking-wider text-white bg-yellow hover:bg-yellow/90 transition-all shadow-md"
         />
       </div>
     </Form>

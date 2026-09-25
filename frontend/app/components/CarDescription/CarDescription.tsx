@@ -4,20 +4,20 @@ import { Car } from "~/interfaces";
 
 const CarDescription = ({ car }: { car: Car }) => {
   return (
-    <div className="mt-4 flex items-center gap-4 text-xs md:flex">
-      <span className="flex items-center gap-1 text-gray-700">
-        <FaRoad />
-        <span className=" text-gray-700 truncate">
+    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-700">
+      <span className="flex items-center gap-1 min-w-0">
+        <FaRoad className="shrink-0 text-gray-500" />
+        <span className="truncate">
           {car?.mileage ? car.mileage.toLocaleString() : 0} km
         </span>
       </span>
-      <span className="flex items-center gap-1 text-gray-700">
-        <FaGasPump />
-        <span className="capitalize">{car.fuelType}</span>
+      <span className="flex items-center gap-1 shrink-0">
+        <FaGasPump className="text-gray-500" />
+        <span className="capitalize">{car?.fuelType || "N/A"}</span>
       </span>
-      <span className="flex items-center gap-1 text-gray-700">
-        <SiTransmission />
-        <span className="capitalize">{car.transmission}</span>
+      <span className="flex items-center gap-1 shrink-0">
+        <SiTransmission className="text-gray-500" />
+        <span className="capitalize">{car?.transmission || "N/A"}</span>
       </span>
     </div>
   );

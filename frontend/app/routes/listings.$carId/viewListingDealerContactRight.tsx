@@ -10,7 +10,7 @@ import { Link } from "@remix-run/react";
 
 export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
   const fullname = `${car?.owner?.first_name} ${car?.owner?.last_name}`;
-  const profileImage = car?.owner?.avatarUrl ? car?.owner?.avatarUrl : '/sain.jpeg';
+  const profileImage = car?.owner?.avatarUrl ? car?.owner?.avatarUrl : '/placeholder.png';
 
 
 
@@ -23,7 +23,7 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
       {/* SELLER PIC */}
       <Link to={`/profile/${car?.owner?.userId}`} className="mt-5">
         <ListingSellerImage
-          imgUrl={profileImage || "/sain.jpeg"}
+          imgUrl={profileImage}
           name={car?.owner?.username || fullname}
           className="h-22 w-22 border-b"
         />

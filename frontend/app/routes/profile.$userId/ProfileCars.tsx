@@ -3,6 +3,7 @@ import { useState } from "react";
 import CarDescription from "~/components/CarDescription/CarDescription";
 import CarMakeAndModel from "~/components/CarMakeAndModel/CarMakeAndModel";
 import Image from "~/components/Image/Image";
+import { Pagination } from "~/components/pagination/pagination";
 import PrevButton from "~/components/PaginationLeft/prev";
 import NextButton from "~/components/PaginationRight/next";
 import Price from "~/components/Price/price";
@@ -21,6 +22,11 @@ export const ProfileCars = ({
   const isUserCarsAvailable = userCars && userCars.length > 0;
   const isDealerFilteredCarsAvailable =
     dealerFilteredCars && dealerFilteredCars.length > 0;
+
+
+  const handlePageSelect = (pageNumber: number) => {
+    setStartIndex((pageNumber - 1) * carsPerPage);
+  };
 
   // Helper for status badge styling
   const getStatusStyles = (status?: string) => {
@@ -130,22 +136,17 @@ export const ProfileCars = ({
             : null}
         <hr />
       </div>
-      {isUserCarsAvailable && (
-        <div className="mt-10 flex items-center justify-between">
-          <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
-          {/* PAGINATION PAGE NUMBERS */}
-          <div className="flex items-center gap-2">
-            <span className="rounded bg-gray-200 px-4 py-1 text-white">1</span>
-            <span className="rounded bg-yellow px-4 py-1 text-white">2</span>
-            <span className="rounded bg-yellow px-4 py-1 text-white">3</span>
-          </div>
-          <NextButton
-            handleNext={handleNext}
-            startIndex={startIndex}
-            carsPerPage={carsPerPage}
-            carsLength={userCars.length}
-          />
-        </div>
+
+
+      {userCars && userCars.length > 0 && (
+        <Pagination
+          totalItems={userCars.length}
+          itemsPerPage={carsPerPage}
+          startIndex={startIndex}
+          onNext={handleNext}
+          onPrev={handlePrev}
+          onPageSelect={handlePageSelect}
+        />
       )}
     </>
   );

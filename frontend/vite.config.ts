@@ -16,6 +16,10 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  ssr: {
+    // Forces Vite to bundle Three.js as ES Modules rather than require() CommonJS
+    noExternal: ['three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
+  },
   esbuild: {
     drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
   }
