@@ -8,7 +8,7 @@ interface ListingSmallImageProps {
 
 export const ListingSmallImg = ({ imageUrl, onClick, className }: ListingSmallImageProps) => {
   return (
-    <div className="relative h-36 w-full cursor-pointer overflow-hidden rounded-lg bg-gray-100">
+    <div className="relative h-28 w-full cursor-pointer overflow-hidden rounded-lg bg-gray-100">
       <img
         src={imageUrl}
         alt="Car thumbnail"
