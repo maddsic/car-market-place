@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="relative min-h-[560px] lg:h-[calc(100vh-200px)] w-full overflow-hidden bg-slate-950 flex flex-col justify-between p-6 md:p-12 lg:p-16">
+      <header className="relative min-h-screen md:min-h-[calc(100vh-200px)] w-full overflow-hidden bg-slate-950 flex flex-col justify-between p-6 md:p-12 lg:p-16">
 
         {/* Animated Background Image Slide */}
         <AnimatePresence mode="wait">
