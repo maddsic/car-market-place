@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { json, useActionData, useLoaderData, useNavigation } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 // icons
@@ -24,6 +24,7 @@ import { MessageDealerForm } from "./messageDealerForm";
 import { ListingSubHeader } from "./submenu";
 import { sendMessageToDealer } from "~/service/dealer.server";
 import { messageDealerSchema } from "~/validations/validateForm";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface loaderData {
   car: Car | null;
@@ -42,11 +43,29 @@ const ViewListing = () => {
   const loading = navigation.state === "loading";
   const isSubmitting = navigation.state === "submitting" && navigation.formData?.get("content") !== undefined;
   const formRef = React.useRef<HTMLFormElement>(null);
+  // Inside your component:
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  const Cartitle = `${car?.year} ${car?.make} ${car?.model}`;
+
+
+  // Function to handle scrolling of the thumbnail images
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = direction === "left" ? -150 : 150;
+      scrollContainerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Toggle the visibility of the dealer's phone number
   const handleShowNumber = (): void => {
     setShowNumber(!showNumber);
   };
 
+  // Handle toast notifications based on the action data
   useEffect(() => {
     if (!messageActionData) return;
 
@@ -71,7 +90,7 @@ const ViewListing = () => {
           {/* TOP: ASIDE LEFT - CAR INFO */}
           <aside className="col-span-12 flex flex-col gap-3 md:col-span-9">
             <Heading
-              title={car?.make + " " + car?.model}
+              title={Cartitle}
               classNames="lg:text-[38px] text-[24px] uppercase"
             />
             {/* SUB HEADER */}
@@ -105,16 +124,53 @@ const ViewListing = () => {
             )}
 
             {/* THUMBNAILS */}
-            <div className="relative flex flex-row justify-between gap-4">
-              {car?.images &&
-                car?.images?.map((img, i) => (
-                  <ListingSmallImg
+            {/* THUMBNAILS */}
+            <div className="relative w-full">
+              {/* Left Arrow Button (Mobile only, shown if > 4 images) */}
+              {(car?.images?.length ?? 0) > 4 && (
+                <button
+                  type="button"
+                  onClick={() => scroll("left")}
+                  className="absolute -left-2 top-1/2 z-20 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-gray-700 shadow-md md:hidden"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Thumbnails Row */}
+              <div
+                ref={scrollContainerRef}
+                className="flex w-full flex-row gap-2 overflow-x-auto scroll-smooth py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:justify-between md:gap-4 md:overflow-visible"
+              >
+                {car?.images?.map((img, i) => (
+                  <div
                     key={i}
-                    imageUrl={img.imageUrl!}
-                    onClick={() => setIndex(i)}
-                    className={i === index ? "border-4 border-yellow" : ""}
-                  />
+                    className="w-[calc((100%-1.5rem)/4)] flex-shrink-0 md:w-full md:flex-shrink"
+                  >
+                    <ListingSmallImg
+                      imageUrl={typeof img === "string" ? img : img.imageUrl!}
+                      onClick={() => setIndex(i)}
+                      className={`h-full w-full cursor-pointer object-cover ${i === index ? "border-4 border-yellow" : ""
+                        }`}
+                    />
+                  </div>
                 ))}
+              </div>
+
+              {/* Right Arrow Button (Mobile only, shown if > 4 images) */}
+              {(car?.images?.length ?? 0) > 4 && (
+                <button
+                  type="button"
+                  onClick={() => scroll("right")}
+                  className="absolute -right-2 top-1/2 z-20 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-gray-700 shadow-md md:hidden"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
             </div>
 
             {/* CAR INFO */}
@@ -153,6 +209,7 @@ export default ViewListing;
 
 function SubHeader({ car }: { car: Car }) {
   const createdAtDate: Date = new Date(car?.createdAt!);
+  const vinNumber = car?.vin ? `${car.vin.slice(0, -6)}******` : "N/A";
 
   // FORMAT DATE
   const formattedDate = createdAtDate.toLocaleDateString("en-US", {
@@ -168,7 +225,11 @@ function SubHeader({ car }: { car: Car }) {
         icon={<MdAccessTime size={16} />}
       />
       <ListingSubHeader
-        text={`stock ${car.stockNumber}`}
+        text={`stk# ${car.stockNumber}`}
+        className="bg-muted"
+      />
+      <ListingSubHeader
+        text={`vin#: ${vinNumber}`}
         className="bg-muted"
       />
       <ListingSubHeader

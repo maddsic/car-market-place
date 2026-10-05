@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ListSubMenuProps {
@@ -17,7 +17,9 @@ export const ListingSubHeader: React.FC<ListSubMenuProps> = ({
   return (
     <span
       className={twMerge(
-        `text-gray-500, w-content flex cursor-pointer items-center gap-1 rounded-2xl border px-[8px] py-1 text-[8px] uppercase md:text-[10px] ${className}`,
+        "flex w-fit items-center gap-1 rounded-2xl border px-2 py-1 text-[8px] uppercase text-gray-500 md:text-[10px]",
+        onClick ? "cursor-pointer" : "cursor-default",
+        className
       )}
       onClick={onClick}
     >

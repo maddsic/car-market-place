@@ -52,6 +52,7 @@ export interface Car {
   fuelType: string;
   carType: string;
   description: string;
+  vin: string;
   imageUrl: string;
   image: string;
   images?: carImage[];
