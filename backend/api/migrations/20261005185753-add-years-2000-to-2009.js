@@ -3,19 +3,15 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // 1. Fetch IDs using MySQL compatible syntax
     const [models] = await queryInterface.sequelize.query(
       'SELECT id FROM CarModel;'
     );
 
-    if (models.length === 0) {
-      console.log('No models found in CarModel table.');
-      return;
-    }
+    if (models.length === 0) return;
 
     const yearsToInsert = [];
     const startYear = 2000;
-    const endYear = 2026;
+    const endYear = 2009; // Only seed missing years 2000-2009
 
     models.forEach(model => {
       for (let year = startYear; year <= endYear; year++) {
@@ -29,7 +25,6 @@ module.exports = {
       }
     });
 
-    // 2. Chunking for MySQL performance
     const chunkSize = 1000;
     for (let i = 0; i < yearsToInsert.length; i += chunkSize) {
       const chunk = yearsToInsert.slice(i, i + chunkSize);
@@ -38,6 +33,12 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('CarModelYear', null, {});
-  },
+    // Delete only the newly added years if rolled back
+    await queryInterface.bulkDelete('CarModelYear', {
+      year: {
+        [Sequelize.Op.gte]: 2000,
+        [Sequelize.Op.lte]: 2009
+      }
+    });
+  }
 };
