@@ -39,10 +39,21 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
+  console.log("SignUp actionData:", actionData);
+
   useEffect(() => {
-    if (actionData?.success) {
+    if (!actionData) return;
+
+    if (actionData && 'success' in actionData && actionData.success) {
       toast.success(actionData?.message);
-      setTimeout(() => navigate("/auth/login"), 1000);
+
+      const timer = setTimeout(() => {
+        navigate("/auth/login")
+      }, 2000)
+
+      return () => clearTimeout(timer)
+    } else if (actionData && 'success' in actionData && !actionData.success) {
+      toast.error(actionData?.message);
     }
   }, [actionData, navigate]);
 

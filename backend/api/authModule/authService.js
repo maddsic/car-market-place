@@ -17,8 +17,8 @@ class AuthService {
     const hashedPassword = await hashPassword(data.password);
     // Generate a secure verification token (64 hex characters)
     const verificationToken = crypto.randomBytes(32).toString('hex');
-    // Set expiration (e.g., 24 hours from now)
-    const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    // Set expiration (e.g., 1 week from now)
+    const verificationTokenExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     const userData = {
       ...data,
@@ -47,6 +47,7 @@ class AuthService {
       // Decide if failure to deliver email should log an error or fail registration
       return {
         status: 500,
+        success: false,
         message: 'User created, but failed to send verification email. Please contact support.',
         data: formData,
         error: emailError.message
