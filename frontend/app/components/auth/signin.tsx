@@ -156,7 +156,7 @@ const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
           </Form>
 
           {/* Demo User Info Box */}
-          <div className="mt-6 sm:mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm">
+          {/* <div className="mt-6 sm:mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm">
             <div className="flex items-center gap-2 mb-2">
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
               <span className="text-[10px] sm:text-xs font-black text-emerald-400 uppercase tracking-widest">
@@ -171,7 +171,7 @@ const SignIn = ({ actionData }: { actionData: SignInActionDataProps }) => {
                 Pass: <span className="font-mono text-emerald-300">Password1234$</span>
               </p>
             </div>
-          </div>
+          </div> */}
 
           <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-slate-400 font-medium">
             Don’t have an account?{" "}

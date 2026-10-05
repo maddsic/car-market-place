@@ -57,7 +57,7 @@ class AuthService {
     return {
       status: 201,
       success: true,
-      message: `User ${data.first_name} ${data.last_name} created successfully. Please check your email to verify your account.`,
+      message: `Account created successfully. Please check your email to verify your account.`,
       data: formData,
     };
   }

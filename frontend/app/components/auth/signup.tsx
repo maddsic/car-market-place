@@ -45,7 +45,7 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
     if (!actionData) return;
 
     if (actionData && 'success' in actionData && actionData.success) {
-      toast.success(actionData?.message);
+      toast.success(actionData?.message || "Account created successfully! Redirecting to login...");
 
       const timer = setTimeout(() => {
         navigate("/auth/login")
