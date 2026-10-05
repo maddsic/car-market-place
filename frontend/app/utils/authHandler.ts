@@ -18,26 +18,43 @@ export const handleSignUp = async (formData: FormData) => {
 
   if (!validateResult.success) {
     const fieldErrors = validateResult.error.flatten().fieldErrors;
-    return json({ errors: fieldErrors, values: data }, { status: 400 });
+    return json(
+      {
+        success: false,
+        message: "Please fix the validation errors in the form.",
+        errors: fieldErrors,
+        values: data
+      },
+      { status: 400 }
+    );
   }
 
-  // IF VALIDATION SUCCEEDS, CALL THE REGISTER USER FUNCTION
   try {
     const user = await RegisterUser(validateResult.data);
-    // Check use role and redirect accordingly
-    console.log("Registered User:", user);
-    return json({ success: true }, { status: 200 });
-  } catch (error) {
-    // HANDLE ERROR FROM REGISTER USER FUNCTION
-    if (error instanceof Error) {
+
+    // If your backend service returns { status: 409, message: '...' } instead of throwing
+    if (user.status && user.status >= 400) {
       return json(
-        { errors: { formError: error.message }, values: data },
-        { status: 400 },
+        { success: false, message: user.message },
+        { status: user.status }
       );
     }
+
     return json(
-      { errors: { formError: "An unexpected error occurred" }, values: data },
-      { status: 500 },
+      { success: true, message: user.message },
+      { status: 200 }
+    );
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+
+    return json(
+      {
+        success: false,
+        message: errorMessage,
+        errors: { formError: errorMessage },
+        values: data
+      },
+      { status: 500 }
     );
   }
 };
