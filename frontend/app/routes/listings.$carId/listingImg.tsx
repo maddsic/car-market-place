@@ -1,24 +1,34 @@
 import { cn } from "~/lib/utils";
 
 interface ListingSmallImageProps {
-  imageUrl: string,
-  onClick: () => void,
-  className?: string
+  imageUrl: string;
+  onClick: () => void;
+  className?: string;
+  alt?: string;
 }
 
-export const ListingSmallImg = ({ imageUrl, onClick, className }: ListingSmallImageProps) => {
+export const ListingSmallImg = ({
+  imageUrl,
+  onClick,
+  className,
+  alt = "Car thumbnail",
+}: ListingSmallImageProps) => {
   return (
-    <div className="relative h-28 w-full cursor-pointer overflow-hidden rounded-lg bg-gray-100">
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500",
+        className
+      )}
+    >
       <img
         src={imageUrl}
-        alt="Car thumbnail"
-        sizes="30vw"
-        onClick={onClick}
-        className={cn(
-          "absolute inset-0 h-full w-full object-cover transition-transform duration-300 hover:scale-105",
-          className
-        )}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
-    </div>
+    </button>
   );
 };

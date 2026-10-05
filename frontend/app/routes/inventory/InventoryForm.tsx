@@ -1,16 +1,22 @@
 import { Form } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Button from "~/components/Button/button";
-import { CarMake, CarModel } from "~/interfaces";
 import { useCarStore } from "~/store/carStore";
+import { CarModel } from "~/store/carStoreInterfaces";
+
+// Generate years 2026 down to 2000
+const START_YEAR = 2000;
+const END_YEAR = 2026;
+const YEARS = Array.from(
+  { length: END_YEAR - START_YEAR + 1 },
+  (_, i) => END_YEAR - i
+);
 
 const InventoryForm = () => {
   const { carBodyTypes, carMakes, fetchCarData } = useCarStore();
   const [models, setModels] = useState<CarModel[]>([]);
-  const [formData, setFormData] = useState({
-    make: "",
-    model: "",
-  });
+  const [selectedMake, setSelectedMake] = useState<string>("");
+  const [selectedModel, setSelectedModel] = useState<string>("");
 
   useEffect(() => {
     if (carBodyTypes.length === 0 || carMakes.length === 0) {
@@ -20,42 +26,54 @@ const InventoryForm = () => {
 
   // Handle Make change
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const makeId = e.target.value;
-    const foundMake = carMakes.find((make: any) => make.id === makeId);
+    const selectedValue = e.target.value;
 
-    // Update formdata for the make and reset model
-    setFormData({ ...formData, make: makeId, model: "" });
+    // Handles either make.name or make.id depending on what <option value="..."> provides
+    const foundMake = carMakes.find(
+      (make) => make.name === selectedValue || String(make.id) === selectedValue
+    );
 
     if (foundMake) {
+      setSelectedMake(foundMake.name);
       setModels(foundMake.CarModels || []);
     } else {
+      // Clears models if user selects "all", empty option, or resets
+      setSelectedMake("");
       setModels([]);
     }
   };
 
+  const handleReset = () => {
+    setSelectedMake("");
+    setSelectedModel("");
+    setModels([]);
+  };
+
   return (
-    <Form className="grid gap-4 p-5 lg:gap-6">
+    <Form method="get" className="grid gap-4 p-5 lg:gap-6">
       {/* CONDITION */}
       <select
         name="condition"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        defaultValue=""
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
-        <option value="">condition</option>
+        <option value="">Condition</option>
         <option value="all">All</option>
         <option value="new">New</option>
         <option value="used">Used</option>
-        <option value="certified_used">Certified USed</option>
+        <option value="certified_used">Certified Used</option>
       </select>
 
       {/* BODY */}
       <select
         name="body"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        defaultValue=""
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
-        <option value="">body</option>
+        <option value="">Body</option>
         <option value="all">All</option>
         {carBodyTypes.map((bodyType: any) => (
-          <option value={bodyType.typeName} key={bodyType.typeId} className="">
+          <option value={bodyType.typeName} key={bodyType.typeId}>
             {bodyType.typeName}
           </option>
         ))}
@@ -64,13 +82,14 @@ const InventoryForm = () => {
       {/* MAKE */}
       <select
         name="make"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        value={selectedMake}
         onChange={handleMakeChange}
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
         <option value="">Make</option>
         <option value="all">All</option>
-        {carMakes.map((make: any) => (
-          <option value={make.id} key={make.id}>
+        {carMakes.map((make) => (
+          <option value={make.name} key={make.id}>
             {make.name}
           </option>
         ))}
@@ -79,55 +98,63 @@ const InventoryForm = () => {
       {/* MODEL */}
       <select
         name="model"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        value={selectedModel}
+        onChange={(e) => setSelectedModel(e.target.value)}
+        disabled={!selectedMake || selectedMake === "all"}
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
         <option value="">Model</option>
         <option value="all">All</option>
-
-        {models &&
-          models.length > 0 &&
-          models.map((model: CarModel) => (
-            <option key={model.id} value={model.name}>
-              {model.name}
-            </option>
-          ))}
+        {models.map((model: CarModel) => (
+          <option key={model.id} value={model.name}>
+            {model.name}
+          </option>
+        ))}
       </select>
 
-      {/* YEAR */}
+      {/* YEAR (2000 - 2026) */}
       <select
         name="year"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        defaultValue=""
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
-        <option value="">year</option>
+        <option value="">Year</option>
         <option value="all">All</option>
+        {YEARS.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
       </select>
 
-      {/* transmission */}
+      {/* TRANSMISSION */}
       <select
         name="transmission"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
+        defaultValue=""
+        className="block w-full rounded-md border border-gray-200 bg-muted p-2.5 text-sm capitalize text-gray-700 focus:outline-none focus:ring-1 focus:ring-yellow-500"
       >
-        <option value="">transmission</option>
+        <option value="">Transmission</option>
         <option value="all">All</option>
-        <option value="petrol">automatic</option>
-        <option value="gas">manual</option>
+        <option value="automatic">Automatic</option>
+        <option value="manual">Manual</option>
       </select>
 
-      {/* LISTING STATUS */}
-      <select
-        name="listing_status"
-        className="block w-full bg-muted p-2.5 text-sm capitalize text-gray-600 focus:border-none"
-      >
-        <option value="">listing status</option>
-        <option value="active">active</option>
-        <option value="sold">sold</option>
-      </select>
 
-      {/* button */}
-      <Button
-        title="reset all"
-        className="w-full bg-yellow px-2 py-4 font-bold tracking-wide text-white"
-      />
+      {/* BUTTON ACTIONS */}
+      <div className="flex gap-2 pt-2">
+        <button
+          type="reset"
+          onClick={handleReset}
+          className="w-1/2 rounded border border-gray-300 py-3 text-xs font-semibold uppercase tracking-wider text-gray-700 transition hover:bg-gray-100"
+        >
+          Reset All
+        </button>
+        <Button
+          type="submit"
+          title="Apply Filters"
+          className="w-1/2 bg-yellow py-3 text-xs font-bold uppercase tracking-wider text-white"
+        />
+      </div>
     </Form>
   );
 };

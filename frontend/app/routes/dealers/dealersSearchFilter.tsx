@@ -14,7 +14,7 @@ interface DealersSearchFilterProps {
 const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   carMakes,
 }) => {
-  const [selectedMAke, setSelectedMake] = useState<CarMake | null>(null);
+  const [selectedMake, setSelectedMake] = useState<CarMake | null>(null);
   const [models, setModels] = useState<CarModel[]>([]);
   const navigation = useNavigation();
   const loading = navigation?.state === "loading";
@@ -25,19 +25,22 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
     return <Loader />;
   }
 
-  //   Handles changes in the make selection
+  // Handles changes in the make selection
   const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const makeName = e.target.value;
-    const make = e.target.name;
+    const selectedValue = e.target.value;
 
-    if (e.target.name === make) {
-      const foundMake = carMakes.find(
-        (make: CarMake) => make.name === makeName,
-      );
-      if (foundMake) {
-        setSelectedMake(foundMake);
-        setModels(foundMake.CarModels || []);
-      }
+    // Handles either make.name or make.id depending on what <option value="..."> provides
+    const foundMake = carMakes.find(
+      (make) => make.name === selectedValue || String(make.id) === selectedValue
+    );
+
+    if (foundMake) {
+      setSelectedMake(foundMake);
+      setModels(foundMake.CarModels || []);
+    } else {
+      // Clears models if user selects "all", empty option, or resets
+      setSelectedMake(null);
+      setModels([]);
     }
   };
 
