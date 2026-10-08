@@ -5,6 +5,20 @@
   scroll-behavior: smooth;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+
 .input__bg {
   background-color: #f0f2f5;
 }
@@ -20,8 +34,10 @@
 }
 
 .rotate-diagonal {
-  transform: rotate(-45deg); /* Rotate the element diagonally */
-  transform-origin: bottom; /* Set the pivot point for rotation */
+  transform: rotate(-45deg);
+  /* Rotate the element diagonally */
+  transform-origin: bottom;
+  /* Set the pivot point for rotation */
 }
 
 .clip-path {

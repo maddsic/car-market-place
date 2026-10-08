@@ -24,26 +24,6 @@ export async function getDealerDashboardStats(request: Request) {
   return await response.json();
 }
 
-// This function will be used to fetch inventory data for the dealer dashboard inventory page
-// export async function getDealerDashboardInventory(request: Request) {
-//   const token = getAuthToken(request);
-//   if (!token) {
-//     throw new Error("Unauthorized: No auth token found");
-//   }
-
-//   const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/inventory`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       authorization: `Bearer ${token}`,
-//     },
-//   });
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch dealer dashboard inventory");
-//   }
-//   return await response.json();
-// }
-
 export async function getDealerDashboardInventory(request: Request) {
   const token = getAuthToken(request);
   if (!token) {

@@ -3,9 +3,16 @@ import StatsCard from "./statsCard";
 import DashboardChart from "./dashboardCharts";
 import DealerProfileCard from "./dealerProfileCard";
 import RecentActivities from "./recentActivities";
-import { getDashboardActivities, getDealerDashboardStats, getDealerProfileCardData } from "~/service/dealer.server";
+import {
+  getDashboardActivities,
+  getDealerDashboardStats,
+  getDealerProfileCardData,
+} from "~/service/dealer.server";
 import { json, redirect, useLoaderData } from "@remix-run/react";
 import { getAuthToken } from "~/utils/authHelpers";
+import AdminOverview from "../dashboard.adminOverview/route";
+import { verifyJwtToken } from "~/utils/jwt.server";
+import { getAdminDashboardStats, getRecentUsers } from "~/service/admin.server";
 
 type DashboardStats = {
   totalListings: number;
@@ -17,7 +24,7 @@ type DashboardStats = {
 export default function DashboardIndex() {
   const data = useLoaderData<typeof loader>();
 
-  // Handle error state with responsive UI container
+  // 1. ERROR HANDLING: If the loader returned an error, display it to the user.
   if ("error" in data) {
     return (
       <div className="mx-auto max-w-7xl p-4 sm:p-6">
@@ -29,31 +36,47 @@ export default function DashboardIndex() {
     );
   }
 
-  // Get stats from loader data
+  // 2. ADMIN VIEW: Handled entirely by AdminOverview
+  if (data.role === "admin" && "adminStats" in data) {
+    return (
+      <AdminOverview
+        stats={data.adminStats}
+        recentUsers={data.recentUsers}
+        activities={data.activities}
+      />
+    );
+  }
+
+  // 3. DEALER VIEW: Narrow the loader result before accessing dealer-only fields.
+  if (!("stats" in data)) {
+    return null;
+  }
+
+  // 4. DEALER VIEW: Render the dealer dashboard with stats, activities, and profile data.
   const { stats, activities, profileData } = data;
 
   const statsCardData = [
     {
       title: "Total Listings",
-      value: stats.totalListings ?? 0,
+      value: stats?.totalListings ?? 0,
       icon: <FaCar className="text-primary" size={26} />,
       color: "bg-yellow",
     },
     {
       title: "Active Listings",
-      value: stats.availableListings ?? 0,
+      value: stats?.availableListings ?? 0,
       icon: <FaCarSide className="text-green-600" size={26} />,
       color: "bg-green-100",
     },
     {
       title: "Total Sales",
-      value: stats.soldListings ?? 0,
+      value: stats?.soldListings ?? 0,
       icon: <FaDollarSign className="text-yellow-600" size={26} />,
       color: "bg-yellow-100",
     },
     {
       title: "Customer Reviews",
-      value: stats.reviewCount ?? 0,
+      value: stats?.reviewCount ?? 0,
       icon: <FaStar className="text-orange-500" size={26} />,
       color: "bg-orange-100",
     },
@@ -62,20 +85,17 @@ export default function DashboardIndex() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <div className="flex flex-col gap-6 sm:gap-8">
-
-        {/* Stats Section - Stacks on mobile, 2 per row on tablet, 4 per row on desktop */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-          {statsCardData.map((statsData, i) => (
+          {statsCardData.map((item, i) => (
             <StatsCard
               key={i}
-              title={statsData.title}
-              value={statsData.value}
-              icon={statsData.icon}
+              title={item.title}
+              value={item.value}
+              icon={item.icon}
             />
           ))}
         </div>
 
-        {/* Middle Section: Chart + Profile */}
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
           <div className="w-full lg:col-span-2">
             <DashboardChart />
@@ -85,11 +105,9 @@ export default function DashboardIndex() {
           </div>
         </div>
 
-        {/* Bottom Section: Recent Activities */}
         <div className="w-full">
           <RecentActivities activities={activities} />
         </div>
-
       </div>
     </div>
   );
@@ -97,11 +115,31 @@ export default function DashboardIndex() {
 
 export const loader = async ({ request }: { request: Request }) => {
   const token = getAuthToken(request);
-  if (!token) {
-    return redirect("/auth/login");
-  }
+  if (!token) return redirect("/auth/login");
+
+  const verifiedToken = verifyJwtToken(token);
+  if (!verifiedToken) return redirect("/auth/login");
+
+  const role = verifiedToken.role || "user";
 
   try {
+    if (role === "admin") {
+      const [adminStatsResponse, recentUsersData, activitiesData] =
+        await Promise.all([
+          getAdminDashboardStats(request),
+          getRecentUsers(request),
+          getDashboardActivities(request),
+        ]);
+
+      return json({
+        role: "admin",
+        // Extract the nested .data property from your Express JSON response
+        adminStats: adminStatsResponse?.data || adminStatsResponse || {},
+        recentUsers: recentUsersData?.data || [],
+        activities: activitiesData?.data || [],
+      });
+    }
+
     const [stats, activitiesData, profileData] = await Promise.all([
       getDealerDashboardStats(request),
       getDashboardActivities(request),
@@ -109,6 +147,7 @@ export const loader = async ({ request }: { request: Request }) => {
     ]);
 
     return json({
+      role: "agent",
       stats: stats as DashboardStats,
       activities: activitiesData?.data || [],
       profileData: profileData?.data || {},

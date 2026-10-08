@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { FaChartBar, FaCarSide, FaUserCircle, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
+import { FaChartBar, FaCarSide, FaUserCircle, FaEnvelope, FaBars, FaTimes, FaTags, FaUsers } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { DashboardTopNav } from "./dashboardTopNav";
 import { getAuthToken } from "~/utils/authHelpers";
@@ -28,24 +28,27 @@ const dealerNavItems = [
 
 const adminNavItems = [
   { to: "/dashboard", label: "Overview", icon: <FaChartBar size={18} /> },
-  { to: "/dashboard/users", label: "Users", icon: <FaUserCircle size={18} /> },
-  { to: "/dashboard/messages", label: "Messages", icon: <FaEnvelope size={18} /> },
+  { to: "/dashboard/users", label: "User Directory", icon: <FaUsers size={18} /> },
+  { to: "/dashboard/admin-inventory", label: "All Inventory", icon: <FaCarSide size={18} /> },
+  { to: "/dashboard/taxonomy", label: "Makes & Models", icon: <FaTags size={18} /> },
+  { to: "/dashboard/messages", label: "Messages & Inquiries", icon: <FaEnvelope size={18} /> },
 ];
 
 export default function DashboardLayout() {
   const { role } = useLoaderData<typeof loader>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Select navigation set based on user role
   const navItems = role === "admin" ? adminNavItems : dealerNavItems;
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 md:flex">
+    // Outer Container: locked to exact screen height
+    <div className="h-screen w-full overflow-hidden bg-gray-50 flex flex-col md:flex-row">
+
       {/* Mobile Top Header Toggle Bar */}
-      <div className="sticky top-0 z-20 flex items-center justify-between bg-primary p-4 text-white md:hidden">
+      <div className="flex-shrink-0 z-20 flex items-center justify-between bg-primary p-4 text-white md:hidden">
         <button
           onClick={toggleSidebar}
           className="rounded-md p-2 text-white hover:bg-white/10 focus:outline-none"
@@ -58,7 +61,7 @@ export default function DashboardLayout() {
         </span>
       </div>
 
-      {/* Mobile Backdrop Overlay */}
+      {/* Mobile Backdrop */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -71,9 +74,9 @@ export default function DashboardLayout() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar Navigation */}
+      {/* Fixed Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-primary p-5 shadow-lg transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-shrink-0 flex-col bg-primary p-5 shadow-lg transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
@@ -88,7 +91,7 @@ export default function DashboardLayout() {
           </button>
         </div>
 
-        <nav className="font-montserrat flex flex-col gap-2">
+        <nav className="font-montserrat flex flex-1 flex-col gap-2 overflow-y-auto no-scrollbar">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -104,7 +107,6 @@ export default function DashboardLayout() {
             >
               {({ isActive }) => (
                 <>
-                  {/* Animated active indicator bar */}
                   {isActive && (
                     <motion.div
                       layoutId="activeIndicator"
@@ -125,17 +127,17 @@ export default function DashboardLayout() {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="font-montserrat flex-1 p-4 sm:p-6 lg:p-8">
+      {/* Main Content Area: flex-1 + min-h-0 + pb-24 ensures 100% of content is scrollable */}
+      <main className="font-montserrat flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar pb-24">
         <DashboardTopNav />
         <div className="mt-6">
           <Outlet />
         </div>
       </main>
+
     </div>
   );
 }
-
 // DEFINE INTERFACE FOR DECODED TOKEN
 interface AuthTokenPayload {
   userId: string;
