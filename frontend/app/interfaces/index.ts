@@ -73,3 +73,4 @@ export interface CarBodyType {
   typeId: string;
   typeName: string;
 }
+

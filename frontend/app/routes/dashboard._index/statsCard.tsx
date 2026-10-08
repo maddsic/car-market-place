@@ -3,7 +3,7 @@ import React from "react";
 interface StatsCardProps {
   key: number;
   title: string;
-  value: number;
+  value: number | string;
   icon: React.ReactNode;
 }
 

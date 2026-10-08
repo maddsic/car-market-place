@@ -49,6 +49,7 @@ class AuthMiddleware {
       if (req.user.role !== 'admin') {
         return sendResponse(res, 403, false, 'Forbidden: Admins only');
       }
+      next();
     })
   }
 
