@@ -1,5 +1,17 @@
+import { MetaFunction } from "@remix-run/node";
 import React from "react";
-import { DollarSign } from "lucide-react"; // Icons for visual appeal
+
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Auctions | Gamautos" },
+    {
+      name: "description",
+      content:
+        "GamAutos is excited to announce that our digital auction house is coming soon! Get ready to bid on exclusive, high-value vehicles in a seamless and secure online environment.",
+    },
+  ];
+};
 
 // --- Main Route Component ---
 export default function AuctionsComingSoon() {

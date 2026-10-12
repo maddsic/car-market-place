@@ -1,8 +1,14 @@
 import { FaBell, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSubmit } from "@remix-run/react";
 
 export const DashboardTopNav = () => {
   const navigate = useNavigate();
+  const submit = useSubmit();
+
+  const handleSignOut = () => {
+    // Sends a POST request to /auth/logout
+    submit(null, { method: "post", action: "/auth/logout" });
+  };
 
   return (
     <div className="mb-5 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
@@ -10,22 +16,31 @@ export const DashboardTopNav = () => {
         Welcome to your Dashboard
       </h1>
       <div className="flex items-center gap-5">
-        <button onClick={() => navigate('/dashboard/messages')} className="relative text-gray-500 transition hover:text-primary"
-
+        <button
+          type="button"
+          onClick={() => navigate("/dashboard/messages")}
+          className="relative text-gray-500 transition hover:text-primary"
+          aria-label="Messages"
         >
           <FaEnvelope size={22} />
-          {/* <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
-            3
-          </span> */}
         </button>
-        <button className="relative text-gray-500 transition hover:text-primary">
+
+        <button
+          type="button"
+          className="relative text-gray-500 transition hover:text-primary"
+          aria-label="Notifications"
+        >
           <FaBell size={22} />
-          {/* <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">
-            5
-          </span> */}
         </button>
-        <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white">
-          <FaSignOutAlt size={22} />
+
+        <button
+          type="button"
+          onClick={handleSignOut}
+          title="Sign Out"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white transition hover:bg-red-600 focus:outline-none"
+          aria-label="Sign out"
+        >
+          <FaSignOutAlt size={16} />
         </button>
       </div>
     </div>

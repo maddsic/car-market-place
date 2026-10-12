@@ -1,4 +1,4 @@
-import { json, LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useState } from "react";
 
@@ -12,16 +12,26 @@ import CarMakeAndModel from "~/components/CarMakeAndModel/CarMakeAndModel";
 import CarDescription from "~/components/CarDescription/CarDescription";
 import Image from "~/components/Image/Image";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
-// import InventoryForm from "./InventoryForm";
 
 // Icons
 import { IoCarSportOutline } from "react-icons/io5";
 
 // Helpers & Interfaces
 import { apiFetch } from "~/utils/apiFetch";
-import { apiEndpoints } from "~/store/apiEndpoints";
 import { Car } from "~/interfaces";
 import InventoryForm from "../inventory/InventoryForm";
+
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Rentals | Gamautos" },
+    {
+      name: "description",
+      content:
+        "Find local car dealerships and browse their inventory.",
+    },
+  ];
+};
 
 const RentalsPage = () => {
   const { cars = [] } = useLoaderData<typeof loader>() || {};

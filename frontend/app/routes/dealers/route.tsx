@@ -1,7 +1,7 @@
 import Heading from "~/components/Heading/heading";
 import { useLoaderData } from "@remix-run/react";
 import { apiFetch } from "~/utils/apiFetch";
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import DealersSearchFilter from "./dealersSearchFilter";
 import SubHeading from "~/components/Heading/subheading";
 import DisplayDealerInfo from "./displayDealerInfo";
@@ -18,6 +18,17 @@ interface DealerData {
   phone: string;
   carsCount: number;
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Dealers | Gamautos" },
+    {
+      name: "description",
+      content:
+        "Find local car dealerships and browse their inventory.",
+    },
+  ];
+};
 
 const Dealers = () => {
   // Add fallback defaults (= []) so dropdowns never break on refresh

@@ -1,17 +1,14 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 // Components
 import Divider from "~/components/Divider/divider";
 import Heading from "~/components/Heading/heading";
-import NextButton from "~/components/PaginationRight/next";
-import PrevButton from "~/components/PaginationLeft/prev";
 
 // Icons
 import { IoCarSportOutline } from "react-icons/io5";
 
-import Special from "~/components/Special/special";
 import { apiFetch } from "~/utils/apiFetch";
 import Price from "~/components/Price/price";
 import CarMakeAndModel from "~/components/CarMakeAndModel/CarMakeAndModel";
@@ -21,6 +18,18 @@ import { Car } from "~/interfaces";
 import InventoryForm from "./InventoryForm";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 import { Pagination } from "~/components/pagination/pagination";
+
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Inventory | Gamautos" },
+    {
+      name: "description",
+      content:
+        "Browse our selection of vehicles for sale across The Gambia and internationally.",
+    },
+  ];
+};
 
 const InventoryPage = () => {
   const { cars = [] } = useLoaderData<typeof loader>() || {};

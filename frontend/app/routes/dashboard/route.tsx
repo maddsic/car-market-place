@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { Form, NavLink, Outlet, useLoaderData, useSubmit } from "@remix-run/react";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { FaChartBar, FaCarSide, FaUserCircle, FaEnvelope, FaBars, FaTimes, FaTags, FaUsers } from "react-icons/fa";
+import { FaChartBar, FaCarSide, FaUserCircle, FaEnvelope, FaBars, FaTimes, FaTags, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { DashboardTopNav } from "./dashboardTopNav";
 import { getAuthToken } from "~/utils/authHelpers";
@@ -37,11 +37,17 @@ const adminNavItems = [
 export default function DashboardLayout() {
   const { role } = useLoaderData<typeof loader>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const submit = useSubmit();
 
   const navItems = role === "admin" ? adminNavItems : dealerNavItems;
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const closeSidebar = () => setIsSidebarOpen(false);
+
+  const handleSignOut = () => {
+    // Sends a POST request to /auth/logout
+    submit(null, { method: "post", action: "/auth/logout" });
+  };
 
   return (
     // Outer Container: locked to exact screen height
@@ -125,6 +131,18 @@ export default function DashboardLayout() {
             </NavLink>
           ))}
         </nav>
+
+        {/* Bottom Sidebar Sign-Out Action */}
+        <div className="border-t border-white/10 pt-4 mt-auto ">
+          <button
+            type="submit"
+            className="flex w-full items-center gap-3 rounded-md p-2.5 font-medium text-white transition hover:bg-red-500/20 hover:text-red-400"
+            onClick={handleSignOut}
+          >
+            <FaSignOutAlt size={18} />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content Area: flex-1 + min-h-0 + pb-24 ensures 100% of content is scrollable */}

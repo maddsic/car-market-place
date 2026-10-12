@@ -74,3 +74,13 @@ export interface CarBodyType {
   typeName: string;
 }
 
+export interface FaqItem {
+  id: string;
+  category: "buyers" | "dealers" | "safety";
+  question: string;
+  answer: string;
+  tag: string;
+}
+
+
+
