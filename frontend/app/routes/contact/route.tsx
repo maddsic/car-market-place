@@ -1,3 +1,4 @@
+import { MetaFunction } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import Button from "~/components/Button/button";
@@ -5,6 +6,17 @@ import { FormInput } from "~/components/FormInput/formInput";
 import Heading from "~/components/Heading/heading";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Textarea } from "~/components/ui/textarea";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Contact Us | Gamautos" },
+    {
+      name: "description",
+      content:
+        "Have questions about buying, selling, or renting on GamAutos? Reach out to our team directly.",
+    },
+  ];
+};
 
 const ContactPage = () => {
   return (
@@ -30,8 +42,8 @@ const ContactPage = () => {
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Call Us</p>
-              <a href="tel:+2207531646" className="text-sm font-semibold hover:text-yellow transition-colors">
-                +220 753 1646
+              <a href="tel:+2207252222" className="text-sm font-semibold hover:text-yellow transition-colors">
+                +220 725 2222
               </a>
             </div>
           </div>
@@ -42,8 +54,8 @@ const ContactPage = () => {
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email Us</p>
-              <a href="mailto:gamautos@gamautos.gm" className="text-sm font-semibold hover:text-yellow transition-colors">
-                gamautos@gamautos.gm
+              <a href="mailto:support@gamautos.gm" className="text-sm font-semibold hover:text-yellow transition-colors">
+                support@gamautos.gm
               </a>
             </div>
           </div>

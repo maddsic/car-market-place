@@ -43,21 +43,43 @@ const accessLogSream = fs.createWriteStream(
 // ---------------------------------------------
 // SERVE STATIC FILES - IMAGE UPLOADS
 // ---------------------------------------------
-app.use(
-  '/image_uploads',
-  (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  },
-  express.static(path.join(__dirname, 'image_uploads'))
-);
+// app.use(
+//   '/image_uploads',
+//   (req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     next();
+//   },
+//   express.static(path.join(__dirname, 'image_uploads'))
+// );
 
 // ---------------------------------------------
 // MIDDLEWARES
 // ---------------------------------------------
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cookieParser());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https://res.cloudinary.com", // Allows your Cloudinary vehicle pictures
+        ],
+        connectSrc: [
+          "'self'",
+          "https://api.gamautos.com", // Allows calls to your live backend
+          "http://localhost:3000",   // Allows local dev testing
+        ],
+        frameAncestors: ["'none'"],
+      },
+    },
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  })
+);
 // ✅ CORS setup
 app.use(
   cors({

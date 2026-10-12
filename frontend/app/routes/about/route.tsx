@@ -10,7 +10,18 @@ import Advantages from "./advantages";
 import Testimonials from "./testimonials";
 
 import Team from "./team";
-import OurPartners from "./partners";
+import { MetaFunction } from "@remix-run/node";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "About Us | Gamautos" },
+    {
+      name: "description",
+      content:
+        "Learn more about GamAutos and our mission to revolutionize the car buying and selling experience.",
+    },
+  ];
+};
 
 const AboutUs = () => {
   return (

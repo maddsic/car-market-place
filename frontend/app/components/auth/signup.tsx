@@ -199,7 +199,7 @@ const SignUp = ({ actionData }: { actionData?: SignUpActionDataProps }) => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-6 border-t border-slate-800 mt-4">
               <div className="space-y-3">
                 <CustomCheckBox text="Register as an Agent / Dealer" name="role" value="agent" htmlFor="as_agent" />
-                <CustomCheckBox text="I accept the Terms & Conditions" htmlFor="terms" />
+                <CustomCheckBox text="I accept the Terms & Conditions" htmlFor="terms" href="/terms" />
               </div>
 
               <Button
@@ -227,21 +227,23 @@ export default SignUp;
 /**
  * Styled Checkbox for the Dark Theme
  */
-function CustomCheckBox({ text, htmlFor, name, value }: { text: string; htmlFor: string; name?: string; value?: string }) {
+function CustomCheckBox({ text, htmlFor, name, value, href }: { text: string; htmlFor: string; name?: string; value?: string; href?: string }) {
   return (
     <div className="flex items-center space-x-3 group cursor-pointer">
-      <Checkbox
-        id={htmlFor}
-        name={name}
-        value={value}
-        className="w-4 h-4 rounded border-slate-700 bg-slate-800 data-[state=checked]:bg-yellow data-[state=checked]:text-slate-950 transition-colors"
-      />
-      <label
-        htmlFor={htmlFor}
-        className="text-xs font-medium text-slate-300 cursor-pointer group-hover:text-white transition-colors"
-      >
-        {text}
-      </label>
+      <a href={href || "#"} className="flex items-center space-x-3 group cursor-pointer">
+        <Checkbox
+          id={htmlFor}
+          name={name}
+          value={value}
+          className="w-4 h-4 rounded border-slate-700 bg-slate-800 data-[state=checked]:bg-yellow data-[state=checked]:text-slate-950 transition-colors"
+        />
+        <label
+          htmlFor={htmlFor}
+          className="text-xs font-medium text-slate-300 cursor-pointer group-hover:text-white transition-colors"
+        >
+          {text}
+        </label>
+      </a>
     </div>
   );
 }
