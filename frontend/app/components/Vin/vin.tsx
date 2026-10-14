@@ -16,11 +16,13 @@ const VinNumber = () => {
           className="input__bg w-full rounded-none pl-5 text-xs outline-none md:w-1/2 lg:text-sm"
           type="text"
           placeholder="Enter VIN..."
+          disabled={true}
         />
         <Button
           title="APPLY"
           className="w-full px-12 text-white md:w-1/3 lg:w-1/4"
           icon={<SendIcon size={18} />}
+          disabled={true}
         />
       </div>
     </div>

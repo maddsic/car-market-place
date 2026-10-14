@@ -153,7 +153,7 @@ const AddListingPage = () => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              title={editCar ? "Update Listing" : "Add Listing"}
+              title={editCar ? "Update Listing" : "Create Listing"}
               className="mt-10 w-full border py-4 font-extrabold text-white shadow lg:w-1/4"
               icon={<PlusCircle />}
             />

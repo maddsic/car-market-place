@@ -12,6 +12,13 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
   const fullname = `${car?.owner?.first_name} ${car?.owner?.last_name}`;
   const profileImage = car?.owner?.avatarUrl ? car?.owner?.avatarUrl : '/placeholder.png';
 
+  const phone = car?.owner?.phone ? String(car.owner.phone).replace(/\D/g, "") : "";
+  const fullPhone = phone.length === 7 ? `220${phone}` : phone;
+
+  const carTitle = `${car?.year || ""} ${car?.make || ""} ${car?.model || ""}`.trim();
+  const msg = encodeURIComponent(`Hi, I'm interested in the ${carTitle} listed on Gamautos.`);
+  const whatsappUrl = fullPhone ? `https://wa.me/${fullPhone}?text=${msg}` : "";
+
 
 
   return (
@@ -30,11 +37,14 @@ export const ViewListingDealerContactInfoRight = ({ car }: { car: Car }) => {
       </Link>
 
       {/* CONTACT: WHATSAPP */}
-      <Contact
-        className="py-4 font-semibold leading-3 shadow"
-        text="chat via whatsapp"
-        icon={<MdWhatsapp size={28} fill="green" />}
-      />
+      {whatsappUrl && (
+        <Contact
+          href={whatsappUrl}
+          className="py-4 font-semibold leading-3 shadow"
+          text="chat via whatsapp"
+          icon={<MdWhatsapp size={28} fill="green" />}
+        />
+      )}
 
       {/* CONTACT: MESSAGE */}
       <Contact

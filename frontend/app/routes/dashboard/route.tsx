@@ -39,11 +39,14 @@ export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const submit = useSubmit();
 
+  // Determine which navigation items to display based on the user's role
   const navItems = role === "admin" ? adminNavItems : dealerNavItems;
 
+  // Event handlers for sidebar toggle
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const closeSidebar = () => setIsSidebarOpen(false);
 
+  // Handle sign-out by submitting a POST request to the logout endpoint
   const handleSignOut = () => {
     // Sends a POST request to /auth/logout
     submit(null, { method: "post", action: "/auth/logout" });

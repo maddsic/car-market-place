@@ -200,7 +200,7 @@ function InventoryRow({ car }: { car: Car }) {
         </td>
 
         <td className="p-5">
-          <div className="font-bold text-slate-900">GMD {Number(car.price || car.pricePerDay).toLocaleString()}</div>
+          <div className="font-bold text-slate-900">D {Number(car.price || car.pricePerDay).toLocaleString()}</div>
           <div className={`text-[10px] font-bold uppercase ${isSold ? "text-rose-500" : "text-emerald-500"}`}>
             {currentStatus}
           </div>

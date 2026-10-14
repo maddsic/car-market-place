@@ -82,7 +82,7 @@ const CreateListingInfo: React.FC<CreateListingInfoProps> = ({
             defaultValue={initialData?.mileage}
             className="input__bg font-body h-12 w-full rounded-none pl-5 text-xs outline-none"
             type="number"
-            placeholder="Enter Mileage (mi)"
+            placeholder="Enter Mileage (km)"
           />
         </IconField>
         {/* FUEL TYPE => select */}
