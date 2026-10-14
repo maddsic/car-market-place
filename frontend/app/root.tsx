@@ -16,6 +16,7 @@ import tailwindStyles from "./tailwind.css?url";
 import globalStyles from "./styles/global.css?url";
 
 import { ToastContainer } from "react-toastify";
+import { FloatingWhatsApp } from "./components/whatsapp/whatsapp";
 
 export default function App() {
   return <Outlet />;
@@ -36,6 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <Footer />
         </main>
+        <FloatingWhatsApp />
         <ScrollRestoration />
         <ToastContainer position="top-right" />
         <Scripts />

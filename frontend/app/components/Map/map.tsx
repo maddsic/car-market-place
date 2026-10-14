@@ -46,8 +46,6 @@ const MapComponent: React.FC = () => {
           map,
           position: { lat: 51.505, lng: -0.09 },
           title: "Advanced Marker",
-          //   content:
-          //     "<div style='padding: 5px; background: #fff; border: 1px solid #000;'>Hello World!</div>",
         });
       } catch (error) {
         console.error(error);
