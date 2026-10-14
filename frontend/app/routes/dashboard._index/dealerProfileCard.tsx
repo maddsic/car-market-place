@@ -15,7 +15,7 @@ interface DealerProfileCardProps {
     fullName: string;
     isVerified: boolean;
     rating: number;
-    totalReviews: number;
+    reviewCount: number;
     location: string;
     joined: string;
     avatarUrl: string;
@@ -24,6 +24,12 @@ interface DealerProfileCardProps {
 
 export default function DealerProfileCard({ profileData }: DealerProfileCardProps) {
   const dealer = profileData
+
+  const rating = Math.min(Math.max(Number(dealer?.rating) || 0, 0), 5);
+  const reviewCount = Number(dealer?.reviewCount) || 0;
+  const hasReviews = reviewCount > 0;
+
+  // console.log("dealers data dashboard", dealer)
 
 
   return (
@@ -62,15 +68,18 @@ export default function DealerProfileCard({ profileData }: DealerProfileCardProp
               .map((_, i) => (
                 <FaStar
                   key={i}
-                  className={`${i < Math.round(dealer?.rating ?? 0)
-                    ? "text-yellow"
-                    : "text-gray-300"
-                    }`}
+                  className={
+                    hasReviews && i < Math.round(rating)
+                      ? "text-yellow"
+                      : "text-gray-300"
+                  }
                 />
               ))}
           </div>
           <p className="text-sm text-gray-500">
-            {dealer?.rating} / 5.0 ({dealer?.totalReviews} reviews)
+            {hasReviews
+              ? `${rating.toFixed(1)} / 5.0 (${reviewCount} ${reviewCount === 1 ? "review" : "reviews"})`
+              : "No reviews yet"}
           </p>
           <p className="mt-1 text-xs text-gray-400">Joined {dealer?.joined}</p>
         </CardContent>

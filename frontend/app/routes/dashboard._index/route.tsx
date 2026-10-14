@@ -1,4 +1,4 @@
-import { FaCar, FaDollarSign, FaCarSide, FaStar } from "react-icons/fa";
+import { FaCar, FaDollarSign, FaCarSide, FaStar, FaCheckCircle } from "react-icons/fa";
 import StatsCard from "./statsCard";
 import DashboardChart from "./dashboardCharts";
 import DealerProfileCard from "./dealerProfileCard";
@@ -59,7 +59,7 @@ export default function DashboardIndex() {
     {
       title: "Total Listings",
       value: stats?.totalListings ?? 0,
-      icon: <FaCar className="text-primary" size={26} />,
+      icon: <FaCar className="text-red-500" size={26} />,
       color: "bg-yellow",
     },
     {
@@ -69,16 +69,16 @@ export default function DashboardIndex() {
       color: "bg-green-100",
     },
     {
-      title: "Total Sales",
+      title: "Cars Sold",
       value: stats?.soldListings ?? 0,
-      icon: <FaDollarSign className="text-yellow-600" size={26} />,
-      color: "bg-yellow-100",
+      icon: <FaCheckCircle className="text-yellow" size={26} />,
+      color: "bg-yellow",
     },
     {
       title: "Customer Reviews",
       value: stats?.reviewCount ?? 0,
-      icon: <FaStar className="text-orange-500" size={26} />,
-      color: "bg-orange-100",
+      icon: <FaStar className="text-blue-500" size={26} />,
+      color: "bg-blue-100",
     },
   ];
 

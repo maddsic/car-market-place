@@ -67,6 +67,22 @@ export interface Car {
   location: string;
   lat: string;
   lng: string;
+  air_condition: boolean;
+  backup_camera: boolean;
+  cruis_control: boolean;
+  navigation: boolean;
+  bluetooth: boolean;
+  audio: boolean;
+  stereo: boolean;
+  dvd: boolean;
+  airbag_driver: boolean;
+  airbag_passenger: boolean;
+  security_system: boolean;
+  antilock: boolean;
+  heated_seat: boolean;
+  power_seat: boolean;
+  bucket_seat: boolean;
+  leather_seat: boolean;
 }
 
 export interface CarBodyType {

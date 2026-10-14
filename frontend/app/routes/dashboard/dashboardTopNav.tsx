@@ -13,7 +13,7 @@ export const DashboardTopNav = () => {
   return (
     <div className="mb-5 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
       <h1 className="text-2xl font-semibold text-primary">
-        Welcome to your Dashboard
+        Welcome
       </h1>
       <div className="flex items-center gap-5">
         <button

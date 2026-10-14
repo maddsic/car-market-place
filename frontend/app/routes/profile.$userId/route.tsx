@@ -206,95 +206,76 @@ interface ProfileInfoProps {
   className?: string;
 }
 
-// TOP: USER INFO
+
+interface ProfileInfoProps {
+  icon?: ReactNode;
+  phone?: string;
+  email?: string;
+  phoneDesc?: string;
+  emailDesc?: string;
+  className?: string;
+}
+
 export function ProfileInfo({
-  phoneDesc,
   icon,
-  emailDesc,
   phone,
   email,
+  phoneDesc,
+  emailDesc,
   className,
 }: ProfileInfoProps) {
-  return (
-    <div className={cn("flex w-full items-start gap-3.5", className)}>
-      {/* ICON WRAPPER */}
-      {icon && <div className="mt-1 shrink-0">{icon}</div>}
+  // Clean phone to avoid duplicate country codes in href
+  const cleanPhone = phone ? String(phone).replace(/\D/g, "") : "";
+  const telNumber = cleanPhone.startsWith("220") ? cleanPhone : `220${cleanPhone}`;
 
-      {/* TEXT CONTENT WRAPPER */}
-      <div className="flex flex-col min-w-0 overflow-hidden">
-        {/* PHONE LINK */}
+  const description = phoneDesc || emailDesc;
+
+  return (
+    <div
+      className={cn(
+        "group flex items-center gap-3.5 rounded-xl border border-gray-150 bg-white p-3 shadow-xs transition hover:border-gray-300 hover:shadow-sm",
+        className
+      )}
+    >
+      {/* Icon Badge */}
+      {icon && (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-700 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+          {icon}
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Sub-label */}
+        {description && (
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+            {description}
+          </span>
+        )}
+
+        {/* Phone Link */}
         {phone && (
           <a
-            href={`tel:+220${phone}`}
-            className="truncate text-sm font-bold text-gray-800 transition-colors duration-200 hover:text-yellow md:text-base lg:text-lg"
+            href={`tel:+${telNumber}`}
+            className="truncate text-sm font-bold text-gray-900 transition hover:text-yellow md:text-base"
           >
             (+220) {phone}
           </a>
         )}
 
-        {/* EMAIL LINK */}
+        {/* Email Link */}
         {email && (
           <a
             href={`mailto:${email}`}
-            className="truncate text-sm font-bold text-gray-800 transition-colors duration-200 hover:text-yellow lg:text-base"
+            className="truncate text-sm font-bold text-gray-900 transition hover:text-yellow md:text-base"
           >
             {email}
           </a>
-        )}
-
-        {/* DESCRIPTION LABEL */}
-        {(phoneDesc || emailDesc) && (
-          <span className="text-xs font-medium text-gray-500">
-            {phoneDesc || emailDesc}
-          </span>
         )}
       </div>
     </div>
   );
 }
-// Route Components
-// function ProfileInfo({
-//   phoneDesc,
-//   icon,
-//   emailDesc,
-//   phone,
-//   email,
-// }: {
-//   icon?: ReactNode;
-//   phoneDesc?: string;
-//   emailDesc?: string;
-//   phone?: string;
-//   email?: string;
-// }) {
-//   return (
-//     <div className="flex items-start gap-3">
-//       {icon && <div className="mt-0.5 shrink-0">{icon}</div>}
-//       <div className="flex flex-col overflow-hidden">
-//         {phone && (
-//           <a
-//             href={`tel:+220${phone}`}
-//             className="truncate text-sm font-bold text-gray-800 transition-colors hover:text-yellow md:text-base"
-//           >
-//             (+220) {phone}
-//           </a>
-//         )}
-
-//         {email && (
-//           <a
-//             href={`mailto:${email}`}
-//             className="truncate text-sm font-bold text-gray-800 transition-colors hover:text-yellow"
-//           >
-//             {email}
-//           </a>
-//         )}
-
-//         <span className="text-xs font-medium text-gray-500">
-//           {phoneDesc || emailDesc}
-//         </span>
-//       </div>
-//     </div>
-//   );
-// }
 
 // ASIDE RIGHT: CONTACT DEALER
 function ProfileForm() {

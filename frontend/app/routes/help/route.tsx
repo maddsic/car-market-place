@@ -4,9 +4,6 @@ import { Link } from "@remix-run/react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaSearch,
-  FaCar,
-  FaStore,
-  FaShieldAlt,
   FaEnvelope,
   FaPhoneAlt,
   FaChevronDown,
@@ -17,7 +14,7 @@ import {
 
 } from "react-icons/fa";
 import { FaSprayCanSparkles } from "react-icons/fa6";
-import { FAQS } from "~/data/help";
+import { CATEGORIES, FAQS } from "~/data/help";
 
 export const meta: MetaFunction = () => {
   return [

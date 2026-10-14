@@ -3,7 +3,7 @@ import { json, useActionData, useLoaderData, useNavigation } from "@remix-run/re
 import { LoaderFunctionArgs } from "@remix-run/node";
 // icons
 import { GrSchedule } from "react-icons/gr";
-import { MdAccessTime, MdShare } from "react-icons/md";
+import { MdAccessTime, MdCheck, MdShare } from "react-icons/md";
 import { toast } from "react-toastify";
 // interfaces
 import { Car } from "~/interfaces";
@@ -37,7 +37,7 @@ const ViewListing = () => {
   const [index, setIndex] = useState<number>(
     car?.images?.findIndex((img) => img.isPrimary) || 0,
   );
-  const [showNumber, setShowNumber] = useState<Boolean>(false);
+  const [showNumber, setShowNumber] = useState<boolean>(false);
 
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
@@ -45,8 +45,9 @@ const ViewListing = () => {
   const formRef = React.useRef<HTMLFormElement>(null);
   // Inside your component:
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
   const Cartitle = `${car?.year} ${car?.make} ${car?.model}`;
+
+  // console.log("Car Data", car)
 
 
   // Function to handle scrolling of the thumbnail images
@@ -176,7 +177,7 @@ const ViewListing = () => {
             {/* CAR INFO */}
             <ViewListingCarInfo car={car!} />
             <Divider />
-            <ViewListingCarFeatures />
+            <ViewListingCarFeatures car={car!} />
             <Divider />
             <SellerNote car={car!} />
           </aside>
@@ -208,6 +209,8 @@ const ViewListing = () => {
 export default ViewListing;
 
 function SubHeader({ car }: { car: Car }) {
+  const [copied, setCopied] = useState(false);
+
   const createdAtDate: Date = new Date(car?.createdAt!);
   const vinNumber = car?.vin ? `${car.vin.slice(0, -6)}******` : "N/A";
 
@@ -217,6 +220,36 @@ function SubHeader({ car }: { car: Car }) {
     month: "short",
     year: "numeric",
   });
+
+  const handleShare = async () => {
+    const title = `${car.year || ""} ${car.make || ""} ${car.model || ""}`.trim();
+    const shareData = {
+      title: `${title} on Gamautos`,
+      text: `Check out this ${title} on Gamautos!`,
+      url: window.location.href,
+    }
+
+    // 1. Mobile & modern browsers: Native share sheet (WhatsApp, iMessage, etc.)
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        // User cancelled the share dialog
+        if ((err as Error).name === "AbortError") return;
+      }
+    }
+
+    // 2. Desktop fallback: Copy link directly to clipboard
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback prompt for older environments
+      prompt("Copy vehicle link:", window.location.href);
+    }
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -236,7 +269,24 @@ function SubHeader({ car }: { car: Car }) {
         text="schedule test drive"
         icon={<GrSchedule size={16} />}
       />
-      <ListingSubHeader text="share this" icon={<MdShare size={16} />} />
+      {/* Direct clickable Share button */}
+      <button
+        type="button"
+        onClick={handleShare}
+        className="inline-flex cursor-pointer items-center gap-1 rounded-2xl border border-gray-200 bg-white px-2 py-1 text-[10px] font-semibold uppercase text-gray-600 transition hover:bg-gray-100 active:scale-95"
+      >
+        {copied ? (
+          <>
+            <span className="text-green-600"><MdCheck size={14} /></span>
+            <span className="text-green-600">Copied!</span>
+          </>
+        ) : (
+          <>
+            <span className="text-yellow"><MdShare size={14} /></span>
+            <span>Share This</span>
+          </>
+        )}
+      </button>
     </div>
   );
 }

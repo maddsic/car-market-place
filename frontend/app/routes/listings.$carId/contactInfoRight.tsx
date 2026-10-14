@@ -6,7 +6,7 @@ import { ListingSellerImage } from "./listingSeller";
 import { Contact } from "~/components/listing";
 
 interface ListingContactInfoBottomProps {
-  showNumber: Boolean;
+  showNumber: boolean;
   handleShowNumber: () => void;
   car: Car;
 }
@@ -16,8 +16,18 @@ export const ListingContactInfoBottom = ({
   handleShowNumber,
   car,
 }: ListingContactInfoBottomProps) => {
+  const profileImage = car?.owner?.avatarUrl || "/placeholder.png";
+  const sellerName = car?.owner?.username || "Seller";
 
-  const profileImage = car?.owner?.avatarUrl || '/placeholder.png'
+  // Clean the number (digits only)
+  const phone = car?.owner?.phone ? String(car.owner.phone).replace(/\D/g, "") : "";
+  // Add 220 if it's a standard 7-digit Gambia number
+  const fullPhone = phone.length === 7 ? `220${phone}` : phone;
+
+  // Short, clear WhatsApp message
+  const carTitle = `${car?.year || ""} ${car?.make || ""} ${car?.model || ""}`.trim();
+  const msg = encodeURIComponent(`Hi, I'm interested in the ${carTitle} listed on Gamautos.`);
+  const whatsappUrl = fullPhone ? `https://wa.me/${fullPhone}?text=${msg}` : "";
 
   return (
     <aside className="col-span-12 box-border md:col-span-5 lg:col-span-4">
@@ -26,10 +36,11 @@ export const ListingContactInfoBottom = ({
         <Link to={`/profile/${car?.owner?.userId}`}>
           <ListingSellerImage
             imgUrl={profileImage}
-            name={car?.owner?.username || `${car?.owner?.first_name} ${car?.owner?.last_name}`}
+            name={sellerName}
             className="h-22 w-22 border-b"
           />
         </Link>
+
         <div className="mb-5 flex flex-col gap-3">
           {/* PHONE # */}
           <ToggleShowNumber
@@ -37,19 +48,18 @@ export const ListingContactInfoBottom = ({
             showNumber={showNumber}
             handleShowNumber={handleShowNumber}
           />
+
           {/* WHATSAPP */}
+          {whatsappUrl && (
+            <Contact
+              href={whatsappUrl}
+              text="chat via whatsapp"
+              icon={<MdWhatsapp size={24} className="text-green-600" />}
+            />
+          )}
+
+          {/* MESSAGE */}
           <Contact
-            className="text-[13px] font-semibold shadow"
-            text="chat via whatsapp"
-            icon={
-              <MdWhatsapp
-                size={28}
-                fill="green" // className="text-green-500"
-              />
-            }
-          />
-          <Contact
-            className="py-4 text-[13px] font-semibold shadow"
             text="message us"
             icon={<MdMessage size={24} className="text-yellow" />}
           />
