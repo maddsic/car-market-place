@@ -1,10 +1,9 @@
-import { Form, useNavigate, useNavigation } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import Button from "~/components/Button/button";
 import Loader from "~/components/Loader/loader";
 import Select from "~/components/Select/select";
-// import { Select } from "~/components/ui/select";
 import { CarMake, CarModel } from "~/interfaces";
 
 interface DealersSearchFilterProps {
@@ -19,7 +18,7 @@ const DealersSearchFilter: React.FC<DealersSearchFilterProps> = ({
   const navigation = useNavigation();
   const loading = navigation?.state === "loading";
 
-  console.log("car makes from dealer search filter", carMakes)
+  // console.log("car makes from dealer search filter", carMakes)
 
   if (loading) {
     return <Loader />;

@@ -5,20 +5,20 @@ import hero_img_1 from "/hero_img_1.jpeg";
 export const Slider = [
   {
     url: bannerImg1,
-    title: "Mercedez-Benz ",
+    title: "Mercedes-Benz ",
     subTitle: "AMG GT 2017",
     price: 320,
   },
   {
     url: hero_img,
-    title: "Mercedez benz",
+    title: "Mercedes-Benz",
     subTitle: "Gl380 2024",
     price: 500,
   },
   {
     url: hero_img_1,
-    title: "2024 bmw",
-    subTitle: "model X8",
+    title: "2024 BMW",
+    subTitle: "Model X8",
     price: 280,
   },
 ];

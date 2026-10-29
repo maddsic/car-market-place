@@ -1,4 +1,4 @@
-import { FaGasPump, FaRoad } from "react-icons/fa";
+import { FaGasPump, FaRoad, FaWhatsapp } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 import { BsTelephone } from "react-icons/bs";
 import { useNavigate } from "@remix-run/react";
@@ -12,12 +12,27 @@ import Image from "../Image/Image";
 
 const LatestCars = () => {
   const { latestCars } = useCarStore();
-
-  // console.log("LATEST CARS:", latestCars)
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
     navigate(`/inventory?section=${section}&value=${value}`);
+  };
+
+  // Helper to sanitize phone numbers
+  const getCarPhoneNumber = (car: LatestCar) => {
+    const rawPhone = car?.owner?.phone || "14707338533";
+    const cleanPhone = String(rawPhone).replace(/\D/g, "");
+    return cleanPhone.length === 10 ? `1${cleanPhone}` : `220${cleanPhone}`;
+  };
+
+  // WhatsApp click handler
+  const handleWhatsAppChat = (e: React.MouseEvent, car: LatestCar) => {
+    e.stopPropagation();
+    const phone = getCarPhoneNumber(car);
+    const message = `Hello, I'm interested in this ${car?.year || ""} ${car?.make || ""} ${car?.model || ""} listed for D${car?.price?.toLocaleString()} on GamAutos (ID: ${car?.carId}). Is it still available?`;
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   const getStatusStyles = (status?: string) => {
@@ -36,7 +51,7 @@ const LatestCars = () => {
       <Heading title="latest for" colouredText="sale" classNames="text-center" />
 
       {/* CAR GRID */}
-      <div className="mt-10 grid gap-8 grid-cols-1 xl:grid-cols-2">
+      <div className="mt-10 grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
         {(latestCars || []).map((car: LatestCar) => (
           <div
             key={car?.carId}
@@ -137,14 +152,26 @@ const LatestCars = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {/* CALL BUTTON */}
                   <a
                     href={`tel:${car?.owner?.phone}`}
                     onClick={(e) => e.stopPropagation()}
                     className="flex items-center gap-1.5 rounded-lg bg-yellow/10 px-3 py-1.5 text-[11px] font-bold text-yellow hover:bg-yellow hover:text-white transition-all"
                   >
                     <BsTelephone size={11} />
-                    <span>Call</span>
+                    {/* <span>Call</span> */}
                   </a>
+
+                  {/* WHATSAPP BUTTON */}
+                  <button
+                    type="button"
+                    onClick={(e) => handleWhatsAppChat(e, car)}
+                    className="flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-emerald-600 transition-all active:scale-95"
+                  >
+                    <FaWhatsapp size={13} />
+                    {/* <span>WhatsApp</span> */}
+                  </button>
+
                   {car?.stockNumber && (
                     <span className="hidden sm:inline-block rounded-md bg-gray-100 px-2 py-1 text-[9px] font-semibold text-gray-500 uppercase">
                       Stk# {car.stockNumber}

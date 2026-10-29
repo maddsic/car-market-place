@@ -8,6 +8,7 @@ import Heading from "~/components/Heading/heading";
 
 // Icons
 import { IoCarSportOutline } from "react-icons/io5";
+import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 import { apiFetch } from "~/utils/apiFetch";
 import Price from "~/components/Price/price";
@@ -18,7 +19,6 @@ import { Car } from "~/interfaces";
 import InventoryForm from "./InventoryForm";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 import { Pagination } from "~/components/pagination/pagination";
-
 
 export const meta: MetaFunction = () => {
   return [
@@ -43,13 +43,13 @@ const InventoryPage = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
-    })
-  }, [startIndex])
+      behavior: "smooth",
+    });
+  }, [startIndex]);
 
   const handlePageSelect = (pageNumber: number) => {
-    setStartIndex((pageNumber - 1) * carsPerPage)
-  }
+    setStartIndex((pageNumber - 1) * carsPerPage);
+  };
 
   const handleNavigateToListings = (carId: string) => {
     navigate(`/listings/${carId}`);
@@ -67,6 +67,30 @@ const InventoryPage = () => {
     if (startIndex > 0) {
       setStartIndex(startIndex - 6);
     }
+  };
+
+  // Helper to sanitize phone numbers
+  const getCarPhoneNumber = (car: Car) => {
+    const rawPhone = car.owner?.phone || "14707338533";
+    const cleanPhone = String(rawPhone).replace(/\D/g, "");
+    return cleanPhone.length === 10 ? `1${cleanPhone}` : `220${cleanPhone}`;
+  };
+
+  // Call click handler
+  const handleCall = (e: React.MouseEvent, car: Car) => {
+    e.stopPropagation();
+    const phone = getCarPhoneNumber(car);
+    window.location.href = `tel:+${phone}`;
+  };
+
+  // WhatsApp click handler
+  const handleWhatsAppChat = (e: React.MouseEvent, car: Car) => {
+    e.stopPropagation();
+    const phone = getCarPhoneNumber(car);
+    const message = `Hello, I'm interested in this ${car.year || ""} ${car.make} ${car.model} listed for D${car.price?.toLocaleString()} on GamAutos (ID: ${car.carId}). Is it still available?`;
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   // Helper for dynamic status badge styling
@@ -100,7 +124,7 @@ const InventoryPage = () => {
             <InventoryForm />
           </aside>
 
-          {/*  CONTENT */}
+          {/* CONTENT */}
           <div className="content sm:col-span-9">
             <Heading title="cars for sale" />
             <Divider classNames="h-[1px] mt-6" />
@@ -110,7 +134,6 @@ const InventoryPage = () => {
             </h2>
 
             <Divider classNames="h-[1px]" />
-
 
             {/* Cars Grid */}
             <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-4 lg:grid-cols-3 items-start">
@@ -125,7 +148,7 @@ const InventoryPage = () => {
                     >
                       {/* TOP SECTION: Image + Details */}
                       <div>
-                        {/* IMAGE CONTAINER WITH STRICT LOCKED ASPECT RATIO */}
+                        {/* IMAGE CONTAINER */}
                         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-gray-100">
                           {/* STATUS BADGE */}
                           <div
@@ -136,7 +159,7 @@ const InventoryPage = () => {
                             {car.status || "Available"}
                           </div>
 
-                          {/* IMAGE PINNED ABSOLUTELY */}
+                          {/* IMAGE */}
                           <Image
                             car={car}
                             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
@@ -144,7 +167,7 @@ const InventoryPage = () => {
                           <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                         </div>
 
-                        {/* CARD DETAILS WRAPPER WITH PADDING */}
+                        {/* CARD DETAILS WRAPPER */}
                         <div className="p-3">
                           <div className="flex items-center justify-between gap-2 transition-colors duration-300 group-hover:text-yellow">
                             <CarMakeAndModel car={car} />
@@ -158,8 +181,31 @@ const InventoryPage = () => {
                         </div>
                       </div>
 
-                      {/* BOTTOM SECTION: Divider */}
-                      <hr className="mt-3 border-gray-300 transition-colors duration-300 group-hover:border-yellow" />
+                      {/* BOTTOM SECTION: Call / WhatsApp Action Row */}
+                      <div className="mt-3 px-2 pb-1">
+                        <hr className="mb-2.5 border-gray-100" />
+                        <div className="grid grid-cols-2 gap-2">
+                          {/* CALL BUTTON */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleCall(e, car)}
+                            className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 py-2 px-2 text-[11px] font-bold text-slate-800 transition hover:bg-slate-100 active:scale-[0.98]"
+                          >
+                            <FaPhoneAlt className="text-[10px] text-slate-600" />
+                            <span>Call</span>
+                          </button>
+
+                          {/* WHATSAPP BUTTON */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleWhatsAppChat(e, car)}
+                            className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500 py-2 px-2 text-[11px] font-bold text-white shadow-xs transition hover:bg-emerald-600 active:scale-[0.98]"
+                          >
+                            <FaWhatsapp className="text-xs" />
+                            <span>WhatsApp</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))
               ) : (
