@@ -35,7 +35,7 @@ const Dealers = () => {
   const { carMakes = [], carBodyTypes = [], dealers = [], query = {}, hasFilters = false } =
     useLoaderData<typeof loader>() || {};
 
-  console.log("dealers", dealers);
+  // console.log("dealers", dealers);
 
   const [carsPerPage, setCarsPerPage] = useState<number>(6);
   const [startIndex, setStartIndex] = useState<number>(0);

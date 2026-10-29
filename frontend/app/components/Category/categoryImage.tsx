@@ -30,7 +30,7 @@ const CategoryImage: React.FC<CategoryImageProps> = ({
       />
       <div className="z-999 font-montserrat absolute bottom-1 left-2 text-white lg:bottom-2 lg:left-5">
         <p className="text-lg font-bold capitalize lg:text-2xl">{title}</p>
-        <p className="font-sans text-sm capitalize">{count} Cars</p>
+        {count && <p className="font-sans text-sm capitalize">{count} Cars</p>}
       </div>
     </div>
   );

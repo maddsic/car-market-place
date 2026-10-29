@@ -12,11 +12,18 @@ const Heading = ({
   return (
     <h2
       className={twMerge(
-        `font-montserrat my-1.5 box-border block text-[20px] font-bold capitalize leading-[30px] md:text-[22px] lg:text-[28px] ${classNames}`,
+        "font-montserrat my-2 block text-balance font-extrabold capitalize leading-tight tracking-tight",
+        "text-[26px] sm:text-[30px] md:text-[34px] lg:text-[40px]",
+        classNames,
       )}
     >
-      {title}{" "}
-      {colouredText && <span className="text-yellow">{colouredText}</span>}
+      {title}
+      {colouredText && (
+        <>
+          {" "}
+          <span className="text-yellow">{colouredText}</span>
+        </>
+      )}
     </h2>
   );
 };

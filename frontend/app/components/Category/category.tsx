@@ -19,7 +19,6 @@ const Category = () => {
 
   useEffect(() => {
     const width: number = window.innerWidth;
-
     // Detect window Size
     const handleWindowSizeChanged = () => {
       if (width < 768) {
@@ -39,12 +38,12 @@ const Category = () => {
 
   // next button
   const handleNext = () => {
-
     if (startIndex + 1 < category.length - carsPerPage + 1) {
       setStartIndex(startIndex + 4);
     }
   };
 
+  // prev button
   const handlePrev = () => {
     if (startIndex > 0) {
       setStartIndex(startIndex - 4);
@@ -76,7 +75,7 @@ const Category = () => {
               imgUrl={category.imgUrl}
               classNames={`${category.colSpan} ${category.classNames}`}
               title={category.name}
-              count={13}
+              // count={13}
               onClick={() => handleNavigate("category", category.name)}
             />
           ))}
