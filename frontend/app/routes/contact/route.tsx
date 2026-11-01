@@ -55,7 +55,7 @@ const ContactPage = () => {
             <div>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email Us</p>
               <a href="mailto:support@gamautos.gm" className="text-sm font-semibold hover:text-yellow transition-colors">
-                support@gamautos.gm
+                support@gamautos.com
               </a>
             </div>
           </div>

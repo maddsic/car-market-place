@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import { FaArrowRight, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 import Heading from "../Heading/heading";
 import Button from "../Button/button";
@@ -146,8 +146,13 @@ const PremiumCars = () => {
       <div className="mt-10 flex w-full items-center justify-center">
         <Button
           onClick={() => handleNavigate("premium", "all")}
-          title="show all premium cars"
-          className="font-montserrat rounded-xl bg-yellow px-10 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all hover:bg-yellow/90 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:bg-primary"
+          title={
+            <span className="flex items-center gap-2">
+              View all premium cars
+              <FaArrowRight className="transition-transform group-hover:translate-x-1" />
+            </span>
+          }
+          className=" font-montserrat group rounded-full bg-yellow px-10 py-4 text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-xl active:scale-95"
         />
       </div>
 

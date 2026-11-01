@@ -1,5 +1,4 @@
 import Heading from "~/components/Heading/heading";
-import { StyledUndeline } from "./underline";
 
 const AboutGamAutos = () => {
   return (
@@ -24,21 +23,29 @@ const AboutGamAutos = () => {
           colouredText="gamautos"
           classNames="uppercase tracking-tight text-2xl sm:text-3xl font-extrabold"
         />
-        {/* <StyledUndeline /> */}
-
 
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-          Before we get ahead of ourselves, we want to warmly welcome you to GamAutos.
-          While nothing replaces the hands-on, on-the-lot experience, our digital showroom is designed to give you complete control from anywhere.
+          Buying a car in The Gambia is a hassle. You visit one dealership after
+          another, keep calling friends to ask if they know someone selling the
+          car you want, or scroll through social media hoping to find a good
+          one. It takes time, and it is hard to know what is available or what
+          a fair price is.
         </p>
 
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-          Thank you for taking the time to visit our platform. Our mission is to
-          provide an intuitive experience that lets you explore our wide
-          selection of new and pre-owned vehicles, request quotes, schedule services, or apply for financing—all in one convenient place. We understand that shopping for a vehicle comes with high expectations, and we are committed to delivering not just exceptional vehicles, but exceptional service.
+          I started GamAutos to fix that. Dealers and private sellers list their
+          cars in one place, with clear photos, prices in Dalasi and a direct
+          line to the seller, so you can find the car you want without chasing
+          it around town.
         </p>
 
-        {/* PRESIDENT QUOTE SIGNATURE */}
+        <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+          Whether you are buying, selling or renting, we want the process to
+          feel simple and honest. Thank you for visiting, and please reach out
+          if there is anything we can do better.
+        </p>
+
+        {/* FOUNDER SIGNATURE */}
         <div className="pt-2 border-l-4 border-primary pl-4 my-2">
           <p className="text-xs sm:text-sm font-semibold text-slate-900 tracking-wide uppercase">
             Kunta Sidibeh

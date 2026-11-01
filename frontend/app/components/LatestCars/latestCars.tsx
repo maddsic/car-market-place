@@ -1,4 +1,4 @@
-import { FaGasPump, FaRoad, FaWhatsapp } from "react-icons/fa";
+import { FaArrowRight, FaGasPump, FaRoad, FaWhatsapp } from "react-icons/fa";
 import { SiTransmission } from "react-icons/si";
 import { BsTelephone } from "react-icons/bs";
 import { useNavigate } from "@remix-run/react";
@@ -185,11 +185,16 @@ const LatestCars = () => {
       </div>
 
       {/* VIEW ALL BUTTON */}
-      <div className="my-10 flex justify-center">
+      <div className="my-10 flex w-full items-center justify-center">
         <Button
           onClick={() => handleNavigate("latest", "all")}
-          title="show all latest cars"
-          className="font-montserrat rounded-xl bg-yellow px-10 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all hover:bg-yellow/90 hover:shadow-lg active:scale-95"
+          title={
+            <span className="flex items-center gap-2">
+              View all latest cars
+              <FaArrowRight className="transition-transform group-hover:translate-x-1" />
+            </span>
+          }
+          className="font-montserrat group rounded-full bg-yellow px-10 py-4 text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-xl active:scale-95"
         />
       </div>
     </section>

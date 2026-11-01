@@ -5,6 +5,7 @@ import Button from "../Button/button";
 import { IoCarSportOutline, IoArrowForwardOutline, IoShieldCheckmarkOutline, IoFlashOutline } from "react-icons/io5";
 import { AiOutlineDollar } from "react-icons/ai";
 import { BiSearchAlt } from "react-icons/bi";
+import { FaMoneyBill } from "react-icons/fa";
 
 const Highlight = () => {
   const navigate = useNavigate();
@@ -80,15 +81,15 @@ const Highlight = () => {
             </div>
 
             {/* Action Bar */}
-            <div className="mt-10 flex items-center justify-between border-t border-white/10 pt-6">
+            <div className="mt-10 border-t border-white/10 pt-6">
               <Button
                 title="Browse Inventory"
-                className="font-montserrat bg-yellow px-8 py-3.5 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-yellow/20 transition-all duration-300 hover:bg-yellow/90 hover:scale-105"
+                className="w-full font-montserrat bg-yellow px-8 py-3.5 text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg shadow-yellow/20 transition-all duration-300 hover:bg-yellow/90 hover:scale-105"
               />
-              <div className="flex items-center gap-2 text-xs font-bold uppercase text-yellow transition-transform duration-300 group-hover:translate-x-2">
+              {/* <div className="flex items-center gap-2 text-xs font-bold uppercase text-yellow transition-transform duration-300 group-hover:translate-x-2">
                 <span>View All Cars</span>
                 <IoArrowForwardOutline size={18} />
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -102,7 +103,7 @@ const Highlight = () => {
               {/* Header Icon Row */}
               <div className="flex items-center justify-between">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow/20 border border-yellow/40 text-yellow shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:bg-yellow group-hover:text-slate-950">
-                  <AiOutlineDollar size={34} />
+                  <FaMoneyBill size={34} />
                 </div>
                 <span className="text-xs font-mono font-bold uppercase tracking-widest text-yellow">
                   02 / SELL
@@ -129,13 +130,13 @@ const Highlight = () => {
                 />
               </Link>
 
-              <Link
+              {/* <Link
                 to="/addListing"
                 className="flex items-center justify-center gap-2 text-xs font-bold uppercase text-gray-300 transition-colors duration-300 hover:text-yellow"
               >
                 <span>Get Instant Valuation</span>
                 <IoArrowForwardOutline size={16} />
-              </Link>
+              </Link> */}
             </div>
 
           </div>

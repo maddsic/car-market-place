@@ -3,11 +3,12 @@ import { GiCheckMark } from "react-icons/gi";
 import Heading from "~/components/Heading/heading";
 
 const coreValuesData = [
-  "Stress-free finance department.",
-  "Robust selection of popular vehicles.",
-  "350 offers on site, trusted by a community.",
-  "Maintain your car to stay safe on the road.",
-  "We know how to handle a wide range of car services.",
+  "Fully registered, quality-certified vehicles.",
+  "Hassle free buying and selling process.",
+  "Local dealers and private sellers across The Gambia.",
+  "Clear prices in Dalasi on every listing.",
+  "Call or WhatsApp sellers directly.",
+  "Buy, sell or rent, all in one place.",
 ];
 
 const CoreValues = () => {
@@ -16,14 +17,17 @@ const CoreValues = () => {
       {/* LEFT CONTENT */}
       <div className="flex flex-col gap-2">
         <Heading
-          title="core values"
+          title="why choose"
+          colouredText="gamautos"
+
           classNames="uppercase text-2xl sm:text-3xl font-extrabold tracking-tight"
         />
         <div className="h-0.5 w-16 bg-yellow-500 rounded-full my-1" />
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-          We go through extensive factory training so that we may provide you
-          with the knowledge you need to make an educated decision in choosing
-          the vehicle that is right for your lifestyle.
+          GamAutos connects car buyers, sellers and dealerships across The Gambia.
+          Every listing shows the car's details, the price in Dalasi and a direct way
+          to reach the seller, so you can choose with confidence and skip the
+          guesswork.
         </p>
         {/* VALUE LIST */}
         <ul className="mt-4 flex flex-col gap-3">

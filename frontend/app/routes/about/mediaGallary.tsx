@@ -1,23 +1,26 @@
 import AboutCarousel from "~/components/AboutCarousel/Carousel";
 import Heading from "~/components/Heading/heading";
-import { StyledUndeline } from "./underline";
 
-const MediaGallary = () => {
+const MediaGallery = () => {
   return (
-    <section className="relative bg-slate-950 p-4 md:p-10 lg:p-20">
+    <section className="bg-slate-950 px-4 py-14 md:px-10 lg:px-20 lg:py-20">
       <div className="max__container text-white">
-        <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col items-center gap-2 text-center">
           <Heading
-            title="media gallary"
-            classNames="text-center uppercase lg:text-[36px] shadow"
+            title="media"
+            colouredText="gallery"
+            classNames="uppercase text-white"
           />
-          <StyledUndeline />
+          <div className="h-1 w-16 rounded-full bg-yellow" />
+          <p className="mt-2 max-w-xl text-sm text-slate-400">
+            A look at GamAutos and the cars we work with.
+          </p>
         </div>
-        {/* Slider */}
+
         <AboutCarousel />
       </div>
     </section>
   );
 };
 
-export default MediaGallary;
+export default MediaGallery;
