@@ -42,6 +42,26 @@ a.active {
 }
 
 @layer base {
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  button {
+    font-family: Montserrat, system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+  }
+
   :root {
     --background: 0 0% 100%;
 

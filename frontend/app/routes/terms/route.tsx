@@ -15,16 +15,16 @@ import {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Privacy Policy | Gamautos" },
+    { title: "Terms of Service | Gamautos" },
     {
       name: "description",
       content:
-        "Understand how Gamautos collects, secures, and handles your personal information, dealer profiles, and vehicle inventory data.",
+        "Review the terms and conditions governing your use of the Gamautos platform and services.",
     },
   ];
 };
 
-export default function PrivacyPolicy() {
+export default function Terms() {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -70,11 +70,11 @@ export default function PrivacyPolicy() {
         <div className="relative mx-auto max-w-3xl text-center space-y-5">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-yellow-300 backdrop-blur-sm">
             <FaLock size={11} />
-            <span>Privacy &amp; Data Safeguards</span>
+            <span>Terms &amp; Conditions</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-            Privacy Policy
+            Terms of Service
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">

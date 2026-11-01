@@ -1,23 +1,25 @@
-import Heading from "~/components/Heading/heading";
-import { StyledUndeline } from "./underline";
-import { BsTelephoneFill, BsTelephoneOutboundFill } from "react-icons/bs";
-import { TeamData } from "~/data/team";
+import { BsTelephoneOutboundFill } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
+import Heading from "~/components/Heading/heading";
+import { TeamData } from "~/data/team";
 
 const Team = () => {
   return (
-    <section className="my-10 relative bg-[#f0f2f5] md:p-10 lg:p-10">
-      <div className="max__container relative flex flex-col gap-5">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <Heading
-            title="our team"
-            classNames="text-center uppercase lg:text-[36px]"
-          />
-          <StyledUndeline />
+    <section className="bg-slate-50 py-14 lg:py-20">
+      <div className="max__container">
+        {/* HEADER */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-yellow">
+            The people behind GamAutos
+          </p>
+          <Heading title="meet our" colouredText="team" />
+          <div className="mt-1 h-1 w-16 rounded-full bg-yellow" />
         </div>
-        <div className="mb-10 mt-2 grid gap-10 md:grid-cols-2 lg:mt-5 lg:grid-cols-4 lg:p-10">
-          {TeamData.map((member, index) => (
-            <TeamMember member={member} key={index} />
+
+        {/* GRID */}
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {TeamData.map((member) => (
+            <TeamMember member={member} key={member.email} />
           ))}
         </div>
       </div>
@@ -37,43 +39,43 @@ interface TeamMemberProps {
 
 function TeamMember({ member }: { member: TeamMemberProps }) {
   return (
-    <div className="font-montserrat group relative flex flex-col gap-3">
-      {/* IMAGE */}
-      <img
-        src={member.image}
-        alt={member.name}
-        className="aspect-square h-auto max-w-full overflow-hidden rounded-sm bg-slate-300 object-cover"
-      />
+    <div className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+      {/* PHOTO */}
+      <div className="aspect-[4/5] overflow-hidden bg-slate-200">
+        <img
+          src={member.image}
+          alt={member.name}
+          loading="lazy"
+          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
 
       {/* INFO */}
-      <span className="font-body rounded-sm border-yellow bg-white px-10 py-5 text-center transition-all duration-500 group-hover:bg-primary group-hover:text-white">
-        <p className="text-[14px] font-semibold uppercase">{member.name}</p>
-        <em className="gray__text-soft text-[13px] capitalize group-hover:text-white">
+      <div className="p-5 text-center">
+        <h3 className="text-base font-bold text-slate-900">{member.name}</h3>
+        <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-yellow">
           {member.position}
-        </em>
-      </span>
+        </p>
 
-      {/* CONTACT - HIDDEN OVERLAY */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-2 p-5 opacity-0 transition-all duration-500 group-hover:pointer-events-auto group-hover:opacity-100">
-        <a
-          href={`mailto:${member.email}`}
-          className="flex items-center gap-2 rounded-2xl bg-yellow px-3 py-2 text-xs font-semibold text-white transition-transform hover:scale-105"
-        >
-          <span className="rounded-full border-2 border-black p-1">
-            <MdEmail fill="black" />
-          </span>
-          {member.email}
-        </a>
-
-        <a
-          href={`tel:${member.phone}`}
-          className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2 text-sm text-gray-900 transition-transform hover:scale-105 lg:text-base"
-        >
-          <span className="rounded-full border-2 border-yellow p-1">
-            <BsTelephoneOutboundFill className="text-yellow" />
-          </span>
-          {member.phone}
-        </a>
+        {/* CONTACT BUTTONS (always visible, so they work on phones too) */}
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <a
+            href={`mailto:${member.email}`}
+            aria-label={`Email ${member.name}`}
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 py-2.5 text-xs font-bold text-slate-700 transition hover:border-yellow hover:text-yellow active:scale-95"
+          >
+            <MdEmail size={16} />
+            Email
+          </a>
+          <a
+            href={`tel:${member.phone.replace(/\s/g, "")}`}
+            aria-label={`Call ${member.name}`}
+            className="flex items-center justify-center gap-2 rounded-xl bg-yellow py-2.5 text-xs font-bold text-slate-950 transition hover:bg-amber-300 active:scale-95"
+          >
+            <BsTelephoneOutboundFill size={13} />
+            Call
+          </a>
+        </div>
       </div>
     </div>
   );

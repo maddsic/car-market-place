@@ -91,11 +91,11 @@
 }
 
 .font-body {
-  font-family: "Open Sans", Arial;
+  font-family: Inter, Arial;
   font-size: 13px;
 }
 
 .footer_text {
-  font-family: "Lato", sans-serif;
+  font-family: inherit;
   font-weight: 400;
 }

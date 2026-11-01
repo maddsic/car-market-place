@@ -1,58 +1,58 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "~/components/ui/carousel";
-import { CardContent, CardDescription } from "~/components/ui/card";
-import image from "/carousel.jpg?url";
-import image1 from "/carousel1.jpg?url";
-import image2 from "/carousel2.jpg?url";
-import image3 from "/carousel3.jpg?url";
-import image4 from "/carousel4.jpg?url";
-import { useState } from "react";
+import { useRef } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const carouselItems = [image, image1, image2, image3, image4];
+// These files live in /public
+const images = [
+  "/carousel.jpg",
+  "/carousel1.jpg",
+  "/carousel2.jpg",
+  "/carousel3.jpg",
+  "/carousel4.jpg",
+];
 
 const AboutCarousel = () => {
-  const [index, setIndex] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: number) => {
+    listRef.current?.scrollBy({ left: direction * 320, behavior: "smooth" });
+  };
 
   return (
-    <>
-      <Carousel
-        opts={{
-          align: "start",
-        }}
-        className="w-full"
+    <div className="relative mt-8">
+      {/* Photos */}
+      <div
+        ref={listRef}
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        <CarouselContent>
-          {carouselItems.map((item, index) => (
-            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
-              <div className="p-1">
-                <CardDescription>
-                  <CardContent className="flex aspect-square items-center justify-center p-0">
-                    <img src={item} alt="" className="w-full" />
-                  </CardContent>
-                </CardDescription>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
-
-      <div className="items flex justify-center gap-x-3">
-        {carouselItems.map((_, i) => (
-          <div
-            key={i}
-            className={`${i === index ? "bg-yellow" : "bg-gray-400"} h-2 w-2 cursor-pointer rounded-full`}
-            onClick={() => setIndex(i)}
+        {images.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt={`GamAutos gallery photo ${i + 1}`}
+            loading="lazy"
+            className="aspect-[4/3] w-[85%] shrink-0 snap-start rounded-2xl object-cover sm:w-[45%] lg:w-[32%]"
           />
         ))}
       </div>
-    </>
+
+      {/* Arrows */}
+      <button
+        type="button"
+        onClick={() => scroll(-1)}
+        aria-label="Previous photo"
+        className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 text-slate-900 transition hover:bg-yellow active:scale-95"
+      >
+        <FaChevronLeft size={14} />
+      </button>
+      <button
+        type="button"
+        onClick={() => scroll(1)}
+        aria-label="Next photo"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 text-slate-900 transition hover:bg-yellow active:scale-95"
+      >
+        <FaChevronRight size={14} />
+      </button>
+    </div>
   );
 };
 

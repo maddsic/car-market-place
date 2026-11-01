@@ -366,10 +366,10 @@ export default function HelpCenter() {
               </div>
 
               <a
-                href="tel:+2207531646"
+                href="tel:+2207252222"
                 className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 group-hover:text-amber-800 transition-colors uppercase tracking-wider"
               >
-                <span>+220 753 1646</span>
+                <span>+220 725 2222</span>
                 <span aria-hidden="true">&rarr;</span>
               </a>
             </div>

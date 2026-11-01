@@ -26,7 +26,7 @@ const CategoryImage: React.FC<CategoryImageProps> = ({
       <img
         src={imgUrl}
         className="h-[300px] w-[100%] object-cover"
-        alt="BMW 1"
+        alt="category image"
       />
       <div className="z-999 font-montserrat absolute bottom-1 left-2 text-white lg:bottom-2 lg:left-5">
         <p className="text-lg font-bold capitalize lg:text-2xl">{title}</p>
