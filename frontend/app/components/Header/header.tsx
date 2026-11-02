@@ -165,12 +165,12 @@ const Header = () => {
                   ))}
                 </ul>
               )}
-
+              {/*
               {slide.price && (
                 <p className="mt-6 text-4xl font-black tracking-tight text-yellow sm:text-5xl">
                   D{slide.price}
                 </p>
-              )}
+              )} */}
 
               {/* CTAs */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -216,8 +216,8 @@ const Header = () => {
               >
                 <span
                   className={`block h-2 rounded-full transition-all duration-300 ${currentState === index
-                      ? "w-10 bg-yellow"
-                      : "w-2 bg-slate-600 hover:bg-slate-400"
+                    ? "w-10 bg-yellow"
+                    : "w-2 bg-slate-600 hover:bg-slate-400"
                     }`}
                 />
               </button>

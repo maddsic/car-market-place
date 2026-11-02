@@ -13,6 +13,7 @@ interface CarStore {
   setLatestCars: (latestCars: LatestCar[]) => void;
   carModels: CarModel[];
   setCarModels: (carModels: CarModel[]) => void;
+  isLoading: boolean;
   fetchCarData: () => Promise<void>;
 }
 
@@ -28,8 +29,11 @@ export const useCarStore = create<CarStore>((set) => ({
   carModels: [],
   setCarModels: (carModels: CarModel[]) => set({ carModels }),
 
+  // true until all four requests have finished
+  isLoading: true,
+
   fetchCarData: async () => {
-    // Helper function using direct native fetch
+    // Helper that fetches one url and never throws
     const safeGetCarData = async (url: string) => {
       try {
         const response = await fetch(url);
@@ -38,7 +42,7 @@ export const useCarStore = create<CarStore>((set) => ({
           return [];
         }
         const json = await response.json();
-        // Return json.data if it exists, otherwise the json object or empty array
+        // Return json.data if it exists, otherwise the json itself or an empty list
         return json?.data || (Array.isArray(json) ? json : []);
       } catch (err) {
         console.error(`[API Error] Direct fetch failed for ${url}:`, err);
@@ -46,13 +50,12 @@ export const useCarStore = create<CarStore>((set) => ({
       }
     };
 
-    try {
-      safeGetCarData(apiEndpoints.carMakes).then((makes) => set({ carMakes: makes }));
-      safeGetCarData(apiEndpoints.carBodyTypes).then((bodyTypes) => set({ carBodyTypes: bodyTypes }));
-      safeGetCarData(apiEndpoints.premiumCars).then((premium) => set({ premiumCars: premium }));
-      safeGetCarData(apiEndpoints.latestCars).then((latest) => set({ latestCars: latest }));
-    } catch (error) {
-      console.error("Error running store fetch:", error);
-    }
+    // Run all four requests at the same time and wait for all of them
+    safeGetCarData(apiEndpoints.carMakes).then((makes) => set({ carMakes: makes })),
+      safeGetCarData(apiEndpoints.carBodyTypes).then((types) => set({ carBodyTypes: types })),
+      safeGetCarData(apiEndpoints.premiumCars).then((cars) => set({ premiumCars: cars })),
+      safeGetCarData(apiEndpoints.latestCars).then((cars) => set({ latestCars: cars })),
+
+      set({ isLoading: false });
   },
 }));

@@ -53,7 +53,10 @@ const Category = () => {
   return (
     <div className="max__container">
       <div className="flex items-center justify-between">
-        <Heading title="Browse By" colouredText="Category" />
+        <div>
+          <Heading title="Browse By" colouredText="Category" />
+          <div className="mt-1 h-1 w-16 rounded-full bg-yellow" />
+        </div>
         <div className="flex gap-4">
           <PrevButton startIndex={startIndex} handlePrev={handlePrev} />
 

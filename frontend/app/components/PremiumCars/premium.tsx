@@ -13,7 +13,7 @@ import { Car } from "~/interfaces";
 import { useCarStore } from "~/store/carStore";
 
 const PremiumCars = () => {
-  const { premiumCars } = useCarStore();
+  const { premiumCars, isLoading } = useCarStore();
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
@@ -64,14 +64,22 @@ const PremiumCars = () => {
 
   return (
     <section className="max__container relative">
-      <Heading
-        title="Latest Premium"
-        colouredText="Cars"
-        classNames="text-center"
-      />
+      <div className="flex flex-col items-center gap-2 text-center">
+        <Heading title="Latest Premium" colouredText="Cars" classNames="text-center" />
+        <div className="mt-1 h-1 w-16 rounded-full bg-yellow" />
+      </div>
 
       {/* CAR GRID */}
       <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {isLoading &&
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="animate-pulse rounded-2xl bg-white p-3 shadow-sm">
+              <div className="h-64 rounded-xl bg-slate-200" />
+              <div className="mt-4 h-4 w-2/3 rounded bg-slate-200" />
+              <div className="mt-3 h-4 w-1/3 rounded bg-slate-200" />
+            </div>
+          ))}
+
         {(premiumCars || []).map((car) => (
           <div
             key={car.carId}
