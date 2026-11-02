@@ -11,7 +11,7 @@ import { LatestCar } from "~/store/carStoreInterfaces";
 import Image from "../Image/Image";
 
 const LatestCars = () => {
-  const { latestCars } = useCarStore();
+  const { latestCars, isLoading } = useCarStore();
   const navigate = useNavigate();
 
   const handleNavigate = (section: string, value: string) => {
@@ -48,10 +48,18 @@ const LatestCars = () => {
 
   return (
     <section className="max__container relative">
-      <Heading title="latest for" colouredText="sale" classNames="text-center" />
+      <div className="flex flex-col items-center gap-2 text-center">
+        <Heading title="latest for" colouredText="sale" classNames="text-center" />
+        <div className="mt-1 h-1 w-16 rounded-full bg-yellow" />
+      </div>
 
       {/* CAR GRID */}
       <div className="mt-10 grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
+        {/* LOADING STATE */}
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-52 animate-pulse rounded-2xl bg-slate-200" />
+          ))}
         {(latestCars || []).map((car: LatestCar) => (
           <div
             key={car?.carId}

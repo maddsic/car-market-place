@@ -2,6 +2,7 @@ import { type MetaFunction } from "@vercel/remix";
 import {
   isRouteErrorResponse,
   Link,
+  useLoaderData,
   useNavigation,
   useRouteError,
 } from "@remix-run/react";
@@ -14,6 +15,13 @@ import LatestCars from "~/components/LatestCars/latestCars";
 import LoadingIndicator from "~/components/Loader/loadingIndicator";
 import Header from "~/components/Header/header";
 import { useCarStore } from "~/store/carStore";
+import FindMyCar from "~/components/findMyCar/findMyCar";
+import HowItWorks from "~/components/howItWorks/howItWorks";
+import { apiEndpoints } from "~/store/apiEndpoints";
+import { apiFetch } from "~/utils/apiFetch";
+import FeaturedDealers from "~/components/featuredDealer/featuredDealer";
+import FAQ from "~/components/faq/faq";
+import Animation from "~/components/animation.tsx/animation";
 
 export const meta: MetaFunction = () => {
   const title = "GamAutos | Buy, Sell, Rent & Bid on Quality Cars";
@@ -31,6 +39,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const fetchCarData = useCarStore((state) => state.fetchCarData);
+  const { dealers } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const loading = navigation.state === "loading";
 
@@ -61,10 +70,37 @@ export default function Index() {
         <section className="mt-8 sm:mb-14">
           <LatestCars />
         </section>
+        <section className="py-10">
+          <FeaturedDealers dealers={dealers} />
+        </section>
+        <section>
+          <FindMyCar />
+        </section>
+        <section className="bg-slate-100 py-10">
+          <FAQ />
+        </section>
+        <Animation>
+          <section className="py-10">
+            <HowItWorks />
+          </section>
+        </Animation>
       </main>
     </>
   );
 }
+
+export const loader = async () => {
+  try {
+    const result = await apiFetch(apiEndpoints.allDealers);
+    const dealers = (result.data || [])
+      .sort((a: any, b: any) => b.carsCount - a.carsCount)
+      .slice(0, 4);
+    return { dealers };
+  } catch (error) {
+    console.error("Error loading dealers:", error);
+    return { dealers: [] };
+  }
+};
 
 // Route Error Boundary
 export function ErrorBoundary() {
