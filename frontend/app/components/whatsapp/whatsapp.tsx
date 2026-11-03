@@ -7,12 +7,11 @@ interface FloatingWhatsAppProps {
 }
 
 export function FloatingWhatsApp({
-  phone = "14707338533", // Replace with your support team Gambian number
+  phone = "14707338533",
   defaultMessage = "Hi Gamautos team, I have a quick question about the platform.",
 }: FloatingWhatsAppProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Clean the number and ensure Gambian prefix (220)
   const cleanPhone = phone.replace(/\D/g, "");
   const fullPhone = cleanPhone.length === 10 ? `1${cleanPhone}` : cleanPhone;
   const whatsappUrl = `https://wa.me/${fullPhone}?text=${encodeURIComponent(defaultMessage)}`;
@@ -25,7 +24,7 @@ export function FloatingWhatsApp({
           <div className="flex items-start justify-between border-b border-gray-100 pb-2">
             <div>
               <h4 className="text-sm font-bold text-gray-900">Gamautos Support</h4>
-              <p className="text-xs text-emerald-600 font-medium">● Typically replies instantly</p>
+              <p className="text-xs font-medium text-emerald-600">● Typically replies instantly</p>
             </div>
             <button
               type="button"
@@ -60,7 +59,11 @@ export function FloatingWhatsApp({
         className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-transform hover:scale-105 active:scale-95 focus:outline-none"
         aria-label="Contact support on WhatsApp"
       >
-        {isOpen ? <MdClose size={26} /> : <MdWhatsapp size={32} />}
+        {isOpen ? (
+          <MdClose size={26} />
+        ) : (
+          <MdWhatsapp size={32} className="animate-pulse" />
+        )}
       </button>
     </div>
   );

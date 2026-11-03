@@ -43,8 +43,8 @@ const UploadListingImage = ({ initialImages }: UploadListingImageProps) => {
           <p className="gray__text-soft font-body block">
             Recommended image resolution: 800 x 470 px or higher.
           </p>
-          <p className="text-red-500 font-body">
-            You can upload up to 5 photos.
+          <p className="text-red-500 font-body font-bold">
+            You can upload up to 10 photos.
           </p>
         </span>
       </div>
