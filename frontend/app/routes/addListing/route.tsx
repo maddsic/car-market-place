@@ -227,6 +227,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const carId = formData.get("carId") as string;
   const formDataCarImages = formData.getAll("imageUrl") as File[];
 
+  const rawImages = formData.getAll("imageUrl");
+  console.log("=== LOCAL ACTION DEBUG ===");
+  console.log("Number of items in imageUrl:", rawImages.length);
+  console.log("First item type:", typeof rawImages[0]);
+  console.log("Is first item an instance of File?:", rawImages[0] instanceof File);
+  console.log("First item details:", rawImages[0]);
+  console.log("==========================");
+
   // Removing images from form data for validation
   const formDataWithOutImages = Object.fromEntries(
     [...formData].filter(([key, value]) => typeof value === "string" || typeof value === "number"),
@@ -315,107 +323,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 }
-
-
-// ACTION - HANDLING FORM SUBMISSION
-// export async function action({ request, params }: ActionFunctionArgs) {
-//   let formData = await request.formData();
-//   const carId = formData.get("carId") as string;
-
-//   console.log("carID FROM ADDLISTING ACTION HANDLER:-", carId)
-
-//   const formDataCarImages = formData.getAll("imageUrl") as File[];
-
-//   // Removing images from form data for validation
-//   const formDataWithOutImages = Object.fromEntries(
-//     [...formData].filter(([key, value]) => typeof value === "string" || typeof value === "number"),
-//   );
-
-//   try {
-//     const token = getAuthToken(request);
-//     if (!token) return json({ success: false, message: "Unauthorized" }, { status: 401 });
-
-//     const payload = verifyJwtToken(token);
-//     if (!payload) {
-//       return json(
-//         { success: false, message: "Invalid or expired token" },
-//         { status: 401 },
-//       );
-//     }
-
-//     // Get User ID from payload
-//     const userId = payload.userId;
-
-//     // Pass form for validation
-//     let validatedForm = createListingValidateor.parse({
-//       ...formDataWithOutImages,
-//       userId: userId,
-//       imageUrl: formDataCarImages,
-//     });
-
-//     const newValidatedFormData = new FormData();
-//     // Append non-file fields
-//     for (const [key, value] of Object.entries(validatedForm)) {
-//       if (key !== "imageUrl" && value !== undefined && value !== null) {
-//         newValidatedFormData.append(key, String(value));
-//       }
-//     }
-
-//     console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER BEFORE ADDING THE IMAGES:-", newValidatedFormData)
-
-//     // Re-append files
-//     validatedForm.imageUrl.forEach((file: File) => {
-//       newValidatedFormData.append("imageUrl", file);
-//     });
-
-//     console.log("NEW VALIDATED FORM DATA FROM ADDLISTING ACTION HANDLER AFTER APPENDING THE IMAGE URL:-", newValidatedFormData)
-
-//     // DECISION LOGIC: UPDATE OR CREATE
-//     const url = carId ? `${apiEndpoints.updateCar}/${carId}`
-//       : `${apiEndpoints.createCar}`;
-
-//     const method = carId ? "PUT" : "POST";
-
-//     console.log(`SENDING ${method} TO: ${url}`);
-
-//     // Post the validated data to the API
-//     const response = await fetch(`${url}`, {
-//       method: method,
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: newValidatedFormData,
-//     });
-
-//     // Handle non-2xx responses
-//     if (!response.ok) {
-//       let formError = await response.json();
-//       return json(
-//         {
-//           error: true,
-//           message:
-//             formError.message || `Failed to create car: ${response.statusText}`,
-//         },
-//         {
-//           status: response.status,
-//         },
-//       );
-//     }
-//     // Getting the response data
-//     const responseData = await response.json();
-//     // Return data.
-//     return json({ success: true, data: responseData });
-//     // return redirect("/dashboard/inventory");
-
-//   } catch (error) {
-//     if (error instanceof z.ZodError) {
-//       const errors = error.flatten().fieldErrors;
-//       return json({ errors, values: formData }, { status: 400 });
-//     }
-//     console.error("Unexpected error occured", error);
-//     return json({ error: "Whoops...something went wrong" }, { status: 500 });
-//   }
-// }
 
 // ERROR BOUNDARY
 export function ErrorBoundary() {

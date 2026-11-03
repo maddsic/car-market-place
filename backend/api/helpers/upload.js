@@ -10,7 +10,7 @@ const carStorage = new CloudinaryStorage({
     folder: 'gam-autos/cars',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
     public_id: (req, file) => 'car-' + Date.now().toString() + '-' + file.originalname.split('.')[0],
-    // transformation: [{ width: 800, height: 600, crop: 'limit' }],
+    transformation: [{ width: 1200, height: 900, crop: 'limit', quality: 'auto' }],
   },
 });
 
@@ -21,7 +21,7 @@ const profileStorage = new CloudinaryStorage({
     folder: 'gam-autos/profiles',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
     public_id: (req, file) => 'profile-' + Date.now().toString() + '-' + file.originalname.split('.')[0],
-    // transformation: [{ width: 400, height: 400, crop: 'limit' }],
+    transformation: [{ width: 400, height: 400, crop: 'fill', quality: 'auto', gravity: 'face' }],
   },
 });
 

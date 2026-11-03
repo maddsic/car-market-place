@@ -49,9 +49,31 @@ router.get('/search', carController.searchCarInventory);
 router.post(
   '/',
   Auth.checkAuth,
-  carUploader.array('imageUrl', 5),
+  carUploader.array('imageUrl', 10),
   carController.createCar
 );
+
+// router.post(
+//   '/',
+//   Auth.checkAuth,
+//   (req, res, next) => {
+//     carUploader.array('imageUrl', 10)(req, res, (err) => {
+//       if (err) {
+//         console.error('--- MULTER / CLOUDINARY REJECTION ---');
+//         console.error('Error Message:', err.message);
+//         console.error('HTTP Code:', err.http_code);
+//         console.dir(err, { depth: null });
+//         return res.status(400).json({
+//           success: false,
+//           message: err.message,
+//           error: err,
+//         });
+//       }
+//       next();
+//     });
+//   },
+//   carController.createCar
+// );
 
 // GET ALL
 router.get('/', carController.getCars);
@@ -63,7 +85,7 @@ router.get('/:carId', carController.getCarById);
 router.put(
   '/update/:carId',
   Auth.checkAuth, Auth.verifyCarOwnership,
-  carUploader.array('imageUrl', 5),
+  carUploader.array('imageUrl', 10),
   carController.updateCar
 );
 router.patch('/:carId/status', Auth.checkAuth, Auth.verifyCarOwnership, carController.updateCarStatus);

@@ -10,7 +10,7 @@ export const createListingValidateor = z.object({
   condition: z.string().nonempty("Please select condition"),
   make: z.string().nonempty("Please select make"),
   model: z.string().nonempty("Please select model"),
-  year: z.coerce.number().min(2010).max(2026),
+  year: z.coerce.number().min(2000).max(2026),
   carType: z.string().nonempty("Please select czr type"),
   mileage: z.coerce.number().min(0, "Please select mileage").nonnegative(),
   fuelType: z.string().nonempty("Please select fuel type"),
@@ -40,7 +40,7 @@ export const createListingValidateor = z.object({
   power_seat: checkbox,
   bucket_seat: checkbox,
   leather_seat: checkbox,
-  imageUrl: z.array(z.any()).nonempty("Please upload at least 1 image").min(1, "Please upload at least 1 image").max(5, "You can upload a maximum of 5 images"),
+  imageUrl: z.array(z.any()).nonempty("Please upload at least 1 image").min(1, "Please upload at least 1 image").max(10, "You can upload a maximum of 10 images"),
   seller_note: z.string().optional(),
   forRent: checkbox,
   pricePerDay: z.preprocess(
