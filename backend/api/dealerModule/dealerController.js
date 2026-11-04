@@ -17,9 +17,8 @@ class DealerController {
       );
 
       const dealers = hasActiveFilters
-        ? await this.dealerService.searchDealersWithFilters(req.query)
+        ? await this.dealerService.searchDealersWithFilters(req)
         : await this.dealerService.getAllDealersWithCarCount();
-
       return sendResponse(res, 200, true, 'Result(s) found...', dealers || []);
     } catch (error) {
       console.log('ERROR FROM GET ALL DEALERS: ' + error.message);
@@ -27,21 +26,9 @@ class DealerController {
     }
   };
 
-  // Search dealers based on filters and include the count of their cars
-  // searchDealersWithFilters = async (req, res, next) => {
-  //   try {
-  //     const dealers = await this.dealerService.searchDealersWithFilters(req.query);
-  //     return sendResponse(res, 200, true, 'Result(s) found...', dealers || []);
-  //   } catch (error) {
-  //     console.log('ERROR FROM SEARCH DEALER CAR CLASS: ' + error.message);
-  //     next(error);
-  //   }
-  // };
-
   // Get a specific dealer by userId with their cars filtered by the provided criteria
   getDealerByIdWithFilteredCars = async (req, res, next) => {
     const { userId } = req.params;
-
     if (!userId) {
       return sendResponse(res, 400, false, 'User ID is required.', {});
     }
@@ -49,9 +36,8 @@ class DealerController {
     try {
       const dealer = await this.dealerService.getDealerByIdWithFilteredCars(
         userId,
-        req.query
+        req
       );
-
       if (dealer) {
         return sendResponse(res, 200, true, 'Result(s) found...', dealer || []);
       }
