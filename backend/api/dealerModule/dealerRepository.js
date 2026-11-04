@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { User, Car, Review, Sequelize } = require('../models');
 
 // Repository for accessing dealer data from the database
@@ -78,11 +79,15 @@ class DealerRepository {
   async searchDealersWithFilters(filters) {
     // Build case-insensitive ILike/Like filters for strings
     const carWhere = {};
-    if (filters.make) carWhere.make = { [Op.iLike || Op.like]: `%${filters.make}%` };
-    if (filters.model) carWhere.model = { [Op.iLike || Op.like]: `%${filters.model}%` };
+    if (filters.make) carWhere.make = { [Op.like]: `%${filters.make}%` };
+    if (filters.model) carWhere.model = { [Op.like]: `%${filters.model}%` };
     if (filters.condition) carWhere.condition = filters.condition;
 
+    // console.log("SEARCH FUNCTION RUNNING, filters:", filters);
+    // console.dir(carWhere, { depth: 5 });
+
     return User.findAll({
+      // logging: console.log,
       where: { role: 'agent' },
       group: ['User.userId'],
       attributes: [
@@ -118,7 +123,7 @@ class DealerRepository {
   async getDealerWithFilteredCars(userId, filters) {
     return User.findOne({
       where: { role: 'agent', userId },
-      attributes: ['userId', 'username', 'phone', 'address', 'role', 'email'],
+      attributes: ['userId', 'username', 'phone', 'address', 'role', 'email', 'avatarUrl'],
       include: [
         {
           model: Car,
@@ -131,6 +136,9 @@ class DealerRepository {
             'condition',
             'price',
             'imageUrl',
+            'mileage',
+            'transmission',
+            'fuelType'
           ],
           required: true,
         },

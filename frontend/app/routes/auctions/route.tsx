@@ -1,67 +1,65 @@
 import { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { FaGavel } from "react-icons/fa";
 import Animation from "~/components/animation.tsx/animation";
-
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Auctions | Gamautos" },
+    { title: "Auctions Coming Soon | Gamautos" },
     {
       name: "description",
       content:
-        "GamAutos is excited to announce that our digital auction house is coming soon! Get ready to bid on exclusive, high-value vehicles in a seamless and secure online environment.",
+        "GamAutos online car auctions are coming soon. In the meantime, browse cars for sale from dealers and sellers across The Gambia.",
     },
   ];
 };
 
-// --- Main Route Component ---
 export default function AuctionsComingSoon() {
   return (
     <Animation>
-      <div className="font-montserrat flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-4xl overflow-hidden rounded-2xl bg-primary text-white shadow-2xl md:flex">
-          {/* Left Section: Content */}
-          <div className="flex flex-col justify-center p-8 text-center md:w-2/3 md:p-12 md:text-left">
-            <h1 className="mb-6 flex items-center justify-center gap-3 text-5xl font-extrabold text-yellow md:justify-start md:text-6xl">
-              Auctions Are Coming Soon!
-            </h1>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-4">
+        {/* Soft glows */}
+        <div className="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-yellow/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-yellow/10 blur-3xl" />
 
-            <div className="mb-8 rounded-xl bg-gray-700/50 p-6">
-              <h2 className="mb-2 text-3xl font-bold text-white">
-                We're Building Something Special
-              </h2>
-              <p className="text-xl text-gray-300">
-                Get ready to bid on exclusive, high-value vehicles. Our digital
-                auction house will soon be live, offering a seamless and secure
-                bidding experience.
-              </p>
-            </div>
+        <div className="relative z-10 flex w-full max-w-3xl flex-col items-center rounded-3xl border border-yellow/20 bg-gradient-to-br from-slate-900 to-slate-950 p-8 text-center shadow-2xl sm:p-14">
+          {/* Icon */}
+          <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-yellow text-slate-950">
+            <FaGavel size={34} />
+          </span>
 
-            <p className="text-sm text-gray-400">
-              We are working hard to finalize our platform. Follow us on social
-              media for official announcements regarding the launch date!
-            </p>
+          {/* Pill label */}
+          <span className="mt-6 inline-flex rounded-full border border-yellow/30 bg-yellow/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-yellow">
+            Coming Soon
+          </span>
+
+          <h1 className="mt-4 text-3xl font-black uppercase text-white sm:text-5xl">
+            Auctions are <span className="text-yellow">coming soon</span>
+          </h1>
+
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-400 sm:text-base">
+            We are building online car auctions for The Gambia. In the
+            meantime, you can browse cars for sale from dealers and private
+            sellers.
+          </p>
+
+          {/* Buttons */}
+          <div className="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
+            <Link
+              to="/inventory"
+              className="rounded-xl bg-yellow px-8 py-3.5 text-sm font-black uppercase tracking-wider text-slate-950 transition hover:bg-amber-300 active:scale-95"
+            >
+              Browse cars
+            </Link>
+            <a
+              href="mailto:support@gamautos.com?subject=Tell me when auctions open"
+              className="rounded-xl border border-white/30 px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition hover:border-yellow hover:text-yellow active:scale-95"
+            >
+              Notify me
+            </a>
           </div>
-
-          {/* Right Section: Image Placeholder */}
-          <div
-            className="flex min-h-[300px] items-center justify-center bg-cover bg-center p-6 md:min-h-full md:w-1/3"
-            style={{
-              backgroundImage:
-                "url('https://placehold.co/400x600/1F2937/FBBF24?text=AUCTION+CAR')",
-            }}
-          ></div>
         </div>
       </div>
     </Animation>
   );
-}
-
-// Add CSS for the Inter font
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
-    },
-  ];
 }

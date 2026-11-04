@@ -1,4 +1,4 @@
-const { hasLength, sendResponse } = require('../helpers/response');
+const { sendResponse } = require('../helpers/response');
 
 class CarController {
   constructor(carService) {
