@@ -5,7 +5,7 @@ import { NavLinks } from '~/data/navLinks'
 const MobileNav = () => {
   return (
     <div className="fixed bottom-0 left-0 z-50 flex w-full justify-around border-t border-slate-800 bg-primary/95 py-2 backdrop-blur-md md:hidden">
-      {NavLinks.slice(0, 5).map((link) => (
+      {NavLinks.slice(0, 6).map((link) => (
         <NavLink
           key={link.id}
           to={link.href}

@@ -102,19 +102,33 @@ export async function updateDealerProfile(request: Request, formData: FormData) 
     throw new Error("Unauthorized: No auth token found");
   }
 
-  const response = await fetch(`${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-update`, {
-    method: "PUT",
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-    body: formData
-  });
-  const result = await response.json();
+  const response = await fetch(
+    `${API_BASE_URL}${API_VERSION}/dealer-dashboard/profile-update`,
+    {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
+  );
+
+  const text = await response.text();
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch (parseError) {
+    console.error("Backend returned non-JSON response:", text);
+    throw new Error(
+      `Server error (${response.status}): The server returned an unexpected response.`
+    );
+  }
 
   if (!response.ok) {
-    throw new Error("Failed to update dealer profile");
+    throw new Error(result?.message || "Failed to update dealer profile");
   }
-  return result
+
+  return result;
 }
 
 // This function will be used to send message to dealer from the car details page

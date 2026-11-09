@@ -10,7 +10,6 @@ import {
   FaTrash,
   FaChevronLeft,
   FaChevronRight,
-  FaGlobe
 } from "react-icons/fa";
 import { Form, json, useActionData, useLoaderData, useNavigation } from "@remix-run/react";
 import { type ActionFunctionArgs, type LoaderFunctionArgs } from "@remix-run/node";
@@ -41,8 +40,8 @@ export default function ProfileSettings() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("File size exceeds 2MB limit.");
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size exceeds 5MB limit.");
         return;
       }
       setPreview(URL.createObjectURL(file));
@@ -263,7 +262,7 @@ export default function ProfileSettings() {
                 <div className="text-center sm:text-left space-y-2">
                   <h3 className="text-sm sm:text-base font-bold text-gray-800">Profile Photo</h3>
                   <p className="text-xs text-gray-400 max-w-xs">
-                    Allowed formats: JPG, GIF, or PNG. Maximum file size of 2MB.
+                    Allowed formats: JPG, JPEG, or PNG. Maximum file size of 5MB.
                   </p>
                   {preview && (
                     <button

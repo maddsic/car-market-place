@@ -17,7 +17,7 @@ export function FloatingWhatsApp({
   const whatsappUrl = `https://wa.me/${fullPhone}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-16 md:bottom-6 right-6 z-50 flex flex-col items-end">
       {/* Quick Popup Card */}
       {isOpen && (
         <div className="mb-3 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl transition-all">

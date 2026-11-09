@@ -7,6 +7,8 @@
     "start": "node server.js",
     "db:migrate": "npx sequelize-cli db:migrate",
     "dev": "bun --watch server.js",
+    "seed": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo:all",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -47,6 +49,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "jest": "^30.2.0",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "sequelize-cli": "^6.6.5"
   }
 }

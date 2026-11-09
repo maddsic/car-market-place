@@ -26,6 +26,23 @@ router.get(
   dealerController.getDealerCars
 );
 router.get('/profile-card', Auth.checkAuth, dealerController.getDealerProfileCardData);
-router.put('/profile-update', Auth.checkAuth, Auth.isAgent, profileUploader.single('avatarUrl'), dealerController.updateDealerProfile);
+router.put('/profile-update', Auth.checkAuth, Auth.isAgent, (req, res, next) => profileUploader.single('avatarUrl')(req, res, (err) => {
+  if (err) {
+    console.error('Error uploading profile image:', err);
+
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        success: false,
+        message: 'Image size exceeds the 5MB limit. Please upload a smaller image.',
+      })
+    }
+    return res.status(400).json({
+      success: false,
+      message: err.message || 'Image upload failed. Please verify the file format and try again.'
+    })
+  }
+  next();
+}),
+  dealerController.updateDealerProfile);
 
 module.exports = router;
