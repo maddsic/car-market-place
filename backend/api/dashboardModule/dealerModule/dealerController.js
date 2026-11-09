@@ -13,8 +13,8 @@ class DealerController {
       const stats = await this.dealerService.getDealerDashBoardStats(dealerId);
       return res.json(stats);
     } catch (error) {
-      console.log('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
-      console.info('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
+      // console.log('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
+      // console.info('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
       return res
         .status(500)
         .json({ error: 'Failed to fetch dealer dashboard stats' });
@@ -26,8 +26,7 @@ class DealerController {
     try {
       const dealerId = req.user?.userId;
       const cars = await this.dealerService.getDealerCars(dealerId);
-      console.log('Cars');
-      console.log(cars);
+
       return hasLength(cars)
         ? sendResponse(
           res,
@@ -87,7 +86,8 @@ class DealerController {
         avatarUrl: req.file ? (req.file.path || req.file.filename) : undefined
       }
 
-      console.log("UPDATED PROFILE DATA BEFORE : ", updateProfileData)
+      console.log("AVATAR URL", req.file ? (req.file.path || req.file.filename) : undefined);
+      // console.log("UPDATED PROFILE DATA BEFORE : ", updateProfileData)
 
       const updatedProfile = await this.dealerService.updateDealerProfile(userId, updateProfileData);
 

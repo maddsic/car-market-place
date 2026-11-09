@@ -4,9 +4,12 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = {
   async up(queryInterface, Sequelize) {
     // 1. Get the Mercedes make ID
-    const [make] = await queryInterface.sequelize.query(
-      `SELECT id FROM CarMake WHERE name = 'Mercedes' LIMIT 1;`
+    const make = await queryInterface.sequelize.query(
+      `SELECT id FROM CarMake WHERE name = 'mercedes' LIMIT 1;`,
+      { type: Sequelize.QueryTypes.SELECT }
     );
+
+    // console.log(make)
 
     if (!make || make.length === 0) {
       console.warn('⚠️ Mercedes make not found in CarMake table. Skipping.');
@@ -14,6 +17,7 @@ module.exports = {
     }
 
     const mercedesMakeId = make[0].id;
+    // console.log('✅ Found Mercedes makeId:', mercedesMakeId);
     const now = new Date();
 
     // 2. Full list of models and popular badges
@@ -93,6 +97,8 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // Optional rollback logic
+    await queryInterface.bulkDelete('CarModel', {
+      makeId: '1ab0b9d2-08dc-4b63-b173-1955920a7993',
+    });
   },
 };

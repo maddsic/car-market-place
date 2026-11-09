@@ -20,7 +20,7 @@ interface CarMake {
 const initialForm = { condition: "", carType: "", make: "", model: "" };
 
 const fieldClass =
-  "block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm font-medium text-slate-900 shadow-sm transition focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/40";
+  "block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm font-medium text-slate-900 shadow-sm transition focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/40 capitalize";
 
 const SearchInventory = () => {
   const { carMakes, carBodyTypes } = useCarStore();
