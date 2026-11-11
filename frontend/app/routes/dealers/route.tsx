@@ -87,7 +87,7 @@ const Dealers = () => {
 
         {/* DEALERS LIST */}
         {dealers.length > 0 ? (
-          <div className="mt-6 flex flex-col gap-5">
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
             {visibleDealers.map((dealer: DealerData, index: number) => (
               <DisplayDealerInfo
                 key={dealer.userId || index}

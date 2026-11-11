@@ -61,6 +61,11 @@ export default function Index() {
         <section className="mt-8 sm:mb-10">
           <PremiumCars />
         </section>
+        <Animation>
+          <section className="py-10">
+            <HowItWorks />
+          </section>
+        </Animation>
         <section className="mt-10 sm:mb-10">
           <Highlight />
         </section>
@@ -79,11 +84,11 @@ export default function Index() {
         <section className="bg-slate-100 py-10">
           <FAQ />
         </section>
-        <Animation>
+        {/* <Animation>
           <section className="py-10">
             <HowItWorks />
           </section>
-        </Animation>
+        </Animation> */}
       </main>
     </>
   );
