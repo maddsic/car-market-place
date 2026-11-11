@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "@remix-run/react";
-import { Car, ExternalLink, MapPin, Phone, Star } from "lucide-react";
-import { IoCarSport } from "react-icons/io5";
+import {
+  FaArrowRight,
+  FaCheckCircle,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaStar,
+} from "react-icons/fa";
 
 interface DealershipInfoProps {
   userId: string;
@@ -9,9 +14,11 @@ interface DealershipInfoProps {
   address: string;
   phone: string;
   carsCount: number;
-  reviewsCount?: number;
-  avgRating?: number;
+  reviewsCount?: number | string;
+  avgRating?: number | string;
   avatarUrl?: string;
+  isVerified?: boolean | number | string;
+  createdAt?: string;
   query?: {
     condition?: string;
     make?: string;
@@ -28,162 +35,129 @@ const DisplayDealerInfo: React.FC<DealershipInfoProps> = ({
   reviewsCount,
   avgRating,
   avatarUrl,
+  isVerified,
+  createdAt,
   query,
 }) => {
-  const [showFullNumber, setShowFullNumber] = useState(false);
-  const profileUrl = `/profile/${userId}?condition=${query?.condition || ""}&make=${query?.make || ""
-    }&model=${query?.model || ""}`;
+  const [showNumber, setShowNumber] = useState(false);
 
-  const handleShowNumber = () => {
-    setShowFullNumber(true);
-  };
+  // The API can send these as text ("1.8") or 1/0, so convert them
+  const rating = Number(avgRating) || 0;
+  const reviews = Number(reviewsCount) || 0;
+  const verified = Number(isVerified) === 1;
+  const year = createdAt ? new Date(createdAt).getFullYear() : NaN;
+
+  // Add the country code if the saved number does not have one
+  const cleanPhone = (phone || "").replace(/\s/g, "");
+  const callNumber = cleanPhone.startsWith("+") ? cleanPhone : `+220${cleanPhone}`;
+
+  // Keep the search filters when opening the dealer's page
+  const params = new URLSearchParams();
+  if (query?.condition) params.set("condition", query.condition);
+  if (query?.make) params.set("make", query.make);
+  if (query?.model) params.set("model", query.model);
+  const search = params.toString();
+  const profileUrl = `/profile/${userId}${search ? `?${search}` : ""}`;
 
   return (
-    <main className="border-b border-gray-200 bg-white shadow-sm">
-      <div className="max__container mx-auto p-2">
-        <div className="flex flex-col gap-5 md:gap-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Left Section - Logo and Business Name */}
-          <div className="flex items-center space-x-4">
-            {/* Logo */}
-            <Link to={profileUrl} className="flex-shrink-0 cursor-pointer">
-              {avatarUrl ? (
-                <img
-                  src={avatarUrl || "/placeholder.svg"}
-                  alt={`${username} Avatar`}
-                  className="h-12 w-auto object-contain"
+    <div className="flex flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-yellow/40 hover:shadow-xl">
+      {/* Top: logo, name, rating, area */}
+      <div className="flex items-center gap-4">
+        <Link to={profileUrl} className="shrink-0">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={`${username} logo`}
+              loading="lazy"
+              className="h-20 w-20 rounded-full border-2 border-yellow/40 bg-white object-cover"
+            />
+          ) : (
+            <span className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow text-3xl font-black text-slate-950">
+              {username.charAt(0).toUpperCase()}
+            </span>
+          )}
+        </Link>
+
+        <div className="min-w-0">
+          <Link to={profileUrl}>
+            <h3 className="flex items-center gap-1.5 text-lg font-bold text-slate-900 transition-colors hover:text-yellow">
+              <span className="truncate">{username}</span>
+              {verified && (
+                <FaCheckCircle
+                  size={16}
+                  className="shrink-0 text-sky-500"
+                  title="Verified dealer"
+                  aria-label="Verified dealer"
                 />
-              ) : (
-                <div className="flex h-12 items-center gap-2.5 rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 shadow-xs">
-                  <div className="h-full w-1.5 rounded-full bg-yellow" />
-                  <div className="flex flex-col">
-                    <span className="font-montserrat text-xs font-extrabold uppercase tracking-tight text-slate-900 leading-none">
-                      {username}
-                    </span>
-                    <span className="text-[9px] font-semibold tracking-widest text-slate-400 uppercase leading-tight mt-0.5">
-                      Verified Dealer
-                    </span>
-                  </div>
-                </div>
               )}
-            </Link>
+            </h3>
+          </Link>
 
-            {/* Business Name and Reviews */}
-            <div>
-              <Link to={profileUrl} className="">
-                <h1 className="text-lg font-bold text-gray-900 capitalize transition duration-1000 hover:text-yellow lg:text-xl">
-                  {username}
-                </h1>
-              </Link>
-              <div className="md:flex items-center space-x-1 text-sm text-gray-600 hidden">
-                <span>({avgRating} Rating)</span>
-                <div className="ml-2 flex items-center">
-                  {[...Array(5)].map((_, i) => {
-                    const ratingValue = Math.round(Number(avgRating) || 0);
-                    return (
-                      <Star
-                        key={i}
-                        className={`h-3 w-3 ${i < ratingValue
-                          ? "fill-current text-yellow"
-                          : "text-gray-300"
-                          }`}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="md:flex hidden items-center space-x-1 text-sm text-gray-600">
-                <span>({reviewsCount} Reviews)</span>
-              </div>
-            </div>
-          </div>
+          {reviews > 0 && rating > 0 ? (
+            <p className="mt-1 flex items-center gap-1 text-sm text-slate-600">
+              <FaStar className="text-yellow" size={14} />
+              <span className="font-bold text-slate-900">{rating.toFixed(1)}</span>
+              <span className="text-slate-400">
+                ({reviews} {reviews === 1 ? "review" : "reviews"})
+              </span>
+            </p>
+          ) : (
+            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              New dealer
+            </p>
+          )}
 
-          {/* Right Section - Info Cards */}
-          <div className="flex flex-col gap-4 sm:flex-row lg:gap-6">
-            {/* Cars in Stock */}
-            <Link
-              to={profileUrl}
-              className="flex items-center space-x-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3"
-            >
-              <div className="rounded-full bg-orange-500 p-2">
-                <Car className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">
-                  {carsCount} New
-                </div>
-                <div className="text-sm font-medium text-orange-600">
-                  Cars in stock
-                </div>
-              </div>
-            </Link>
-
-            {/* Phone Number */}
-            <div className="flex items-center space-x-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-              <div className="rounded-full bg-gray-600 p-2">
-                <Phone className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">
-                  {showFullNumber ? "(+220) " + phone : "(+220) ***-****"}
-                </div>
-                {!showFullNumber && (
-                  <button
-                    onClick={handleShowNumber}
-                    className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-800"
-                  >
-                    Show number
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center space-x-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3">
-              <div className="rounded-full bg-blue-600 p-2">
-                <MapPin className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{address}</div>
-                {/* open the map in a popup  */}
-                <Link
-                  to="/map"
-                  className="inline-flex items-center space-x-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-800"
-                >
-                  <span>See map</span>
-                  <ExternalLink className="h-3 w-3" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile-optimized bottom section */}
-        <div className="mt-4 lg:hidden">
-          <div className="flex items-center justify-between text-sm text-gray-600">
-            <div className="flex items-center space-x-1 text-sm text-gray-600 md:hidden">
-              {/* <span>({avgRating} Rating)</span> */}
-              <div className="ml-2 flex items-center">
-                {[...Array(5)].map((_, i) => {
-                  const ratingValue = Math.round(Number(avgRating) || 0);
-                  return (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 ${i < ratingValue
-                        ? "fill-current text-yellow"
-                        : "text-gray-300"
-                        }`}
-                    />
-                  );
-                })}
-              </div>
-              <span>{avgRating} Rating</span>
-
-            </div>
-            <span>Open until 8:00 PM</span>
-          </div>
+          {address && (
+            <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
+              <FaMapMarkerAlt className="shrink-0 text-yellow" size={12} />
+              <span className="truncate">{address}</span>
+            </p>
+          )}
         </div>
       </div>
-    </main>
+
+      {/* Middle: quick facts */}
+      <div className="mt-5 flex flex-wrap gap-2">
+        <span className="rounded-full bg-yellow/15 px-3 py-1 text-xs font-bold text-slate-900">
+          {carsCount} {carsCount === 1 ? "car" : "cars"} in stock
+        </span>
+        {!Number.isNaN(year) && (
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+            Member since {year}
+          </span>
+        )}
+      </div>
+
+      {/* Bottom: buttons */}
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <Link
+          to={profileUrl}
+          className="flex items-center justify-center gap-2 rounded-xl bg-yellow px-4 py-3 text-xs font-black uppercase tracking-wider text-slate-950 transition hover:bg-amber-300 active:scale-95"
+        >
+          View cars
+          <FaArrowRight size={11} />
+        </Link>
+
+        {showNumber ? (
+          <a
+            href={`tel:${callNumber}`}
+            className="flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-xs font-bold text-white transition hover:bg-slate-800 active:scale-95"
+          >
+            <FaPhoneAlt size={11} />
+            {callNumber}
+          </a>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowNumber(true)}
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 transition hover:border-yellow hover:text-yellow active:scale-95"
+          >
+            <FaPhoneAlt size={11} />
+            Show number
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 
