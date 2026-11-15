@@ -79,11 +79,28 @@ module.exports = (sequelize, DataTypes) => {
       as: 'dealerReviews',
       onDelete: 'CASCADE',
     });
+
     // Messages sent to this user (as a dealer)
     User.hasMany(models.Message, {
       foreignKey: 'dealerId',
       as: 'receivedMessages',
       onDelete: 'CASCADE',
+    });
+
+    // Notifications received by this user
+    User.hasMany(models.Notification, {
+      foreignKey: 'userId',
+      sourceKey: 'userId',
+      as: 'notifications',
+      onDelete: 'CASCADE',
+    });
+
+    // Notifications sent by this user (Admin)
+    User.hasMany(models.Notification, {
+      foreignKey: 'senderId',
+      sourceKey: 'userId',
+      as: 'sentNotifications',
+      onDelete: 'SET NULL',
     });
   };
 

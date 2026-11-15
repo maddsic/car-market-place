@@ -98,5 +98,24 @@ export interface FaqItem {
   tag: string;
 }
 
+export interface NotificationItem {
+  id: string;
+  userId: string;
+  senderId: string | null;
+  title: string;
+  message: string;
+  type: string;
+  link: string | null;
+  isRead: boolean;
+  createdAt: string;
+  sender?: {
+    userId: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    avatarUrl: string | null;
+  } | null;
+}
+
 
 

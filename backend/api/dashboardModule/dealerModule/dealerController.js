@@ -13,8 +13,6 @@ class DealerController {
       const stats = await this.dealerService.getDealerDashBoardStats(dealerId);
       return res.json(stats);
     } catch (error) {
-      // console.log('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
-      // console.info('ERROR FROM GET DEALER DASHBOARD STATS API:', error);
       return res
         .status(500)
         .json({ error: 'Failed to fetch dealer dashboard stats' });
