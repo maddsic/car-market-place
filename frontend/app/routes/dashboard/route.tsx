@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { DashboardTopNav } from "./dashboardTopNav";
 import { getAuthToken } from "~/utils/authHelpers";
 import jwt from "jsonwebtoken";
+import { getUserNotifications } from "~/service/notification.server";
+import { NotificationItem } from "~/interfaces";
 
 const dealerNavItems = [
   { to: "/dashboard", label: "Overview", icon: <FaChartBar size={18} /> },
@@ -35,10 +37,11 @@ const adminNavItems = [
 ];
 
 export default function DashboardLayout() {
-  const { role } = useLoaderData<typeof loader>();
+  const { role, notifications } = useLoaderData<typeof loader>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const submit = useSubmit();
 
+  console.log("NOTIFICATION", notifications)
   // Determine which navigation items to display based on the user's role
   const navItems = role === "admin" ? adminNavItems : dealerNavItems;
 
@@ -150,7 +153,7 @@ export default function DashboardLayout() {
 
       {/* Main Content Area: flex-1 + min-h-0 + pb-24 ensures 100% of content is scrollable */}
       <main className="font-montserrat flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar pb-24">
-        <DashboardTopNav />
+        <DashboardTopNav notifications={notifications} />
         <div className="mt-6">
           <Outlet />
         </div>
@@ -177,5 +180,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect(`/profile/${decodedToken?.userId || ""}`);
   }
 
-  return json({ role: decodedToken.role, userId: decodedToken.userId });
+  let notifications: NotificationItem[] = [];
+  try {
+    notifications = await getUserNotifications(request);
+  } catch (error) {
+    console.error("Failed to load user notifications:", error);
+  }
+
+  return json({
+    role: decodedToken.role,
+    userId: decodedToken.userId,
+    notifications,
+  });
 };

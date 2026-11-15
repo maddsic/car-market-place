@@ -31,6 +31,7 @@ const dealerRouter = require('./api/dealerModule/dealerRoute');
 const messageRouter = require('./api/messageModule/messageRoute');
 const userRouter = require('./api/userModule/userRoute');
 const reviewRouter = require('./api/reviewModule/reviewRoute');
+const notificationRouter = require('./api/notificationModule/notificationRoute');
 
 // ---------------------------------------------
 // LOGGING SETUP
@@ -39,18 +40,6 @@ const accessLogSream = fs.createWriteStream(
   path.join(__dirname, 'access.logs'),
   { flags: 'a' }
 );
-
-// ---------------------------------------------
-// SERVE STATIC FILES - IMAGE UPLOADS
-// ---------------------------------------------
-// app.use(
-//   '/image_uploads',
-//   (req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     next();
-//   },
-//   express.static(path.join(__dirname, 'image_uploads'))
-// );
 
 // ---------------------------------------------
 // MIDDLEWARES
@@ -121,5 +110,6 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/dealer-dashboard', dealerRouterDashboard);
 app.use('/api/v1/admin-dashboard', adminRouterDashboard);
 app.use('/api/v1/messages', messageRouter);
+app.use('/api/v1/notification', notificationRouter);
 
 module.exports = app;

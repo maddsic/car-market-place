@@ -3,8 +3,9 @@ const crypto = require('crypto');
 const EmailHelper = require('../helpers/emailHelper');
 
 class AuthService {
-  constructor(authRepository) {
+  constructor(authRepository, notificationService) {
     this.authRepository = authRepository;
+    this.notificationService = notificationService;
   }
 
   // STEP 1: Process User Registration & Dispatch Verification Email
@@ -33,7 +34,12 @@ class AuthService {
     // Destructure to exclude sensitive fields from the response eg. password and verificationToken
     const { password, verificationToken: token, ...formData } = newUser.toJSON ? newUser.toJSON() : newUser;
 
-    console.log(`User ${formData.first_name} ${formData.last_name} created successfully. Verification email will be sent to ${formData.email}. ${verificationToken}`);
+    if (this.notificationService) {
+      // Send a welcome notification to the new user
+      await this.notificationService.sendWelcomeNotification(newUser.userId).catch((error) => {
+        console.error('Failed to send welcome notification:', error);
+      });
+    }
 
     // Send the Welcome & Verification Email
     try {

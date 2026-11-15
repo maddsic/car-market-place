@@ -8,7 +8,7 @@ class NotificationController {
   // Send a welcome notification to a new user
   getNotifications = async (req, res) => {
     try {
-      const userId = req.user.userId;
+      const userId = req.user?.userId;
       const notifications = await this.notificationService.getUserNotifications(userId);
       return res.status(200).json({ success: true, data: notifications });
     } catch (error) {
@@ -20,7 +20,7 @@ class NotificationController {
   // Get unread notifications for a user
   getUnreadNotificationsCount = async (req, res) => {
     try {
-      const userId = req.user.userId;
+      const userId = req.user?.userId;
       const unread = await this.notificationService.getUnreadNotifications(userId);
       return res.status(200).json({ success: true, count: unread.length, data: unread });
     } catch (error) {
@@ -33,7 +33,7 @@ class NotificationController {
   markAsRead = async (req, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user.userId;
+      const userId = req.user?.userId;
 
       const updated = await this.notificationService.markNotificationAsRead(id, userId);
       if (!updated) {
@@ -50,7 +50,7 @@ class NotificationController {
   // Mark all notifications as read for a user
   markAllAsRead = async (req, res) => {
     try {
-      const userId = req.user.userId;
+      const userId = req.user?.userId;
       await this.notificationService.markAllNotificationsAsRead(userId);
       return res.status(200).json({ success: true, message: 'All notifications marked as read' });
     } catch (error) {
@@ -62,7 +62,7 @@ class NotificationController {
   // Send a notification to a dealer from an admin
   sendToDealer = async (req, res) => {
     try {
-      const adminId = req.user.userId;
+      const adminId = req.user?.userId;
       const { dealerId, title, message, link, type } = req.body;
 
       if (!dealerId || !title || !message) {
